@@ -1,0 +1,108 @@
+package com.test.client.renderer;
+
+import com.test.api.TestRenderHelper;
+import com.test.block.tileentity.FurnaceConstructTileEntity;
+import com.test.main.TestCore;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.IBlockAccess;
+
+public class FurnaceConstructRenderer implements ISimpleBlockRenderingHandler{
+
+	public FurnaceConstructRenderer() {
+
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+		TestRenderHelper.renderInvCuboid(renderer, block,1F/16F, 1F/16F, 1F/16F, 15F/16F, 15F/16F, 15F/16F, 4);
+		renderer.setOverrideBlockTexture(Blocks.iron_block.getBlockTextureFromSide(0));
+		TestRenderHelper.renderInvCubeFrame(renderer, block, 0F / 16F, 0F / 16F, 0F / 16F, 16F / 16F, 16F / 16F, 16F / 16F, 1F / 16F);
+		renderer.clearOverrideBlockTexture();
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		renderer.setRenderBounds(1F/16F, 1F/16F, 1F/16F, 15F/16F, 15F/16F, 15F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setOverrideBlockTexture(Blocks.iron_block.getBlockTextureFromSide(0));
+		renderCubeFrame(x, y, z, block, 0F / 16F, 0F / 16F, 0F / 16F, 16F / 16F, 16F / 16F, 16F / 16F, 1F / 16F, renderer);
+
+		renderer.clearOverrideBlockTexture();
+
+		if(!(world.getTileEntity(x, y, z) instanceof FurnaceConstructTileEntity)) return false;
+		FurnaceConstructTileEntity tile = (FurnaceConstructTileEntity)world.getTileEntity(x, y, z);
+		if(tile.isConnected == null) return true;
+
+		renderer.setOverrideBlockTexture(Blocks.iron_block.getBlockTextureFromSide(0));
+		if(tile.isConnected[0]){
+			renderer.setRenderBounds(5F/16F, 0F/16F, 5F/16F, 11F/16F, 1F/16F, 11F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		if(tile.isConnected[1]){
+			renderer.setRenderBounds(5F/16F, 15F/16F, 5F/16F, 11F/16F, 16F/16F, 11F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		if(tile.isConnected[2]){
+			renderer.setRenderBounds(5F/16F, 5F/16F, 0F/16F, 11F/16F, 11F/16F, 1F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		if(tile.isConnected[3]){
+			renderer.setRenderBounds(5F/16F, 5F/16F, 15F/16F, 11F/16F, 1F/16F, 16F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		if(tile.isConnected[4]){
+			renderer.setRenderBounds(0F/16F, 5F/16F, 5F/16F, 1F/16F, 1F/16F, 11F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		if(tile.isConnected[5]){
+			renderer.setRenderBounds(15F/16F, 5F/16F, 5F/16F, 16F/16F, 1F/16F, 11F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}
+		renderer.clearOverrideBlockTexture();
+		return true;
+	}
+
+	private void renderCubeFrame(int x, int y, int z, Block block,double startX,double startY,double startZ,double sizeX,double sizeY,double sizeZ, double thickness, RenderBlocks renderer){
+		renderer.setRenderBounds(startX, startY, startZ, startX + thickness, startY + sizeY, startZ + thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + sizeX - thickness, startY, startZ, startX + sizeX, startY + sizeY, startZ + thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX, startY, startZ + sizeZ - thickness, startX + thickness, startY + sizeY, startZ + sizeZ);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + sizeX - thickness, startY, startZ + sizeZ - thickness, startX + sizeX, startY + sizeY, startZ + sizeZ);
+		renderer.renderStandardBlock(block, x, y, z);
+
+		renderer.setRenderBounds(startX + thickness, startY, startZ, startX + sizeX - thickness, startY + thickness, startZ + thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX, startY, startZ + thickness, startX + thickness, startY + thickness, startZ + sizeZ - thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + sizeX - thickness, startY, startZ + thickness, startX + sizeX, startY + thickness, startZ + sizeZ - thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + thickness, startY, startZ + sizeZ - thickness, startX + sizeX - thickness, startY + thickness, startZ + sizeZ);
+		renderer.renderStandardBlock(block, x, y, z);
+
+		renderer.setRenderBounds(startX + thickness, startY + sizeY - thickness, startZ, startX + sizeX - thickness, startY + sizeY, startZ + thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX, startY + sizeY - thickness, startZ + thickness, startX + thickness, startY + sizeY, startZ + sizeZ - thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + sizeX - thickness, startY + sizeY - thickness, startZ + thickness, startX + sizeX, startY + sizeY, startZ + sizeZ - thickness);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(startX + thickness, startY + sizeY - thickness, startZ + sizeZ - thickness, startX + sizeX - thickness, startY + sizeY, startZ + sizeZ);
+		renderer.renderStandardBlock(block, x, y, z);
+	}
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		return true;
+	}
+
+	@Override
+	public int getRenderId() {
+		return TestCore.CONSTRUCTBASE_RENDER_ID;
+	}
+
+}

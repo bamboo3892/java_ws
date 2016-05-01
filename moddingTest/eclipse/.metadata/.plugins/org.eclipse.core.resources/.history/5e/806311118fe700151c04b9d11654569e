@@ -1,0 +1,21 @@
+package com.test.client.gui;
+
+import com.test.multiblock.construct.tileentity.ConstructClockPulserTileEntity;
+import com.test.server.gui.ClockPulserContainer;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+
+public class ClockPulserGui extends GuiContainer {
+
+	public ClockPulserGui(ConstructClockPulserTileEntity tile) {
+		super(new ClockPulserContainer(tile));
+
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+}

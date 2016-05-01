@@ -1,0 +1,22 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+/**
+ * @author ???
+ *only for pipe connection
+ */
+public abstract class ConstructBaseTileEntity extends TileEntity {
+
+	public ConstructBaseTileEntity() {
+
+	}
+
+	public abstract String getNameForNBT();
+
+	public abstract void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid);
+
+}

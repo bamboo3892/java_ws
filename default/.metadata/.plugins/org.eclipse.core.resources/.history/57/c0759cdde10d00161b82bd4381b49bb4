@@ -1,0 +1,30 @@
+package main;
+
+import java.awt.EventQueue;
+import java.io.IOException;
+import java.util.Map;
+
+import ai.AISheet;
+
+public class Start {
+
+	public static final int panelSize = 604;
+
+	public static Map<String, Class<? extends AISheet>> AIList;
+
+	public static void main(String[] args) throws IOException {
+
+
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try{
+					InitGui frame = new InitGui();
+					frame.setVisible(true);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+}

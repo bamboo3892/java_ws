@@ -1,0 +1,95 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.utils.ConnectionEntry;
+import com.test.utils.InventoryHelper;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public abstract class ConstructInventoryBaseTileEntity extends ConstructSidedOutputerTileEntity<IConstructInventory> implements IConstructInventory {
+
+	public ConstructInventoryBaseTileEntity(int grade) {
+		super(grade);
+		for (int i = 0; i < 6; i++){
+			connection[i] = null;
+			connections[i] = new ArrayList<ConnectionEntry>();
+			index[i] = 0;
+			flagIO[i] = 2;
+		}
+	}
+
+	protected boolean itemTransfer() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		boolean flag = false;
+		for (int i = 0; i < 6; i++){
+			if(connection[i] != null && flagIO[i] == 1){
+				int slot = i == 0 ? 2 : (i == 1 ? 0 : 1);
+				if(this == connection[i].getTile() && i == connection[i].side){
+					//System.out.println("The Same Destination");
+				}else if(InventoryHelper.tryPushItemEX(worldObj, this, connection[i].getTile(), ForgeDirection.getOrientation(i), ForgeDirection.getOrientation(connection[i].side), slot)){
+					//System.out.println("success? : " + ForgeDirection.getOrientation(i) + " to " + ForgeDirection.getOrientation(connection[i].side));
+					connection[i].getTile().markDirty();
+					flag = true;
+				}
+			}
+		}
+		return flag;
+	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	protected Class<IConstructInventory> getTargetClass() {
+		return IConstructInventory.class;
+	}
+	protected boolean shouldDistinguishSide() {
+		return true;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		if(worldObj.getTileEntity(xCoord, yCoord, zCoord) != this){
+			return false;
+		}
+		return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 50000.0D;
+	}
+	@Override
+	public boolean canInsertItem(int slot, ItemStack item, int side) {
+		return flagIO[side] == 0;
+	}
+	@Override
+	public boolean canExtractItem(int slot, ItemStack item, int side) {
+		return flagIO[side] == 1;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		updateEntry();
+		tag.setString("name", getNameForNBT());
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++){
+			side[i] = new NBTTagCompound();
+			side[i].setByte("io", (byte) flagIO[i]);
+			side[i].setInteger("index", solid.toIndex(connection[i].x, connection[i].y, connection[i].z, false));
+			tag.setTag("side" + i, side[i]);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+	}
+
+}

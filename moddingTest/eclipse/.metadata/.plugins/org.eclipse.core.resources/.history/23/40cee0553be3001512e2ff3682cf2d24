@@ -1,0 +1,12 @@
+package com.test.item.itemBlock;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemBlock;
+
+public class ItemMaltiBlock extends ItemBlock {
+
+	public ItemMaltiBlock(Block block) {
+		super(block);
+	}
+
+}

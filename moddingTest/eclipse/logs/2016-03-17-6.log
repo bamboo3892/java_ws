@@ -1,0 +1,16 @@
+[23:51:32] [main/INFO]: Setting user: Player898
+[23:51:35] [Client thread/INFO]: LWJGL Version: 2.9.1
+[23:51:49] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Test Mod, FMLFileResourcePack:Laser Tech
+[23:51:51] [Sound Library Loader/INFO]: Sound engine started
+[23:51:53] [Client thread/INFO]: Created: 16x16 textures/blocks-atlas
+[23:51:53] [Client thread/INFO]: Created: 16x16 textures/items-atlas
+[23:51:54] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Test Mod, FMLFileResourcePack:Laser Tech
+[23:51:55] [Client thread/INFO]: Created: 512x256 textures/blocks-atlas
+[23:51:55] [Client thread/INFO]: Created: 256x256 textures/items-atlas
+[23:51:57] [Sound Library Loader/INFO]: Sound engine started
+[23:52:00] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[23:52:00] [Server thread/INFO]: Generating keypair
+[23:52:00] [Server thread/INFO]: Preparing start region for level 0
+[23:52:01] [Server thread/INFO]: Changing view distance to 4, from 10
+[23:52:02] [Server thread/INFO]: Player898[local:E:41815a75] logged in with entity id 0 at (542.0715411966946, 56.0, -585.1712639648097)
+[23:52:02] [Server thread/INFO]: Player898 joined the game

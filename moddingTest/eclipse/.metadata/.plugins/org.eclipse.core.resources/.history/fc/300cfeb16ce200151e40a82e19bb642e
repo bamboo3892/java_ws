@@ -1,0 +1,9 @@
+package com.test.utils;
+
+public class Snippet {
+	public static void main(String[] args) {
+		renderer.setRenderBounds(startX, startY, startZ, startX + thickness, startY + sizeY, startZ + thickness);
+				renderer.renderStandardBlock(block, x, y, z);
+	}
+}
+

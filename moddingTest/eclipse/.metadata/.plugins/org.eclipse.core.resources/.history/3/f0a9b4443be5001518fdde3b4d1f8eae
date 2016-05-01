@@ -1,0 +1,22 @@
+package com.test.client.gui;
+
+import com.test.block.tileentity.ConstructFurnaceTileEntity;
+import com.test.server.gui.ConstructFurnaceContainer;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.InventoryPlayer;
+
+public class ConstructFurnaceGUI extends GuiContainer {
+
+	public ConstructFurnaceGUI(InventoryPlayer inventoryPlayer, ConstructFurnaceTileEntity tile) {
+		super(new ConstructFurnaceContainer(inventoryPlayer, tile));
+		this.xSize = 176;
+		this.ySize = 166;
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+
+	}
+
+}

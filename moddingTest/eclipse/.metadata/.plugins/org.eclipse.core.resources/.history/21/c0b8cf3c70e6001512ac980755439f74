@@ -1,0 +1,143 @@
+package com.test.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.utils.Position;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class BlockFrameTileEntity extends TileEntity {
+
+	public int[] length = new int[6];
+
+	public BlockFrameTileEntity() {
+
+	}
+
+	@Override
+	public void updateEntity(){
+		checkConnection();
+	}
+
+	public void checkConnection(){
+		length = new int[6];
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			if(length[dir.ordinal()] == -1) continue;
+			for(int n=1;n<16;n++){
+				int newX = xCoord + dir.offsetX*n;
+				int newY = yCoord + dir.offsetY*n;
+				int newZ = zCoord + dir.offsetZ*n;
+				if(worldObj.getTileEntity(newX, newY, newZ) instanceof BlockFrameTileEntity){
+					length[dir.ordinal()] = n;
+					length[dir.getOpposite().ordinal()] = -1;
+					break;
+				}
+			}
+		}
+	}
+
+	public boolean tryConstruct(){
+		checkConnection();
+		if(worldObj.isRemote) return true;
+		//check
+		ArrayList<Position> list = new ArrayList<Position>();
+		if(!checkCubicFrame(list)) return false;
+		System.out.println("ok");
+
+		ItemStack itemStack = new ItemStack(TestCore.multiBlock, 1);
+		RectangularSolid solid = new RectangularSolid(list);
+		writeNBTToItemStack(itemStack, solid, new Position(xCoord, yCoord, zCoord));
+		if(worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord, yCoord, zCoord, itemStack))){
+			Position p = solid.getMinPoint();
+			p = Position.sum(p, new Position(xCoord, yCoord, zCoord));
+			for (int i=0;i<solid.getXSize();i++) {
+				for (int j=0;j<solid.getYSize();j++) {
+					for (int k=0;k<solid.getZSize();k++) {
+						worldObj.setBlockToAir(p.x+i, p.y+j, p.z+k);
+					}
+				}
+			}
+		}
+		System.out.println(itemStack.getTagCompound());
+		return true;
+	}
+
+	private boolean checkCubicFrame(ArrayList<Position> list){
+		System.out.println("start check");
+		list.add(new Position(0, 0, 0));
+		for(int n=0;n<6;n++){
+			if(length[n] > 0){
+				ForgeDirection dir = ForgeDirection.getOrientation(n);
+				list.add(new Position(dir.offsetX*length[n], dir.offsetY*length[n], dir.offsetZ*length[n]));
+			}
+		}
+		if(list.size() != 4) return false;
+
+		list.add(Position.sum(list.get(1), list.get(2)));
+		list.add(Position.sum(list.get(2), list.get(3)));
+		list.add(Position.sum(list.get(3), list.get(1)));
+		list.add(Position.sum(list.get(3), list.get(4)));
+		for(Position p : list){
+			if(!(worldObj.getTileEntity(xCoord+p.x, yCoord+p.y, zCoord+p.z) instanceof BlockFrameTileEntity)){
+				return false;
+			}
+		}
+
+		int k[] = new int[3];//length
+		for(int kkk=0;kkk<3;kkk++){
+			k[kkk] = -1;
+		}
+		ForgeDirection dir[] = new ForgeDirection[3];//direction
+		for(int l=0;l<6;l++){
+			if(length[l] > 0){
+				if(k[0] == -1){
+					k[0] = length[l];
+					dir[0] = ForgeDirection.getOrientation(l);
+				}else if(k[1] == -1){
+					k[1] = length[l];
+					dir[1] = ForgeDirection.getOrientation(l);
+				}else if(k[2] == -1){
+					k[2] = length[l];
+					dir[2] = ForgeDirection.getOrientation(l);
+				}else{
+					System.out.println("something is wrong");
+				}
+			}
+		}
+		for (int i1=0;i1<3;i1++){
+			int i2 = i1==2 ? 0 : i1+1;
+			int i3 = i2==2 ? 0 : i2+1;
+			for (int n1 = 0; n1 < 2; n1++) for (int n2 = 0; n2 < 2; n2++) {
+				for (int m = 1; m < k[i1]; m++) {
+					int x = m * dir[i1].offsetX + k[i2] * dir[i2].offsetX * n1 + k[i3] * dir[i3].offsetX * n2 + xCoord;
+					int y = m * dir[i1].offsetY + k[i2] * dir[i2].offsetY * n1 + k[i3] * dir[i3].offsetY * n2 + yCoord;
+					int z = m * dir[i1].offsetZ + k[i2] * dir[i2].offsetZ * n1 + k[i3] * dir[i3].offsetZ * n2 + zCoord;
+					if (!(worldObj.getBlock(x, y, z) == TestCore.blockFrameLine)) return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private void writeNBTToItemStack(ItemStack itemStack, RectangularSolid solid, Position start){
+		NBTTagCompound tags = new NBTTagCompound();
+		itemStack.writeToNBT(tags);
+		itemStack.stackTagCompound = tags;
+		MultiBlockTileEntity.writeDetailToNBT(tags, worldObj, solid, start);
+	}
+
+	@Override
+	public AxisAlignedBB getRenderBoundingBox(){
+		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
+		return bb;
+	}
+
+}

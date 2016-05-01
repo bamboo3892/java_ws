@@ -1,0 +1,207 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.InventoryHelper;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public abstract class ConstructInventoryBaseTileEntity extends ConstructBaseTileEntity implements IInventory {
+
+	public ConnectionEntry[] connection = new ConnectionEntry[6];
+	/**each list's index 0 is always rootback tile*/
+	private ArrayList<ConnectionEntry>[] connections = new ArrayList[6];
+	private int[] index = new int[6];
+	public int flagIO[] = new int[6];// 0 : input 1 : output 2 : disabled
+	private boolean needCheck = true;
+
+	public ConstructInventoryBaseTileEntity() {
+		for (int i = 0; i < 6; i++) {
+			connection[i] = null;
+			connections[i] = new ArrayList<ConnectionEntry>();
+			index[i] = 0;
+			flagIO[i] = 2;
+		}
+	}
+
+	public void updateEntity() {
+		if (needCheck) {
+			checkConnection();
+			needCheck = false;
+		}
+	}
+
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		checkConnection();
+		if (player.getCurrentEquippedItem() == null) return false;
+		if (player.getCurrentEquippedItem().getItem() == TestCore.wrench) {
+			boolean b = player.isSneaking();
+			if (!b) {
+				int n = changeIO(side);
+				if (worldObj.isRemote) {
+					if (n == 3) {
+						System.out.println("Illigal side index!");
+					}
+					player.addChatMessage(new ChatComponentText(n == 0 ? "input" : n == 1 ? "output" : "disabled"));
+				}
+			} else {
+				if (connectNextBlock(side)) {
+					spawnCennectionParticle(side);
+					if (worldObj.isRemote) {
+						ConnectionEntry entry = connection[side];
+						if (!(entry == null)) {
+							player.addChatMessage(new ChatComponentText(connection[side].getText()));
+						} else {
+							player.addChatMessage(new ChatComponentText("No Connection Found"));
+						}
+					}
+				} else {
+					if (worldObj.isRemote) {
+						player.addChatMessage(new ChatComponentText("No Connection Found"));
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void checkConnection() {
+		for (int i = 0; i < 6; i++) {
+			checkConnectionForSide(i);
+		}
+		if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private void checkConnectionForSide(int side) {
+		connections[side].clear();
+		connections[side].add(new ConnectionEntry(this, ForgeDirection.getOrientation(side).ordinal()));
+		ForgeDirection dir = ForgeDirection.getOrientation(side);
+		int newX = xCoord + dir.offsetX;
+		int newY = yCoord + dir.offsetY;
+		int newZ = zCoord + dir.offsetZ;
+		TileEntity tile = worldObj.getTileEntity(newX, newY, newZ);
+		if (tile instanceof BlockPipeTileEntity) {
+			BlockPipeTileEntity pipe = (BlockPipeTileEntity) tile;
+			pipe.setConnectedBlocks(new ArrayList<BlockPipeTileEntity>(), connections[side]);
+		} else if (tile instanceof ConstructInventoryBaseTileEntity) {
+			ConstructInventoryBaseTileEntity func = (ConstructInventoryBaseTileEntity) tile;
+			connections[side]
+					.add(new ConnectionEntry(func, ForgeDirection.getOrientation(side).getOpposite().ordinal()));
+		}
+		if (connections[side].size() <= 1) {
+			index[side] = 0;
+			connection[side] = null;
+		}
+	}
+
+	public boolean connectNextBlock(int side) {
+		checkConnectionForSide(side);
+		if (connections[side].size() <= 1) {
+			index[side] = 0;
+			connection[side] = null;
+			return false;
+		} else {
+			index[side] = (index[side] >= connections[side].size() - 1 ? 1 : index[side] + 1);
+			connection[side] = connections[side].get(index[side]);
+			return true;
+		}
+	}
+
+	public int changeIO(int side) {
+		if (side < 0 || side >= 6) return 3;
+		flagIO[side] = flagIO[side] == 2 ? 0 : flagIO[side] + 1;
+		return flagIO[side];
+	}
+
+	protected boolean itemTransfer() {
+		boolean flag = false;
+		for (int i = 0; i < 6; i++) {
+			if (connection[i] != null && flagIO[i] == 1) {
+				int slot = i == 0 ? 2 : (i == 1 ? 0 : 1);
+				if (this == connection[i].tile
+						&& ForgeDirection.getOrientation(i) == ForgeDirection.getOrientation(connection[i].side)) {
+					System.out.println("The Same Destination");
+				} else if (InventoryHelper.tryPushItemEX(worldObj, this, connection[i].tile, ForgeDirection
+						.getOrientation(i), ForgeDirection.getOrientation(connection[i].side), slot)) {
+					System.out.println("success? : " + ForgeDirection.getOrientation(i) + " to "
+							+ ForgeDirection.getOrientation(connection[i].side));
+					flag = true;
+				}
+			}
+		}
+		return flag;
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTagCompound = new NBTTagCompound();
+		this.writeToNBT(nbtTagCompound);
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTagCompound);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		this.readFromNBT(pkt.func_148857_g());
+	}
+
+	public void spawnCennectionParticle(int side) {
+		if (connection[side] != null) {
+			ConnectionEntry entry = connection[side];
+			ForgeDirection dir = ForgeDirection.getOrientation(entry.side);
+			for (int i = 0; i < 10; i++)
+				worldObj.spawnParticle("cloud", entry.tile.xCoord + dir.offsetX * 0.6 + 0.5, entry.tile.yCoord
+						+ dir.offsetY * 0.6 + 0.5, entry.tile.zCoord + dir.offsetZ * 0.6 + 0.5, 0.0D, 0.0D, 0.0D);
+		}
+	}
+
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		checkConnection();
+		tag.setString("name", getNameForNBT());
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++) {
+			side[i] = new NBTTagCompound();
+			side[i].setByte("io", (byte) flagIO[i]);
+			side[i].setInteger("index", solid
+					.toIndex(connection[i].tile.xCoord, connection[i].tile.yCoord, connection[i].tile.zCoord, false));
+			tag.setTag("side" + i, side[i]);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		for (int i = 0; i < 6; i++) {
+			NBTTagCompound sideTag = tag.getCompoundTag("side" + i);
+			flagIO[i] = sideTag.getByte("io");
+			index[i] = sideTag.getInteger("index");
+		}
+		needCheck = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		checkConnection();
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++) {
+			side[i] = new NBTTagCompound();
+			side[i].setByte("io", (byte) flagIO[i]);
+			side[i].setInteger("index", index[i]);
+			tag.setTag("side" + i, side[i]);
+		}
+		super.writeToNBT(tag);
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.test.client.gui;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+
+public class ConstructInterfaceGui extends GuiContainer{
+
+	public ConstructInterfaceGui(IInventory player, ConstructInterfaceTileEntity tile) {
+		super(new ConstructinterfaceContainer(player, tile));
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.test.item;
+
+import net.minecraft.item.Item;
+
+public class ItemFilteringGlyph extends Item {
+
+	public ItemFilteringGlyph() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

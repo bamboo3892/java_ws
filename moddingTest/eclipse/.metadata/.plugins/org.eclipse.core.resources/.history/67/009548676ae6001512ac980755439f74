@@ -1,0 +1,63 @@
+package com.test.api;
+
+import java.util.HashMap;
+
+import com.test.block.parts.ConstructPartBase;
+import com.test.utils.RectangularSolid;
+
+import cpw.mods.fml.common.FMLLog;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class ConstructPartRegistry {
+
+	public static HashMap<String, Class<? extends ConstructPartBase>> partsMap = new HashMap<String, Class<? extends ConstructPartBase>>();
+
+	public static boolean registerConstructPart(ConstructPartBase part){
+		String name = part.getNameForNBT();
+		if(partsMap.containsKey(name)){
+			FMLLog.severe("That name part is already registered : " + name, new Object[0]);
+			return false;
+		}else{
+			partsMap.put(name, part.getClass());
+			return true;
+		}
+	}
+
+	/**
+	 *
+	 * @param tag
+	 * @param solid (use to transfer id to coordinate)
+	 * @return
+	 */
+	public static ConstructPartBase getNewPartFromNBT(NBTTagCompound tag, RectangularSolid solid){
+		String name = tag.getString("name");
+		if(partsMap.containsKey(name)){
+			try {
+				ConstructPartBase part = partsMap.get(name).newInstance();
+				int position = tag.getInteger("index");
+				part.position = solid.toCoord(position);
+				NBTTagCompound[] connection = new NBTTagCompound[6];
+				for(int i=0;i<6;i++){
+					connection[i] = tag.getCompoundTag("side"+i);
+					int flagIO = connection[i].getByte("io");
+					part.flagIO[i] = flagIO;
+					if(flagIO != 2){
+						int index = connection[i].getInteger("index");
+						int side = connection[i].getByte("side");
+						part.connection[i] = solid.toCoord(index);
+						part.side[i] = side;
+					}
+				}
+				return part;
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}else{
+			FMLLog.severe("That name part is not registered : " + name, new Object[0]);
+		}
+		return null;
+	}
+
+}

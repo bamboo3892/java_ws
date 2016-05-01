@@ -1,0 +1,79 @@
+package com.test.block;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.tileentity.MultiBlockTileEntity;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+public class MultiBlock extends BlockContainer {
+
+	public static int[] materials = {};
+
+	public MultiBlock() {
+		super(Material.iron);
+		setCreativeTab(TestCore.testCreativeTab);
+		this.setBlockName("multiBlock");
+		this.setHardness(1F);
+	}
+
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int meta, float hitX, float hitY, float hitZ){
+		if(world.getTileEntity(x, y, z) instanceof MultiBlockTileEntity){
+			MultiBlockTileEntity tile = (MultiBlockTileEntity)world.getTileEntity(x, y, z);
+			tile.showDebug();
+		}
+		return false;
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta){
+		ItemStack stack = new ItemStack(TestCore.multiBlock, 1);
+		if(world.getTileEntity(x, y, z) instanceof MultiBlockTileEntity){
+			MultiBlockTileEntity tile = (MultiBlockTileEntity)world.getTileEntity(x, y, z);
+			tile.writeToNBTForItemDrop(stack);
+		}
+		world.spawnEntityInWorld(new EntityItem(world, x, y, z, stack));
+		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		return ret;
+	}
+
+	@Override
+	public boolean isOpaqueCube(){
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock(){
+		return false;
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess p_149646_1_, int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_){
+		return true;
+	}
+
+	@Override
+	public int getRenderType(){
+		return TestCore.MULTIBLOCK_RENDER_ID;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new MultiBlockTileEntity();
+	}
+
+}

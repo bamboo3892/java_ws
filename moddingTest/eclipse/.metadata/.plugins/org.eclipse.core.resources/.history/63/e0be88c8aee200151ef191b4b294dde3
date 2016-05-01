@@ -1,0 +1,13 @@
+package com.test.main;
+
+public class IntegrationHandler {
+
+	public static void checkIntegration(){
+
+	}
+
+	public static void registerBlock(){
+
+	}
+
+}

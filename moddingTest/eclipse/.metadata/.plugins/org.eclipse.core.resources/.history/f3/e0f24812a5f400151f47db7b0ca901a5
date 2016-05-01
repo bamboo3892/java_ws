@@ -1,0 +1,155 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.main.TestCore;
+import com.test.network.SimpleTilePacket;
+import com.test.tileentity.IGuiSliderUser;
+import com.test.utils.Position;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+public class ConstructClockPulserTileEntity extends ConstructSidedOutputerTileEntity<ISignalReceiver> implements IGuiSliderUser {
+
+	public static final String nameForNBT = "clockPulser";
+	public static final int[] minInterval = { 40, 20, 10, 5, 1 };
+	public static final int[] maxInterval = { 60, 80, 100, 500, 1000 };
+
+	//only use on server
+	public int interval;
+	public int partialTick = 0;
+
+	/**client only*/
+	private boolean clockP = false;
+
+	public ConstructClockPulserTileEntity() {
+		this(0);
+	}
+
+	public ConstructClockPulserTileEntity(int grade) {
+		super(grade);
+		this.interval = maxInterval[grade];
+	}
+
+	@Override
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		player.openGui(TestCore.instance, TestCore.SLIDERINPUT_GUI_ID, worldObj, xCoord, yCoord, zCoord);
+	}
+	@Override
+	public void onShiftRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(worldObj.isRemote){
+			spawnCennectionParticle(side, "reddust");
+		}else{
+			//do nothing
+		}
+	}
+
+	public void updateEntity() {
+		super.updateEntity();
+		if(!worldObj.isRemote){
+			partialTick++;
+			if(partialTick == interval){
+				emitSignal();
+				TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, SimpleTilePacket.EFFECT, 0));
+				partialTick = 0;
+			}
+		}else{
+			if(clockP){
+				spawnSignalParticle();
+				worldObj.playSound(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, TestCore.MODID + ":clockpulser", 0.3F, 1F, false);
+				clockP = false;
+			}
+		}
+	}
+
+	/**server only*/
+	public void emitSignal() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		for (int i = 0; i < 6; i++){
+			if(connection[i] != null && flagIO[i] == 1 && connection[i].getTile() != null) connection[i].getTile().onSignalReceived();
+		}
+	}
+
+	/**client only*/
+	public void spawnSignalParticle() {
+		if(!worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		for (int i = 0; i < 5; i++)
+			worldObj.spawnParticle("reddust", xCoord + Math.random() * 0.6 + 0.5, yCoord + Math.random() * 0.6 + 0.5, zCoord + Math.random() * 0.6 + 0.5, 0.0D, 0.0D, 0.0D);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public int changeIO(int side) {
+		if(side < 0 || side >= 6) return 3;
+		flagIO[side] = flagIO[side] == 1 ? 2 : 1;
+		return flagIO[side];
+	}
+
+	protected Class<ISignalReceiver> getTargetClass() {
+		return ISignalReceiver.class;
+	}
+	protected boolean shouldDistinguishSide() {
+		return false;
+	}
+
+	public void processCommand(byte command, Object value) {
+		if(command == SimpleTilePacket.SLIDER_INPUT && value instanceof Integer){//both side
+			this.interval = (Integer)value;
+			this.partialTick = 0;
+		}else if(command == SimpleTilePacket.EFFECT){//should client
+			this.clockP = true;
+		}
+	}
+	public int getValue() {
+		return this.interval;
+	}
+	public String getContainerName() {
+		return "clockpulser";
+	}
+	public int getMinValue() {
+		return minInterval[grade];
+	}
+	public int getMaxValue() {
+		return maxInterval[grade];
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		tag.setString("name", getNameForNBT());
+		tag.setInteger("interval", interval);
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++){
+			if(connection[i].getTile() != null){
+				TileEntity tile = (TileEntity) connection[i].getTile();
+				side[i] = new NBTTagCompound();
+				side[i].setByte("io", (byte) flagIO[i]);
+				side[i].setInteger("index", solid.toIndex(tile.xCoord, tile.yCoord, tile.zCoord, false));
+				tag.setTag("side" + i, side[i]);
+			}
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		interval = tag.getInteger("interval");
+		partialTick = tag.getInteger("partialTick");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tag.setInteger("interval", interval);
+		tag.setInteger("partialTick", partialTick);
+	}
+
+}

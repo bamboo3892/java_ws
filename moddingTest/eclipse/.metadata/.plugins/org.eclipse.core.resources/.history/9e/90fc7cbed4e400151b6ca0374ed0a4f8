@@ -1,0 +1,48 @@
+package com.test.block;
+
+import java.util.ArrayList;
+
+import com.test.block.tileentity.MaltiBlockTileEntity;
+import com.test.main.TestCore;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class MaltiBlock extends BlockContainer {
+
+	public static int[] materials = {};
+
+	public MaltiBlock() {
+		super(Material.iron);
+		setCreativeTab(TestCore.testCreativeTab);
+		this.setHardness(1F);
+	}
+
+	@Override
+	public void breakBlock(World world, int x, int y, int z, Block block, int meta){
+		ItemStack stack = new ItemStack(TestCore.maltiBlock, 1);
+		if(world.getTileEntity(x, y, z) instanceof MaltiBlockTileEntity){
+			MaltiBlockTileEntity tile = (MaltiBlockTileEntity)world.getTileEntity(x, y, z);
+			tile.writeToNBTForItemDrop(stack);
+		}
+		world.spawnEntityInWorld(new EntityItem(world, x, y, z, stack));
+		super.breakBlock(world, x, y, z, block, meta);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		return ret;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new MaltiBlockTileEntity();
+	}
+
+}

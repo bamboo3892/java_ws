@@ -1,0 +1,231 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.network.SimpleTilePacket;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public abstract class ConstructSimpleOutPuter<Target> extends ConstructBaseTileEntity implements IPipeConnectionUser {
+
+	public ConnectionEntry<Target> connection = null;
+	protected ArrayList<ConnectionEntry> connections = new ArrayList<ConnectionEntry>();
+	protected int index = 0;
+
+	protected boolean needUpdateEntry = true;
+//	private boolean spawnParticle = false;
+//	private int spawnParticleSide = 0;
+
+	public ConstructSimpleOutPuter(int grade) {
+		super(grade);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if(worldObj.isRemote){
+//			if(spawnParticle){
+//				spawnCennectionParticle("cloud");
+//				spawnParticle = false;
+//			}
+			if(needUpdateEntry){
+				updateEntry();
+				needUpdateEntry = false;
+			}
+		}else{
+			if(needUpdateEntry){
+				updateEntry();
+				checkConnectionToEntry();
+				needUpdateEntry = false;
+			}
+		}
+	}
+
+	@Override
+	public abstract void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ);
+	@Override
+	public void onShiftRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(worldObj.isRemote){
+			spawnCennectionParticle("cloud");
+		}else{
+			//do nothing
+		}
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.getCurrentEquippedItem() == null || player.getCurrentEquippedItem().getItem() != TestCore.wrench) return false;
+		//checkConnection();
+		if(!player.isSneaking()){
+
+		}else{
+			if(worldObj.isRemote){
+				//do nothing
+			}else{
+				if(connectNextBlock()){
+					TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, SimpleTilePacket.CONNECT_PARTICLE, side));
+					ConnectionEntry entry = connection;
+					if(!(entry == null)){
+						player.addChatMessage(new ChatComponentText(connection.getText()));
+					}else{
+						player.addChatMessage(new ChatComponentText("No Connection Found"));
+					}
+				}else{
+					player.addChatMessage(new ChatComponentText("No Connection Found"));
+				}
+				this.sendConnectionUpdatePacket();
+			}
+		}
+		return false;
+	}
+
+	public boolean connectNextBlock() {
+		checkConnectionToEntry();
+		if(connections.size() <= 0){
+			index = 0;
+			connection = null;
+			return false;
+		}else{
+			index = (index >= connections.size() - 1 ? 0 : index + 1);
+			connection = connections.get(index);
+			return true;
+		}
+	}
+
+	public void spawnCennectionParticle(String name) {
+		if(connection != null){
+			for (int n = 0; n < 0111; n++){
+				double xOffset = (n & 0001) == 0001 ? -0.5 : 0.5;
+				double yOffset = (n & 0010) == 0010 ? -0.5 : 0.5;
+				double zOffset = (n & 0100) == 0100 ? -0.5 : 0.5;
+				worldObj.spawnParticle(name, connection.x + xOffset + 0.5, connection.y + yOffset + 0.5, connection.z + zOffset + 0.5, 0.0D, 0.0D, 0.0D);
+			}
+		}
+	}
+
+	public void needUpdateEntry() {
+		needUpdateEntry = true;
+	}
+
+	public void checkConnectionToEntry() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		connections.clear();
+		connections.add(new ConnectionEntry(this));
+		ArrayList ppppppppppp = new ArrayList<BlockPipeTileEntity>();
+		for (int side = 0; side < 6; side++){
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			TileEntity tile = worldObj.getTileEntity(newX, newY, newZ);
+			if(tile instanceof BlockPipeTileEntity && !tile.isInvalid()){
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity) tile;
+				pipe.findConnection(ppppppppppp, connections, getTargetClass(), false);
+			}else if(tile != null && getTargetClass().isAssignableFrom(tile.getClass())){
+				if(tile instanceof ConstructBaseTileEntity){
+					ConstructBaseTileEntity baseTile = (ConstructBaseTileEntity) tile;
+					if(baseTile.flagIO[dir.getOpposite().ordinal()] == 0){
+						connections.add(new ConnectionEntry(getTargetClass().cast(baseTile)));
+					}
+				}
+			}
+		}
+		connections.remove(0);
+
+		//find past connection
+		for (int i = 0; i < connections.size(); i++){
+			ConnectionEntry entry = connections.get(i);
+			if(entry == null){
+			}else if(connection != null && connection.equals(entry)){
+				index = i;
+				return;
+			}else{
+				connection = null;
+			}
+		}
+		connection = null;
+	}
+
+	protected boolean updateEntry() {
+		if(connection != null){
+			TileEntity tile = worldObj.getTileEntity(connection.x, connection.y, connection.z);
+			if(tile != null && getTargetClass().isAssignableFrom(tile.getClass()) && !tile.isInvalid()){
+				connection.setTile(getTargetClass().cast(tile));
+			}else{
+				connection = null;
+			}
+		}
+		if(!worldObj.isRemote) sendConnectionUpdatePacket();
+		return true;
+	}
+
+	/**server only*/
+	protected void sendConnectionUpdatePacket() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		NBTTagCompound tag = new NBTTagCompound();
+		if(connection != null){
+			connection.writeToNBT(tag);
+		}
+		TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, SimpleTilePacket.NBT_CONNECTION, tag));
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	protected abstract Class<Target> getTargetClass();
+
+	@Override
+	public void processCommand(byte command, Object value) {
+		super.processCommand(command, value);
+		if(command == SimpleTilePacket.NBT_CONNECTION && value instanceof NBTTagCompound){//should client
+			NBTTagCompound tag = (NBTTagCompound) value;
+			connection = ConnectionEntry.createFromNBT(tag);
+			needUpdateEntry = true;
+		}else if(command == SimpleTilePacket.CONNECT_PARTICLE){//should client
+			this.spawnCennectionParticle("cloud");
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		//checkConnection();
+		tag.setString("name", getNameForNBT());
+		tag.setInteger("index", solid.toIndex(connection.x, connection.y, connection.z, false));
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		index = tag.getInteger("index");
+		NBTTagCompound entrytag = tag.getCompoundTag("entry");
+		connection = ConnectionEntry.createFromNBT(entrytag);
+//		spawnParticle = tag.getBoolean("spawnParticle");
+//		spawnParticleSide = tag.getInteger("spawnParticleSide");
+		needUpdateEntry = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		//checkConnection();
+		tag.setInteger("index", index);
+		NBTTagCompound entryTag = new NBTTagCompound();
+		if(connection != null){
+			connection.writeToNBT(entryTag);
+		}
+		tag.setTag("entry", entryTag);
+//		tag.setBoolean("spawnParticle", this.spawnParticle);
+//		tag.setInteger("spawnParticleSide", spawnParticleSide);
+//		spawnParticle = false;
+		super.writeToNBT(tag);
+	}
+
+}

@@ -1,0 +1,238 @@
+****************************
+ Powered By MCP:             
+ http://modcoderpack.com/    
+ Searge, ProfMobius, Fesh0r, 
+ R4wk, ZeuX, IngisKahn, bspkrs
+ MCP Data version : unknown
+****************************
+All projects evaluated.
+Selected primary task 'DefaultTaskParameter{taskName='build',projectPath='null'}'
+Tasks to be executed: [task ':compileApiJava', task ':processApiResources', task ':apiClasses', task ':sourceMainJava', task ':compileJava', task ':processResources', task ':classes', task ':jar', task ':compileTestJava', task ':processTestResources', task ':testClasses', task ':test', task ':extractMcpData', task ':getVersionJson', task ':extractUserDev', task ':genSrgs', task ':reobf', task ':assemble', task ':check', task ':build']
+:compileApiJava (Thread[main,5,main]) started.
+:compileApiJava
+Skipping task ':compileApiJava' as it has no source files.
+:compileApiJava UP-TO-DATE
+:compileApiJava (Thread[main,5,main]) completed. Took 0.011 secs.
+:processApiResources (Thread[main,5,main]) started.
+:processApiResources
+Skipping task ':processApiResources' as it has no source files.
+:processApiResources UP-TO-DATE
+:processApiResources (Thread[main,5,main]) completed. Took 0.001 secs.
+:apiClasses (Thread[main,5,main]) started.
+:apiClasses
+Skipping task ':apiClasses' as it has no actions.
+:apiClasses UP-TO-DATE
+:apiClasses (Thread[main,5,main]) completed. Took 0.0 secs.
+:sourceMainJava (Thread[main,5,main]) started.
+:sourceMainJava
+Skipping task ':sourceMainJava' as it is up-to-date (took 0.32 secs).
+:sourceMainJava UP-TO-DATE
+:sourceMainJava (Thread[main,5,main]) completed. Took 0.321 secs.
+:compileJava (Thread[main,5,main]) started.
+:compileJava
+Resource missing. [HTTP GET: http://files.minecraftforge.net/maven//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar]
+Resource missing. [HTTP GET: http://repo1.maven.org/maven2//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/net/minecraft/launchwrapper/1.12/launchwrapper-1.12.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/ow2/asm/asm-debug-all/5.0.3/asm-debug-all-5.0.3.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/ow2/asm/asm-debug-all/5.0.3/asm-debug-all-5.0.3.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/typesafe/akka/akka-actor_2.11/2.3.3/akka-actor_2.11-2.3.3.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/typesafe/akka/akka-actor_2.11/2.3.3/akka-actor_2.11-2.3.3.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/typesafe/config/1.2.1/config-1.2.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/typesafe/config/1.2.1/config-1.2.1.jar]
+Resource missing. [HTTP GET: http://repo1.maven.org/maven2/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.jar]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.pom]
+Resource missing. [HTTP GET: http://repo1.maven.org/maven2/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.jar]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.pom]
+Resource missing. [HTTP GET: http://repo1.maven.org/maven2/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.jar]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/sf/jopt-simple/jopt-simple/4.5/jopt-simple-4.5.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/sf/jopt-simple/jopt-simple/4.5/jopt-simple-4.5.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/lzma/lzma/0.0.1/lzma-0.0.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/lzma/lzma/0.0.1/lzma-0.0.1.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/lzma/lzma/0.0.1/lzma-0.0.1.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/lzma/lzma/0.0.1/lzma-0.0.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/mojang/realms/1.3.5/realms-1.3.5.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/mojang/realms/1.3.5/realms-1.3.5.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/mojang/realms/1.3.5/realms-1.3.5.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/mojang/realms/1.3.5/realms-1.3.5.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/commons/commons-compress/1.8.1/commons-compress-1.8.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/commons/commons-compress/1.8.1/commons-compress-1.8.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/httpcomponents/httpclient/4.3.3/httpclient-4.3.3.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/httpcomponents/httpclient/4.3.3/httpclient-4.3.3.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-logging/commons-logging/1.1.3/commons-logging-1.1.3.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/httpcomponents/httpcore/4.3.2/httpcore-4.3.2.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/java3d/vecmath/1.3.1/vecmath-1.3.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/java3d/vecmath/1.3.1/vecmath-1.3.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/sf/trove4j/trove4j/3.0.3/trove4j-3.0.3.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/ibm/icu/icu4j-core-mojang/51.2/icu4j-core-mojang-51.2.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/ibm/icu/icu4j-core-mojang/51.2/icu4j-core-mojang-51.2.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/ibm/icu/icu4j-core-mojang/51.2/icu4j-core-mojang-51.2.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/ibm/icu/icu4j-core-mojang/51.2/icu4j-core-mojang-51.2.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/codecjorbis/20101023/codecjorbis-20101023.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/codecjorbis/20101023/codecjorbis-20101023.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/codecjorbis/20101023/codecjorbis-20101023.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/codecjorbis/20101023/codecjorbis-20101023.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/codecwav/20101023/codecwav-20101023.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/codecwav/20101023/codecwav-20101023.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/codecwav/20101023/codecwav-20101023.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/codecwav/20101023/codecwav-20101023.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/libraryjavasound/20101123/libraryjavasound-20101123.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/librarylwjglopenal/20100824/librarylwjglopenal-20100824.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/soundsystem/20120107/soundsystem-20120107.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/paulscode/soundsystem/20120107/soundsystem-20120107.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/soundsystem/20120107/soundsystem-20120107.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/paulscode/soundsystem/20120107/soundsystem-20120107.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/io/netty/netty-all/4.0.10.Final/netty-all-4.0.10.Final.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/io/netty/netty-all/4.0.10.Final/netty-all-4.0.10.Final.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/guava/guava/17.0/guava-17.0.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/guava/guava/17.0/guava-17.0.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-io/commons-io/2.4/commons-io-2.4.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-io/commons-io/2.4/commons-io-2.4.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-codec/commons-codec/1.9/commons-codec-1.9.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/commons-codec/commons-codec/1.9/commons-codec-1.9.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jinput/jinput/2.0.5/jinput-2.0.5.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jinput/jinput/2.0.5/jinput-2.0.5.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jutils/jutils/1.0.0/jutils-1.0.0.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jutils/jutils/1.0.0/jutils-1.0.0.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/code/gson/gson/2.2.4/gson-2.2.4.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/mojang/authlib/1.5.16/authlib-1.5.16.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/com/mojang/authlib/1.5.16/authlib-1.5.16.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/mojang/authlib/1.5.16/authlib-1.5.16.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/com/mojang/authlib/1.5.16/authlib-1.5.16.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-api/2.0-beta9/log4j-api-2.0-beta9.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-api/2.0-beta9/log4j-api-2.0-beta9.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-core/2.0-beta9/log4j-core-2.0-beta9.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/apache/logging/log4j/log4j-core/2.0-beta9/log4j-core-2.0-beta9.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch/5.16/twitch-5.16.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch/5.16/twitch-5.16.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch/5.16/twitch-5.16.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch/5.16/twitch-5.16.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/scala-lang/modules/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/scala-lang/modules/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/scala-lang/modules/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch-platform/5.16/twitch-platform-5.16.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch-platform/5.16/twitch-platform-5.16-natives-windows-32.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-platform/5.16/twitch-platform-5.16.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-platform/5.16/twitch-platform-5.16-natives-windows-32.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch-external-platform/4.5/twitch-external-platform-4.5.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/tv/twitch/twitch-external-platform/4.5/twitch-external-platform-4.5-natives-windows-32.jar]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-external-platform/4.5/twitch-external-platform-4.5.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-external-platform/4.5/twitch-external-platform-4.5-natives-windows-32.jar]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1.pom]
+Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-windows.jar]
+Skipping task ':compileJava' as it is up-to-date (took 51.906 secs).
+:compileJava UP-TO-DATE
+:compileJava (Thread[main,5,main]) completed. Took 51.908 secs.
+:processResources (Thread[main,5,main]) started.
+:processResources
+Skipping task ':processResources' as it is up-to-date (took 0.021 secs).
+:processResources UP-TO-DATE
+:processResources (Thread[main,5,main]) completed. Took 0.023 secs.
+:classes (Thread[main,5,main]) started.
+:classes
+Skipping task ':classes' as it has no actions.
+:classes UP-TO-DATE
+:classes (Thread[main,5,main]) completed. Took 0.0 secs.
+:jar (Thread[main,5,main]) started.
+:jar
+Executing task ':jar' (up-to-date check took 0.03 secs) due to:
+  Output file D:\eclipse\workspace\testmod\build\libs\testmod-1.0.jar has changed.
+  Output file D:\eclipse\workspace\testmod\build\libs\testmod-1.0.jar has been removed.
+:jar (Thread[main,5,main]) completed. Took 1.343 secs.
+:compileTestJava (Thread[main,5,main]) started.
+:compileTestJava
+Skipping task ':compileTestJava' as it has no source files.
+:compileTestJava UP-TO-DATE
+:compileTestJava (Thread[main,5,main]) completed. Took 0.001 secs.
+:processTestResources (Thread[main,5,main]) started.
+:processTestResources
+Skipping task ':processTestResources' as it has no source files.
+:processTestResources UP-TO-DATE
+:processTestResources (Thread[main,5,main]) completed. Took 0.0 secs.
+:testClasses (Thread[main,5,main]) started.
+:testClasses
+Skipping task ':testClasses' as it has no actions.
+:testClasses UP-TO-DATE
+:testClasses (Thread[main,5,main]) completed. Took 0.0 secs.
+:test (Thread[main,5,main]) started.
+:test
+file or directory 'D:\eclipse\workspace\testmod\build\classes\test', not found
+Skipping task ':test' as it has no source files.
+:test UP-TO-DATE
+:test (Thread[main,5,main]) completed. Took 0.001 secs.
+:extractMcpData (Thread[main,5,main]) started.
+:extractMcpData
+Skipping task ':extractMcpData' as it is up-to-date (took 0.001 secs).
+:extractMcpData UP-TO-DATE
+:extractMcpData (Thread[main,5,main]) completed. Took 0.003 secs.
+:getVersionJson (Thread[main,5,main]) started.
+:getVersionJson
+Executing task ':getVersionJson' (up-to-date check took 0.0 secs) due to:
+  Task has not declared any outputs.
+:getVersionJson (Thread[main,5,main]) completed. Took 0.657 secs.
+:extractUserDev (Thread[main,5,main]) started.
+:extractUserDev
+Resource missing. [HTTP GET: http://repo1.maven.org/maven2/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10.pom]
+Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-userdev.jar]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10.pom]
+Skipping task ':extractUserDev' as it is up-to-date (took 1.228 secs).
+:extractUserDev UP-TO-DATE
+:extractUserDev (Thread[main,5,main]) completed. Took 1.229 secs.
+:genSrgs (Thread[main,5,main]) started.
+:genSrgs
+Skipping task ':genSrgs' as task onlyIf is false.
+:genSrgs SKIPPED
+:genSrgs (Thread[main,5,main]) completed. Took 0.287 secs.
+:reobf (Thread[main,5,main]) started.
+:reobf
+Executing task ':reobf' (up-to-date check took 0.002 secs) due to:
+  Output file D:\eclipse\workspace\testmod\build\libs\testmod-1.0.jar has changed.
+  Output file D:\eclipse\workspace\testmod\build\libs\testmod-1.0.jar has changed.
+:reobf (Thread[main,5,main]) completed. Took 2.997 secs.
+:assemble (Thread[main,5,main]) started.
+:assemble
+Skipping task ':assemble' as it has no actions.
+:assemble (Thread[main,5,main]) completed. Took 0.001 secs.
+:check (Thread[main,5,main]) started.
+:check
+Skipping task ':check' as it has no actions.
+:check UP-TO-DATE
+:check (Thread[main,5,main]) completed. Took 0.001 secs.
+:build (Thread[main,5,main]) started.
+:build
+Skipping task ':build' as it has no actions.
+:build (Thread[main,5,main]) completed. Took 0.0 secs.
+
+BUILD SUCCESSFUL
+
+Total time: 1 mins 33.183 secs

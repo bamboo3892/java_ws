@@ -1,0 +1,191 @@
+package sub;
+
+import ai.AISheet;
+import ai.EstimateAI;
+import ai.ILearnableAI;
+
+public class Learning {
+
+	private int box[][] = new int[8][8];
+	private int teban = 1;
+	private int tteban;
+	private final AISheet AI1;
+	private final AISheet AI2;
+	private int winner;
+
+	private static double duel = 0;
+	private static double win = 0;
+
+	public static void main(String args[]){
+		for(int i=0;i<200;i++){
+			EstimateAI learningAI = new EstimateAI(true);
+			EstimateAI tAI = new EstimateAI(false);
+			duel++;
+			int t = (int)(Math.random()*2) + 1;
+			Learning l;
+			if(t == 1){
+				l = new Learning(learningAI, tAI, t);
+			}else{
+				l = new Learning(tAI, learningAI, t);
+			}
+			l.duel();
+			l.learn();
+		}
+		System.out.println("win rate : " + win/duel);
+	}
+
+	public Learning(AISheet ai1, AISheet ai2, int tteban){
+		this.AI1 = ai1;
+		this.AI2 = ai2;
+		this.tteban = tteban;
+	}
+
+	public void duel(){//return winner
+		for(int i=0;i<8;i++) for(int j=0;j<8;j++) box[i][j] = 0;
+		box[3][4] = box[4][3] = 1;
+		box[3][3] = box[4][4] = 2;
+
+		while(true){
+			
+			///////////////////////////////////////////////////////////////////////////
+			if (!isTherePlaceToPlaceStone()) {
+				teban = teban == 1 ? 2 : 1;
+				if (!isTherePlaceToPlaceStone()) {
+					return;
+				}
+			}
+			///////////////////////////////////////////////////////////////////////////
+
+			AISheet sheet = teban==1 ? AI1 : AI2;
+			sheet.set(box, teban);
+			sheet.decideNextPlace();
+			if(!canPlaceAtAndReverse(sheet.getNextX(), sheet.getNextY())) System.out.println("error?");
+			teban = teban==1 ? 2 : 1;
+		}
+	}
+
+	public void learn(){
+		int winner = getWinner();
+		if(!(AI1 instanceof ILearnableAI) || !(AI2 instanceof ILearnableAI)) return;
+		ILearnableAI ai1 = (ILearnableAI)AI1;
+		ILearnableAI ai2 = (ILearnableAI)AI2;
+		if(winner != tteban){
+			System.out.print("Learn from ");
+			if(tteban == 1){
+				System.out.print("2");
+				ai1.learn(ai2);
+			}else{
+				System.out.print("1");
+				ai2.learn(ai1);
+			}
+		}else{
+			win++;
+		}
+	}
+
+ 	private boolean canPlace(int x, int y){
+		if(box[x][y] != 0) {
+			//System.out.println("The place already has a stone");
+			return false;
+		}
+		boolean b = false;
+		for(int henniX=-1;henniX<2;henniX++){
+			flag:for(int henniY=-1;henniY<2;henniY++){
+				if(henniX == 0 && henniY == 0) continue flag;
+				int reverseCount = 0;
+				for(int i=1;i<8;i++){
+					if(x+henniX*i<0 || x+henniX*i>7 || y+henniY*i<0 || y+henniY*i>7) continue flag;
+					if(box[x+henniX*i][y+henniY*i] == (teban==1 ? 2 : 1)) {
+						reverseCount++;
+					}else if(box[x+henniX*i][y+henniY*i] == teban && reverseCount != 0) {
+						b = true;
+					}else{
+						continue flag;
+					}
+				}
+			}
+		}
+		return b;
+	}
+
+	private boolean canPlaceAtAndReverse(int x, int y){
+		if(box[x][y] != 0) {
+			//System.out.println("The place already has a stone");
+			return false;
+		}
+		boolean b = false;
+		for(int henniX=-1;henniX<2;henniX++){
+			flag:for(int henniY=-1;henniY<2;henniY++){
+				if(henniX == 0 && henniY == 0) continue flag;
+				int reverseCount = 0;
+				for(int i=1;i<8;i++){
+					if(x+henniX*i<0 || x+henniX*i>7 || y+henniY*i<0 || y+henniY*i>7) continue flag;
+					if(box[x+henniX*i][y+henniY*i] == (teban==1 ? 2 : 1)) {
+						reverseCount++;
+					}else if(box[x+henniX*i][y+henniY*i] == teban && reverseCount != 0) {
+						for(int j=0;j<reverseCount+1;j++) box[x+henniX*j][y+henniY*j] = teban;
+						b = true;
+						//System.out.println("reverse");
+					}else{
+						continue flag;
+					}
+				}
+			}
+		}
+		return b;
+	}
+
+	private boolean isFilled(){
+		for(int i=0;i<8;i++) for(int j=0;j<8;j++) {
+			if(box[i][j] != 1 && box[i][j] != 2) return false;
+		}
+		return true;
+	}
+
+	private boolean isTherePlaceToPlaceStone() {
+		for(int i=0;i<8;i++) for(int j=0;j<8;j++) {
+			if(canPlace(i, j)) return true;
+		}
+		return false;
+	}
+
+	private int getWinner() {
+		int black = 0;
+		int white = 0;
+		for(int i=0;i<8;i++) for(int j=0;j<8;j++) {
+			if(box[i][j] == 1) {
+				black++;
+			}else if(box[i][j] == 2){
+				white++;
+			}
+		}
+		if(black > white){
+			System.out.println(tteban + ":" + 1);
+			return 1;
+		}else if(black < white){
+			System.out.println(tteban + ":" + 2);
+			return 2;
+		}else{
+			System.out.println(tteban + ":" + 0);
+			return 0;
+		}
+	}
+
+	@Override
+	public final void finalize(){
+		try {
+			super.finalize();
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		System.gc();
+	}
+}
+
+
+
+
+
+
+
+

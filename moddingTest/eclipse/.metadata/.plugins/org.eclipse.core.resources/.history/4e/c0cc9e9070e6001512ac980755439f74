@@ -1,0 +1,155 @@
+package com.test.multiblock;
+
+import com.test.block.construct.parts.ConstructPartBase;
+import com.test.block.construct.tileentity.ConstructFunctionalBaseTileEntity;
+import com.test.register.ConstructPartRegistry;
+import com.test.utils.Position;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+
+public class MultiBlockTileEntity extends TileEntity {
+
+	private int xSize;//the number of blocks in x direction
+	private int ySize;
+	private int zSize;
+	private ConstructPartBase[][][] parts;
+
+	public MultiBlockTileEntity() {
+
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound){
+		super.readFromNBT(nbtTagCompound);
+		xSize = nbtTagCompound.getInteger("xSize");
+		ySize = nbtTagCompound.getInteger("ySize");
+		zSize = nbtTagCompound.getInteger("zSize");
+		parts = new ConstructPartBase[xSize][ySize][zSize];
+		NBTTagList blockTagList = nbtTagCompound.getTagList("blockList", Constants.NBT.TAG_COMPOUND);
+		RectangularSolid solid = new RectangularSolid(xSize, ySize, zSize);
+		for (int tagCounter = 0; tagCounter < blockTagList.tagCount(); ++tagCounter){
+			NBTTagCompound blockTagCompound = (NBTTagCompound)blockTagList.getCompoundTagAt(tagCounter);
+			int index = blockTagCompound.getInteger("index");
+			Position p = solid.toCoord(index);
+			parts[p.x][p.y][p.z] = ConstructPartRegistry.getNewPartFromNBT(blockTagCompound, solid);
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound){
+		super.writeToNBT(nbtTagCompound);
+		nbtTagCompound.setInteger("xSize", xSize);
+		nbtTagCompound.setInteger("ySize", ySize);
+		nbtTagCompound.setInteger("zSize", zSize);
+		NBTTagList blocksTagList = new NBTTagList();
+		RectangularSolid solid = new RectangularSolid(xSize, ySize, zSize);
+		int index = 0;
+		for (int i=0;i<xSize;i++) {
+			for (int j=0;j<ySize;j++) {
+				for (int k=0;k<zSize;k++) {
+					if(parts[i][j][k] != null){
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setInteger("index" , index);
+						parts[i][j][k].writeToNBTTagCompound(tag, solid);
+						blocksTagList.appendTag(tag);
+					}
+					index++;
+				}
+			}
+		}
+		nbtTagCompound.setTag("blockList", blocksTagList);
+	}
+
+	public void writeToNBTForItemDrop(ItemStack itemStack){
+		NBTTagCompound itemTag = new NBTTagCompound();
+		itemStack.writeToNBT(itemTag);
+		itemTag.setInteger("xSize", xSize);
+		itemTag.setInteger("ySize", ySize);
+		itemTag.setInteger("zSize", zSize);
+		NBTTagList blocksTagList = new NBTTagList();
+		RectangularSolid solid = new RectangularSolid(xSize, ySize, zSize);
+		int index = 0;
+		for (int i=0;i<xSize;i++) {
+			for (int j=0;j<ySize;j++) {
+				for (int k=0;k<zSize;k++) {
+					if(parts[i][j][k] != null){
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setInteger("index" , index);
+						parts[i][j][k].writeToNBTTagCompound(tag, solid);
+						blocksTagList.appendTag(tag);
+					}
+					index++;
+				}
+			}
+		}
+		itemTag.setTag("blockList", blocksTagList);
+		itemStack.setTagCompound(itemTag);
+	}
+
+	public static MultiBlockTileEntity createTileFromNBT(NBTTagCompound tagCompound){
+		System.out.println(tagCompound);
+		MultiBlockTileEntity tile = new MultiBlockTileEntity();
+		tile.xSize = tagCompound.getInteger("xSize");
+		tile.ySize = tagCompound.getInteger("ySize");
+		tile.zSize = tagCompound.getInteger("zSize");
+		tile.parts = new ConstructPartBase[tile.xSize][tile.ySize][tile.zSize];
+		NBTTagList blockTagList = tagCompound.getTagList("blockList", Constants.NBT.TAG_COMPOUND);
+		RectangularSolid solid = new RectangularSolid(tile.xSize, tile.ySize, tile.zSize);
+		for (int tagCounter = 0; tagCounter < blockTagList.tagCount(); ++tagCounter){
+			NBTTagCompound blockTagCompound = (NBTTagCompound)blockTagList.getCompoundTagAt(tagCounter);
+			int index = blockTagCompound.getInteger("index");
+			Position p = solid.toCoord(index);
+			tile.parts[p.x][p.y][p.z] = ConstructPartRegistry.getNewPartFromNBT(blockTagCompound, solid);
+			if(tile.parts[p.x][p.y][p.z]==null) System.out.println("nulllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll");
+		}
+		tile.showDebug();
+		return tile;
+	}
+
+	public static void writeDetailToNBT(NBTTagCompound tagCompound, World world, RectangularSolid solid, Position start){
+		tagCompound.setInteger("xSize", solid.getXSize());
+		tagCompound.setInteger("ySize", solid.getYSize());
+		tagCompound.setInteger("zSize", solid.getZSize());
+		NBTTagList blocksTagList = new NBTTagList();
+		int index = 0;
+		//System.out.println(solid);
+		Position p = solid.getMinPoint();
+		p = Position.sum(p, start);
+		//System.out.println(p.x + ", " + p.y + ", " + p.z);
+		for (int i=0;i<solid.getXSize();i++) {
+			for (int j=0;j<solid.getYSize();j++) {
+				for (int k=0;k<solid.getZSize();k++) {
+					if(world.getTileEntity(p.x + i, p.y + j, p.z + k) instanceof ConstructFunctionalBaseTileEntity){
+						ConstructFunctionalBaseTileEntity base = (ConstructFunctionalBaseTileEntity)world.getTileEntity(p.x + i, p.y + j, p.z + k);
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setInteger("index" , index);
+						base.writeDetailToNBTForItemStack(tag, solid);
+						blocksTagList.appendTag(tag);
+					}
+					index++;
+				}
+			}
+		}
+		tagCompound.setTag("blockList", blocksTagList);
+	}
+
+	public void showDebug(){
+		System.out.println("xSize = "+xSize+" ySize = "+ySize+" zSize = "+zSize);
+		for (int i=0;i<xSize;i++) {
+			for (int j=0;j<ySize;j++) {
+				for (int k=0;k<zSize;k++) {
+					if(parts[i][j][k] != null){
+						System.out.println(parts[i][j][k].getNameForNBT() + " : x, y, z = " + i + ", " + j + ", " + k);
+					}
+				}
+			}
+		}
+	}
+
+}

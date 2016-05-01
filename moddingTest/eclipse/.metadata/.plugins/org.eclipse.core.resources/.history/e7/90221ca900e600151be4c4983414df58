@@ -1,0 +1,9 @@
+package com.test.main;
+
+public class Particles {
+
+	public Particles() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

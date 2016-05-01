@@ -1,0 +1,33 @@
+package com.test.client.gui;
+
+import com.test.multiblock.construct.tileentity.ConstructInterfaceTileEntity;
+import com.test.multiblock.construct.tileentity.ConstructStorageTileEntity;
+import com.test.server.gui.ConstructInterfaceContainer;
+import com.test.server.gui.ConstructStorageContainer;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+
+public class ConstructInterfaceGui extends GuiContainer{
+	
+	private GuiContainer connectedGui;
+
+	public ConstructInterfaceGui(IInventory player, ConstructInterfaceTileEntity tile) {
+		super(new ConstructInterfaceContainer(player, tile));
+		if(tile.connection.tile instanceof ConstructStorageTileEntity){
+			connectedGui = new ConstructStorageGui(player, tile);
+		}
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+		connectedGui.
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_){
+
+	}
+
+}

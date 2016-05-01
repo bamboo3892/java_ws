@@ -1,0 +1,196 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class ConstructClockPulserTileEntity extends ConstructBaseTileEntity {
+
+	public static final String nameForNBT = "clockPulser";
+
+	public ISignalReceiver[] connection = new ISignalReceiver[6];
+	/**each list does not include this tile*/
+	private ArrayList<ISignalReceiver>[] connections = new ArrayList[6];
+	private int[] index = new int[6];
+	public int flagIO[] = new int[6];// 0 : disabled 1 : output
+	private boolean needCheck = true;
+
+	private int updateTickFraction = ConstructInventoryBaseTileEntity.updateTickFractionaa++;
+
+	public ConstructClockPulserTileEntity() {
+		for (int i = 0; i < 6; i++) {
+			connection[i] = null;
+			connections[i] = new ArrayList<ISignalReceiver>();
+			index[i] = 0;
+			flagIO[i] = 0;
+		}
+	}
+
+	public void updateEntity() {
+		if (needCheck || worldObj.getTotalWorldTime() % 20 == updateTickFraction % 20) {
+			checkConnection();
+			needCheck = false;
+		}
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		checkConnection();
+		if (player.getCurrentEquippedItem() == null) return false;
+		if (player.getCurrentEquippedItem().getItem() == TestCore.wrench) {
+			boolean b = player.isSneaking();
+			if (!b) {
+				int n = changeIO(side);
+				if (worldObj.isRemote) {
+					if (n == 3) {
+						System.out.println("Illigal side index!");
+					}
+					player.addChatMessage(new ChatComponentText(n == 0 ? "input" : n == 1 ? "output" : "disabled"));
+				}
+			} else {
+				if (connectNextBlock(side)) {
+					spawnCennectionParticle(side);
+					if (worldObj.isRemote) {
+						if (!(connection[side] == null) && connection[side] instanceof TileEntity) {
+							player.addChatMessage(new ChatComponentText(((TileEntity)connection[side]).getClass().getSimpleName());
+						} else {
+							player.addChatMessage(new ChatComponentText("No Connection Found"));
+						}
+					}
+				} else {
+					if (worldObj.isRemote) {
+						player.addChatMessage(new ChatComponentText("No Connection Found"));
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	public void checkConnection() {
+		for (int i = 0; i < 6; i++) {
+			checkConnectionForSide(i);
+		}
+		if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private void checkConnectionForSide(int side) {
+		connections[side].clear();
+		ForgeDirection dir = ForgeDirection.getOrientation(side);
+		int newX = xCoord + dir.offsetX;
+		int newY = yCoord + dir.offsetY;
+		int newZ = zCoord + dir.offsetZ;
+		TileEntity tile = worldObj.getTileEntity(newX, newY, newZ);
+		if (tile instanceof BlockPipeTileEntity) {
+			BlockPipeTileEntity pipe = (BlockPipeTileEntity) tile;
+			pipe.getConnectedSignalReceivers(new ArrayList<BlockPipeTileEntity>(), connections[side]);
+		} else if (tile instanceof ISignalReceiver) {
+			ISignalReceiver receiver = (ISignalReceiver) tile;
+			connections[side].add(receiver);
+		}
+		if (connections[side].size() <= 0) {
+			index[side] = 0;
+			connection[side] = null;
+		} else if (index[side] < connections[side].size()) {
+			connection[side] = connections[side].get(index[side]);
+		}
+	}
+
+	public boolean connectNextBlock(int side) {
+		checkConnectionForSide(side);
+		if (connections[side].size() <= 0) {
+			index[side] = 0;
+			connection[side] = null;
+			return false;
+		} else {
+			index[side] = (index[side] >= connections[side].size() - 1 ? 0 : index[side] + 1);
+			connection[side] = connections[side].get(index[side]);
+			return true;
+		}
+	}
+
+	public int changeIO(int side) {
+		if (side < 0 || side >= 6) return 3;
+		flagIO[side] = flagIO[side] == 0 ? 1 : 0;
+		return flagIO[side];
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbtTagCompound = new NBTTagCompound();
+		this.writeToNBT(nbtTagCompound);
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTagCompound);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		this.readFromNBT(pkt.func_148857_g());
+	}
+
+	public void spawnCennectionParticle(int side) {
+		if (connection[side] != null) {
+			if (connection[side] instanceof TileEntity) {
+				TileEntity tile = (TileEntity) connection[side];
+				for (int n = 0; n < 6; n++) {
+					ForgeDirection dir = ForgeDirection.getOrientation(n);
+					if (worldObj.getTileEntity(tile.xCoord, tile.yCoord, tile.zCoord) instanceof BlockPipeTileEntity) {
+						for (int i = 0; i < 10; i++)
+							worldObj.spawnParticle("cloud", tile.xCoord + dir.offsetX * 0.6 + 0.5, tile.yCoord + dir.offsetY * 0.6 + 0.5, tile.zCoord + dir.offsetZ * 0.6 + 0.5, 0.0D, 0.0D, 0.0D);
+					}
+				}
+			}
+		}
+	}
+
+	public void spawnSignalParticle() {
+		for (int i = 0; i < 5; i++)
+			worldObj.spawnParticle("reddust", xCoord + Math.random() * 0.6 + 0.5, yCoord + Math.random() * 0.6 + 0.5, zCoord + Math.random() * 0.6 + 0.5, 0.0D, 0.0D, 0.0D);
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		for (int i = 0; i < 6; i++) {
+			NBTTagCompound sideTag = tag.getCompoundTag("side" + i);
+			index[i] = sideTag.getInteger("index");
+		}
+		needCheck = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		checkConnection();
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++) {
+			side[i] = new NBTTagCompound();
+			side[i].setByte("io", (byte) flagIO[i]);
+			side[i].setInteger("index", index[i]);
+			tag.setTag("side" + i, side[i]);
+		}
+		super.writeToNBT(tag);
+	}
+
+}

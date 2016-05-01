@@ -1,0 +1,199 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.inventory.FilterInventory;
+import com.test.inventory.AbstractFilter;
+import com.test.main.TestCore;
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.network.SimpleTilePacket;
+import com.test.tileentity.ISimpleTilePacketUser;
+import com.test.utils.ConnectionEntry;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public abstract class ConstructFilterUserTileEntity extends ConstructInventoryBaseTileEntity implements ISimpleTilePacketUser {
+
+	public FilterInventory[] filter = new FilterInventory[6];
+	public static final int[] filterCapability = { 0, 2, 4, 5, 6 };
+
+	public ConstructFilterUserTileEntity(int grade) {
+		super(grade);
+	}
+
+	@Override
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.getHeldItem() != null && player.getHeldItem().getItem() == TestCore.filter) return;
+		if(filter[side] != null){
+			player.openGui(TestCore.instance, TestCore.FILTER_GUI_ID_0 + side, worldObj, xCoord, yCoord, zCoord);
+		}else{
+			onRightClickedNotFilterSide(player, side, hitX, hitY, hitZ);
+		}
+	}
+
+	public abstract void onRightClickedNotFilterSide(EntityPlayer player, int side, float hitX, float hitY, float hitZ);
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.getCurrentEquippedItem() == null || player.getCurrentEquippedItem().getItem() != TestCore.wrench) return false;
+		if(!player.isSneaking()){
+			int n = changeIO(side);
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			if(worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof BlockPipeTileEntity){
+				((BlockPipeTileEntity) worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ)).checkConnection();
+			}
+			if(!worldObj.isRemote) this.sendFlagIOUpdatePacket();
+			if(worldObj.isRemote) player.addChatMessage(new ChatComponentText(n == 0 ? "input" : n == 1 ? "output" : "disabled"));
+		}else{
+			if(filter[side] != null){
+				ItemStack filter = this.removeFilter(side);
+				if(filter != null && !worldObj.isRemote){
+					ForgeDirection dir = ForgeDirection.getOrientation(side);
+					worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + dir.offsetX + 0.5, yCoord + dir.offsetY + 0.5, zCoord + dir.offsetZ + 0.5, filter));
+				}
+				worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+			}
+			if(worldObj.isRemote){
+				//do nothing
+			}else{
+				if(flagIO[side] == 1){
+					if(connectNextBlock(side)){
+						TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, SimpleTilePacket.CONNECT_PARTICLE, side));
+						ConnectionEntry entry = connection[side];
+						if(!(entry == null)){
+							player.addChatMessage(new ChatComponentText(connection[side].getText()));
+						}else{
+							player.addChatMessage(new ChatComponentText("No Connection Found"));
+						}
+					}else{
+						player.addChatMessage(new ChatComponentText("No Connection Found"));
+					}
+					this.sendConnectionUpdatePacket();
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean setFilter(int side, AbstractFilter filter) {
+		if(this.filter[side] != null) return false;
+		int n = 0;
+		for (int i = 0; i < 6; i++){
+			if(this.filter[i] != null) n++;
+		}
+		if(n >= filterCapability[grade]) return false;
+		this.filter[side] = new FilterInventory(this, side);
+		return true;
+	}
+
+	@Deprecated
+	public boolean setFilter(int side) {
+		if(filter[side] != null) return false;
+		int n = 0;
+		for (int i = 0; i < 6; i++){
+			if(filter[i] != null) n++;
+		}
+		if(n >= filterCapability[grade]) return false;
+		filter[side] = new FilterInventory(this, side);
+		return true;
+	}
+
+	public boolean setCraftingFilter(int side){
+		if(filter[side] != null) return false;
+		int n = 0;
+		for (int i = 0; i < 6; i++){
+			if(filter[i] != null) n++;
+		}
+		if(n >= filterCapability[grade]) return false;
+		filter[side] = new FilterInventory(this, side);
+		return true;
+	}
+
+	public ItemStack removeFilter(int side) {
+		if(filter[side] == null){
+			return null;
+		}else{
+			filter[side] = null;
+			return new ItemStack(TestCore.filter, 1);
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+		if(flagIO[side] != 0){
+			return false;
+		}else{
+			if(filter[side] != null){
+				if(filter[side].canTransferItem(itemStack)){
+					return true;
+				}
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+		if(flagIO[side] != 1){
+			return false;
+		}else{
+			if(filter[side] != null){
+				if(filter[side].canTransferItem(itemStack)){
+					return true;
+				}
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+
+	public void processCommand(byte command, Object value){
+		super.processCommand(command, value);
+		if(command == SimpleTilePacket.FILTER && value instanceof String){
+			String str = (String)value;
+			int side = Character.getNumericValue(str.charAt(0));
+			int damage = Character.getNumericValue(str.charAt(1));
+			int nbt = Character.getNumericValue(str.charAt(2));
+			int oreDict = Character.getNumericValue(str.charAt(3));
+			int ban = Character.getNumericValue(str.charAt(4));
+			if(side >= 0 && side <= 5 && damage != -1 && nbt != -1 && oreDict != -1 && ban != -1){
+				filter[side].useDamage = damage == 1;
+				filter[side].useNBT = nbt == 1;
+				filter[side].useOreDictionary = oreDict == 1;
+				filter[side].filterBan = ban == 1;
+			}
+		}
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		NBTTagCompound sideTag;
+		for (int side = 0; side < 6; side++){
+			sideTag = tag.getCompoundTag("filter" + side);
+			filter[side] = FilterInventory.createFromNBT(this, side, sideTag);
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		for (int side = 0; side < 6; side++){
+			if(filter[side] == null) continue;
+			NBTTagCompound sideTag = new NBTTagCompound();
+			filter[side].writeToNBT(sideTag);
+			tag.setTag("filter" + side, sideTag);
+		}
+	}
+
+}

@@ -1,0 +1,5 @@
+package com.test.client.renderer;
+
+public interface IConstructRenderer {
+
+}

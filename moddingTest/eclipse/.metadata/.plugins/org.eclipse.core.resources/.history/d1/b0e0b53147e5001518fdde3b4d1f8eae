@@ -1,0 +1,70 @@
+package olddirectory.lasertech.tile;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+import olddirectory.lasertech.helper.InventoryHelper;
+import olddirectory.lasertech.logic.Laser;
+
+public class TileLaserEmitterItem extends TileLaserEmitter {
+
+	public TileLaserEmitterItem() {
+		this.type = "Item";
+	}
+
+	@Override
+	public void laserWork() {
+		if (worldObj.isRemote)
+			return;
+		ForgeDirection side = this.getDirection();
+		TileEntity tile = this.getWorldObj().getTileEntity(xCoord + side.getOpposite().offsetX,
+				yCoord + side.getOpposite().offsetY, zCoord + side.getOpposite().offsetZ);
+		if (tile instanceof IInventory) {
+			IInventory inv = (IInventory) tile;
+			if (tile instanceof ISidedInventory) {
+				ISidedInventory sided = (ISidedInventory) tile;
+				int[] accessible = sided.getAccessibleSlotsFromSide(side.ordinal());
+				outside: for (int slot : accessible) {
+					ItemStack destitem = sided.getStackInSlot(slot);
+					if (destitem != null) {
+						if (sided.canExtractItem(slot, destitem, side.ordinal())) {
+							for (Laser laser : this.lasers) {
+								if (laser.collided && laser.collidedtile != null
+										&& InventoryHelper.tryPushItem(this.getWorldObj(), laser.collidedtile.xCoord,
+												laser.collidedtile.yCoord, laser.collidedtile.zCoord,
+												laser.direction.getOpposite(), destitem)) {
+									sided.decrStackSize(slot, 1);
+									IInventory destinv = (IInventory) laser.collidedtile;
+									destinv.markDirty();
+									sided.markDirty();
+									break outside;
+								}
+							}
+						}
+					}
+				}
+			} else {
+				outside: for (int slot = 0; slot < inv.getSizeInventory(); slot++) {
+					ItemStack destitem = inv.getStackInSlot(slot);
+					if (destitem != null) {
+						for (Laser laser : this.lasers) {
+							if (laser.collided && laser.collidedtile != null
+									&& InventoryHelper.tryPushItem(this.getWorldObj(), laser.collidedtile.xCoord,
+											laser.collidedtile.yCoord, laser.collidedtile.zCoord,
+											laser.direction.getOpposite(), destitem)) {
+								inv.decrStackSize(slot, 1);
+								IInventory destinv = (IInventory) laser.collidedtile;
+								destinv.markDirty();
+								inv.markDirty();
+								break outside;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+}

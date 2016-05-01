@@ -1,0 +1,148 @@
+package main;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.border.EmptyBorder;
+
+import ai.AISheet;
+import ai.RandomAI;
+
+public class InitGui extends JFrame implements ActionListener {
+
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try{
+					InitGui frame = new InitGui();
+					frame.setVisible(true);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	private JPanel contentPane;
+	private JCheckBox cBox1;
+	private JCheckBox cBox2;
+	private ButtonGroup group1;
+	private ButtonGroup group2;
+
+	public InitGui() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 326, 379);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		JPanel panel1 = new JPanel();
+		contentPane.add(panel1, BorderLayout.NORTH);
+		panel1.setLayout(new GridLayout(0, 1, 0, 0));
+
+		JLabel label1 = new JLabel("先手-----------------------------------------------------------------------------------------");
+		panel1.add(label1);
+
+		cBox1 = new JCheckBox("AIを使う");
+		panel1.add(cBox1);
+		JRadioButton AI1_0 = new JRadioButton("New radio button");
+		panel1.add(AI1_0);
+		JRadioButton AI1_1 = new JRadioButton("New radio button");
+		panel1.add(AI1_1);
+		JRadioButton AI1_2 = new JRadioButton("New radio button");
+		panel1.add(AI1_2);
+		JRadioButton AI1_3 = new JRadioButton("New radio button");
+		panel1.add(AI1_3);
+		JRadioButton AI1_4 = new JRadioButton("New radio button");
+		panel1.add(AI1_4);
+
+		group1 = new ButtonGroup();
+		group1.add(AI1_0);
+		group1.add(AI1_1);
+		group1.add(AI1_2);
+		group1.add(AI1_3);
+		group1.add(AI1_4);
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		JPanel panel2 = new JPanel();
+		contentPane.add(panel2, BorderLayout.CENTER);
+		panel2.setLayout(new GridLayout(0, 1, 0, 0));
+
+		JLabel label2 = new JLabel("後手-----------------------------------------------------------------------------------------");
+		panel2.add(label2);
+
+		cBox2 = new JCheckBox("AIを使う");
+		panel2.add(cBox2);
+		JRadioButton AI2_0 = new JRadioButton("New radio button");
+		panel2.add(AI2_0);
+		JRadioButton AI2_1 = new JRadioButton("New radio button");
+		panel2.add(AI2_1);
+		JRadioButton AI2_2 = new JRadioButton("New radio button");
+		panel2.add(AI2_2);
+		JRadioButton AI2_3 = new JRadioButton("New radio button");
+		panel2.add(AI2_3);
+		JRadioButton AI2_4 = new JRadioButton("New radio button");
+		panel2.add(AI2_4);
+
+		group2 = new ButtonGroup();
+		group2.add(AI2_0);
+		group2.add(AI2_1);
+		group2.add(AI2_2);
+		group2.add(AI2_3);
+		group2.add(AI2_4);
+
+		JButton btnStart = new JButton("start");
+		btnStart.addActionListener(this);
+		contentPane.add(btnStart, BorderLayout.SOUTH);
+
+		this.pack();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		contentPane.setEnabled(false);
+		this.setVisible(false);
+		AISheet ai1 = null;
+		AISheet ai2 = null;
+		if(cBox1.isSelected()){
+			ai1 = new RandomAI();
+		}
+		if(cBox2.isSelected()){
+			ai2 = new RandomAI();
+		}
+		JFrame jf = new JFrame("Othello");
+		jf.setBounds(300, 300, Start.panelSize + 6, Start.panelSize + 35);
+		jf.setDefaultCloseOperation(3);
+		jf.setResizable(false);
+		try{
+			MyPanel panel = null;
+			panel = new MyPanel(ai1, ai2);
+			jf.getContentPane().add(panel);
+			jf.setVisible(true);
+		}catch (IOException e1){
+			System.err.println("Error");
+			e1.printStackTrace();
+		}
+	}
+
+}
+
+
+
+

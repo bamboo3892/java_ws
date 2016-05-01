@@ -1,0 +1,10 @@
+package com.test.tileentity;
+
+import com.test.utils.Position;
+
+public interface ISimpleTilePacketUser {
+
+	void processCommand(byte command, Object value);
+	Position getPosition();
+
+}

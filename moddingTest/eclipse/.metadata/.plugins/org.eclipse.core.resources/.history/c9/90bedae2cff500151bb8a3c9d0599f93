@@ -1,0 +1,110 @@
+package com.test.utils;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class InventoryHelper {
+
+	public static boolean tryPushItemEX(World world, IInventory start, IInventory goal, ForgeDirection startSide, ForgeDirection goalSide) {
+		if(start instanceof ISidedInventory){
+			ISidedInventory backSidedInv = (ISidedInventory) start;
+			int[] accessible = backSidedInv.getAccessibleSlotsFromSide(startSide.ordinal());
+			for (int slot : accessible){
+				ItemStack item = backSidedInv.getStackInSlot(slot);
+				if(backSidedInv.canExtractItem(slot, item, startSide.ordinal())){
+					if(item != null){
+						if(backSidedInv.canExtractItem(slot, item, startSide.ordinal())){
+							if(InventoryHelper.tryPushItem(world, goal, goalSide, item)){
+								backSidedInv.decrStackSize(slot, 1);
+								goal.markDirty();
+								backSidedInv.markDirty();
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}else{
+			for (int slot = 0; slot < start.getSizeInventory(); slot++){
+				ItemStack item = start.getStackInSlot(slot);
+				if(item != null){
+					if(InventoryHelper.tryPushItem(world, goal, goalSide, item)){
+						start.decrStackSize(slot, 1);
+						goal.markDirty();
+						start.markDirty();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean tryPushItem(World world, IInventory goal, ForgeDirection side, ItemStack item) {
+		//TODO
+		if(goal == null){
+			return false;
+		}
+		if(goal instanceof ISidedInventory){
+			ISidedInventory sided = (ISidedInventory) goal;
+			int[] accessible = sided.getAccessibleSlotsFromSide(side.ordinal());
+			ItemStack ret = null;
+			int slot = 0;
+			for (int i : accessible){
+				ItemStack destitem = sided.getStackInSlot(i);
+				if(!sided.isItemValidForSlot(i, item)) continue;
+				if(!sided.canInsertItem(i, item, side.ordinal())) continue;
+				if(destitem == null || isItemStackable(new ItemStack(item.getItem(), 1, item.getItemDamage()), destitem, sided.getInventoryStackLimit())){
+					ret = new ItemStack(item.getItem(), 1, item.getItemDamage());
+					slot = i;
+					break;
+				}
+			}
+			if(ret != null){
+				if(sided.getStackInSlot(slot) == null){
+					sided.setInventorySlotContents(slot, ret);
+				}else{
+					sided.getStackInSlot(slot).stackSize++;
+				}
+				sided.markDirty();
+				return true;
+			}
+		}else{
+			IInventory inv = (IInventory) goal;
+			ItemStack ret = null;
+			int slot = 0;
+			for (int i = 0; i < inv.getSizeInventory(); i++){
+				ItemStack destitem = inv.getStackInSlot(i);
+				if(!inv.isItemValidForSlot(i, item)) continue;
+				if(destitem == null || isItemStackable(new ItemStack(item.getItem(), 1, item.getItemDamage()), destitem, inv.getInventoryStackLimit())){
+					ret = new ItemStack(item.getItem(), 1, item.getItemDamage());
+					slot = i;
+					break;
+				}
+			}
+			if(ret != null){
+				if(inv.getStackInSlot(slot) == null){
+					inv.setInventorySlotContents(slot, ret);
+				}else{
+					inv.getStackInSlot(slot).stackSize++;
+				}
+				inv.markDirty();
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isItemStackable(ItemStack target, ItemStack current, int invMaxStackSize) {
+		if(target == null || current == null) return false;
+
+		if(target.getItem() == current.getItem() && target.getItemDamage() == current.getItemDamage()){
+			return (current.stackSize + target.stackSize) <= current.getMaxStackSize() && (current.stackSize + target.stackSize) <= invMaxStackSize;
+		}
+
+		return false;
+	}
+}

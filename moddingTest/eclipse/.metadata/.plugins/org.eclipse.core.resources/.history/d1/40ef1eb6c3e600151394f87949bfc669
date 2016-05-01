@@ -1,0 +1,17 @@
+package com.test.multiblock.construct.tileentity;
+
+import net.minecraft.tileentity.TileEntity;
+
+/**
+ * @author ???
+ *only for pipe connection
+ */
+public abstract class ConstructBaseTileEntity extends TileEntity {
+
+	public ConstructBaseTileEntity() {
+
+	}
+
+	public abstract String getNameForNBT();
+
+}

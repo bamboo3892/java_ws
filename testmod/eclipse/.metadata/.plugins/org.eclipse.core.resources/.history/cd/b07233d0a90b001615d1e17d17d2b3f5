@@ -1,0 +1,132 @@
+package com.test.register;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+
+import codechicken.nei.recipe.TemplateRecipeHandler;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+public class CrusherRecipeRegister extends TemplateRecipeHandler {
+
+	public static final String RecipeId = "TestModCrusher";
+
+	public static CrusherRecipeRegister instance = new CrusherRecipeRegister();
+	private static ArrayList<CrusherRecipe> recipes = new ArrayList<CrusherRecipe>();
+
+	public void registerRecipe(ItemStack input, ItemStack output) {
+		instance.recipes.add(new CrusherRecipe(input, output));
+	}
+
+	public void registerRecipe(int inputId, ItemStack output) {
+		instance.recipes.add(new CrusherRecipe(inputId, output));
+	}
+
+	public CrusherRecipe findRecipe(ItemStack stack) {
+		if(stack == null) return null;
+		for (CrusherRecipe recipe : recipes){
+			if(recipe.isMatch(stack)){
+				return recipe;
+			}
+		}
+		return null;
+	}
+
+	//	@Override
+	//	public void loadCraftingRecipes(String outputId, Object... results) {
+	//		if(RecipeId.equals(outputId)){
+	//			System.out.println(results);
+	//			if(recipes == null || recipes.isEmpty()) return;
+	//			for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet()){
+	//				ItemStack item = recipe.getValue();
+	//				ItemStack in = recipe.getKey();
+	//				arecipes.add(new SampleRecipe(in, item));
+	//			}
+	//		}else{
+	//			super.loadCraftingRecipes(outputId, results);
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void loadCraftingRecipes(ItemStack result) {
+	//		HashMap<ItemStack, ItemStack> recipes = (HashMap<ItemStack, ItemStack>) this.getRecipes();
+	//		if(recipes == null || recipes.isEmpty()) return;
+	//		for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet()){
+	//			ItemStack out = recipe.getValue();
+	//			ItemStack in = recipe.getKey();
+	//			if(NEIServerUtils.areStacksSameType(out, result)){
+	//				arecipes.add(new SampleRecipe(in, out));
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void loadUsageRecipes(ItemStack ingredient) {
+	//		if(recipes == null || recipes.isEmpty() || ingredient == null) return;
+	//		for (CrusherRecipe recipe : recipes){
+	//			ItemStack out = recipe.product;
+	//			ItemStack in = recipe.material;
+	//			if(ingredient.isItemEqual(in)){
+	//				arecipes.add(new SampleRecipe(ingredient, out));
+	//			}
+	//		}
+	//	}
+	//
+	//	@Override
+	//	public void loadTransferRects() {
+	//		transferRects.add(new TemplateRecipeHandler.RecipeTransferRect(new Rectangle(65, 25, 20, 20), RecipeId));
+	//	}
+
+	@Override
+	public String getRecipeName() {
+		return RecipeId;
+	}
+
+	@Override
+	public String getGuiTexture() {
+		return TestCore.MODID + ":textures/gui/container/demo_background.png";
+	}
+
+	public class CrusherRecipe {
+
+		/**null : use ore dictionary*/
+		public final ItemStack material;
+		/**-1 : not using ore dictionary*/
+		public final int materialId;
+		public final ItemStack product;
+
+		public CrusherRecipe(ItemStack material, ItemStack product) {
+			this.material = material;
+			this.materialId = -1;
+			this.product = product;
+		}
+
+		public CrusherRecipe(int materialId, ItemStack product) {
+			material = null;
+			this.materialId = materialId;
+			this.product = product;
+		}
+
+		public ItemStack getProduct() {
+			return product.copy();
+		}
+
+		public boolean isMatch(ItemStack stack) {
+			if(material != null){
+				return OreDictionary.itemMatches(material, stack, false);
+			}else{
+				int[] ids = OreDictionary.getOreIDs(stack);
+				if(ids != null){
+					for (int id : ids){
+						return id == materialId;
+					}
+				}
+				return false;
+			}
+		}
+
+	}
+
+
+}

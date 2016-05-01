@@ -1,0 +1,115 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import java.io.File;
+
+import com.test.block.BlockConstructFrame;
+import com.test.block.BlockFrameLine;
+import com.test.block.BlockPipe;
+import com.test.block.FurnaceConstruct;
+import com.test.block.TestBlock;
+import com.test.block.TileTestBlock;
+import com.test.block.tileentity.BlockFrameTileEntity;
+import com.test.block.tileentity.BlockPipeTileEntity;
+import com.test.block.tileentity.FurnaceConstructTileEntity;
+import com.test.block.tileentity.TileTestBlockTileEntity;
+import com.test.item.ItemWrench;
+import com.test.item.SightStealer;
+import com.test.item.TestItem;
+
+import cpw.mods.fml.common.FMLLog;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
+
+public class CommonProxy {
+
+	public void loadConfiguration(File file){
+		Configuration config = new Configuration(file);
+		try{
+			config.load();
+			isHoge = config.get("GENERAL", "isHOGE", false).getBoolean(false);
+		}catch(Exception e){
+			FMLLog.severe("Error Message");
+		}finally{
+			config.save();
+		}
+	}
+
+	public void registerBlock(){
+		testBlock = new TestBlock();
+		GameRegistry.registerBlock(testBlock, "testBlock");
+		tileTestBlock = new TileTestBlock();
+		GameRegistry.registerBlock(tileTestBlock, "tileTestBlock");
+		pipe = new BlockPipe();
+		GameRegistry.registerBlock(pipe, "pipe");
+		furnace = new FurnaceConstruct();
+		GameRegistry.registerBlock(furnace, "furnace");
+		blockFrame = new BlockConstructFrame();
+		GameRegistry.registerBlock(blockFrame, "blockFrame");
+		blockFrameLine = new BlockFrameLine();
+		GameRegistry.registerBlock(blockFrameLine, "blockFrameLine");
+	}
+
+	public void registerItem(){
+		testItem = new TestItem();
+		GameRegistry.registerItem(testItem, "testItem");
+		sightStealer = new SightStealer();
+		GameRegistry.registerItem(sightStealer, "sightStealer");
+		wrench = new ItemWrench();
+		GameRegistry.registerItem(wrench, "wrench");
+	}
+
+	public void registerTileEntity(){
+		GameRegistry.registerTileEntity(TileTestBlockTileEntity.class, "tileTestBlockTileEntity");
+		GameRegistry.registerTileEntity(BlockPipeTileEntity.class, "blockPipeTileEntity");
+		GameRegistry.registerTileEntity(FurnaceConstructTileEntity.class, "furnaceConstructTileEntity");
+		GameRegistry.registerTileEntity(BlockFrameTileEntity.class, "blockFrameTileEntity");
+	}
+
+	public void registerKeyBinding(){
+
+	}
+
+	public void registerRecipes(){
+		//crafting
+		GameRegistry.addRecipe(
+				new ItemStack(Items.diamond, 3),
+					new Object[]
+					{
+						" X ",
+						" X ",
+						" X ",
+						'X', Blocks.dirt
+					});
+		GameRegistry.addShapelessRecipe(
+				new ItemStack(Items.diamond),
+					new Object[]
+					{
+						Blocks.dirt, Blocks.stone
+					});
+		
+		
+		
+		//smelting
+		GameRegistry.addSmelting(testBlock, new ItemStack(Blocks.wool, 1, 0), 0.5F);
+	}
+
+	public void registerRenderer(){
+
+	}
+
+}
+
+
+
+
+
+
+
+
+
+

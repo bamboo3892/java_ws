@@ -1,0 +1,54 @@
+package com.test.block;
+
+import java.util.ArrayList;
+
+import com.test.block.tileentity.MaltiBlockTileEntity;
+import com.test.main.TestCore;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class MaltiBlock extends BlockContainer {
+
+	public static int[] materials = {};
+
+	public MaltiBlock() {
+		super(Material.iron);
+		setCreativeTab(TestCore.testCreativeTab);
+		this.setHardness(1F);
+	}
+	
+	@Override
+	public boolean onBlockActivated(World p_149727_1_, int p_149727_2_, int p_149727_3_, int p_149727_4_, EntityPlayer p_149727_5_, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    {
+        return false;
+    }
+
+	@Override
+	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+		ItemStack stack = new ItemStack(TestCore.maltiBlock, 1);
+		//if(world.getTileEntity(x, y, z) == null) System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+		if(world.getTileEntity(x, y, z) instanceof MaltiBlockTileEntity){
+			MaltiBlockTileEntity tile = (MaltiBlockTileEntity)world.getTileEntity(x, y, z);
+			tile.writeToNBTForItemDrop(stack);
+			ret.add(stack);
+		}
+		return ret;
+	}
+
+	@Override
+	public void onBlockDestroyedByPlayer(World world, int x, int y, int z, int meta) {
+		if(world.getTileEntity(x, y, z) == null) System.out.println("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new MaltiBlockTileEntity();
+	}
+
+}

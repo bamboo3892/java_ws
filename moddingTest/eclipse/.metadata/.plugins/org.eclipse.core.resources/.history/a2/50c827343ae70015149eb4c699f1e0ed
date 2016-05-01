@@ -1,0 +1,166 @@
+package com.test.multiblock;
+
+import java.util.ArrayList;
+
+import com.test.multiblock.construct.tileentity.ConstructBaseTileEntity;
+import com.test.multiblock.construct.tileentity.ConstructInventoryBaseTileEntity;
+import com.test.multiblock.construct.tileentity.ISignalReceiver;
+import com.test.utils.ConnectionEntry;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class BlockPipeTileEntity  extends TileEntity {
+
+	public boolean[] connection;
+	private boolean needUpdate = true;
+
+	public BlockPipeTileEntity() {
+
+	}
+
+	@Override
+	public void updateEntity(){
+		checkConnection();
+		if(needUpdate) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public void checkConnection(){
+		boolean[] connection = new boolean[6];
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getTileEntity(newX, newY, newZ) instanceof ConstructBaseTileEntity || worldObj.getTileEntity(newX, newY, newZ) instanceof BlockPipeTileEntity){
+				connection[dir.ordinal()] = true;
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		this.connection = connection;
+	}
+
+	public void getConnectedInvsWithSide(ArrayList<BlockPipeTileEntity> checkedPipes, ArrayList<ConnectionEntry> tiles){
+		boolean[] connection = new boolean[6];
+		checkedPipes.add(this);
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getTileEntity(newX, newY, newZ) instanceof BlockPipeTileEntity){
+				connection[dir.ordinal()] = true;
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(checkedPipes, pipe)){
+					pipe.getConnectedInvsWithSide(checkedPipes, tiles);
+				}
+			}else if(worldObj.getTileEntity(newX, newY, newZ) instanceof ConstructInventoryBaseTileEntity){
+				connection[dir.ordinal()] = true;
+				ConstructInventoryBaseTileEntity tile = (ConstructInventoryBaseTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				ConnectionEntry entry = new ConnectionEntry(tile, dir.getOpposite().ordinal());
+				if(!isChecked(tiles, entry)){
+					tiles.add(entry);
+				}
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		//this.connection = connection;
+	}
+
+	public void getConnectedInvs(ArrayList<BlockPipeTileEntity> checkedPipes, ArrayList<ConstructInventoryBaseTileEntity> tiles){
+		boolean[] connection = new boolean[6];
+		checkedPipes.add(this);
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getTileEntity(newX, newY, newZ) instanceof BlockPipeTileEntity){
+				connection[dir.ordinal()] = true;
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(checkedPipes, pipe)){
+					pipe.getConnectedInvs(checkedPipes, tiles);
+				}
+			}else if(worldObj.getTileEntity(newX, newY, newZ) instanceof ConstructInventoryBaseTileEntity){
+				connection[dir.ordinal()] = true;
+				ConstructInventoryBaseTileEntity tile = (ConstructInventoryBaseTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(tiles, tile)){
+					tiles.add(tile);
+				}
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		//this.connection = connection;
+	}
+
+	public void getConnectedSignalReceivers(ArrayList<BlockPipeTileEntity> checkedPipes, ArrayList<ISignalReceiver> receivers){
+		boolean[] connection = new boolean[6];
+		checkedPipes.add(this);
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getTileEntity(newX, newY, newZ) instanceof BlockPipeTileEntity){
+				connection[dir.ordinal()] = true;
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(checkedPipes, pipe)){
+					pipe.getConnectedSignalReceivers(checkedPipes, receivers);
+				}
+			}else if(worldObj.getTileEntity(newX, newY, newZ) instanceof ISignalReceiver){
+				connection[dir.ordinal()] = true;
+				ISignalReceiver receicer = (ISignalReceiver)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(receivers, receicer)){
+					receivers.add(receicer);
+				}
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		//this.connection = connection;
+	}
+
+	private boolean isChecked(ArrayList<BlockPipeTileEntity> checkedPipes, BlockPipeTileEntity pipe){
+		for(BlockPipeTileEntity tmpPipe : checkedPipes){
+			if(tmpPipe == pipe){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isChecked(ArrayList<ConnectionEntry> connectedBlocks, ConnectionEntry entry){
+		for(ConnectionEntry tmpEntry : connectedBlocks){
+			if(tmpEntry.equals(entry)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isChecked(ArrayList<ConstructInventoryBaseTileEntity> connectedBlocks, ConstructInventoryBaseTileEntity tile){
+		for(ConstructInventoryBaseTileEntity tmpTile : connectedBlocks){
+			if(tile == tmpTile){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isChecked(ArrayList<ISignalReceiver> receivers, ISignalReceiver reciever){
+		for(ISignalReceiver tmpTile : receivers){
+			if(reciever == tmpTile){
+				return true;
+			}
+		}
+		return false;
+	}
+
+}
+
+
+
+

@@ -1,0 +1,94 @@
+---- Minecraft Crash Report ----
+// This doesn't make any sense!
+
+Time: 16/03/02 16:09
+Description: Ticking memory connection
+
+java.lang.ArrayIndexOutOfBoundsException: 3
+	at com.test.item.TestItem.onItemRightClick(TestItem.java:36)
+	at net.minecraft.item.ItemStack.useItemRightClick(ItemStack.java:164)
+	at net.minecraft.server.management.ItemInWorldManager.tryUseItem(ItemInWorldManager.java:345)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:576)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at com.test.item.TestItem.onItemRightClick(TestItem.java:36)
+	at net.minecraft.item.ItemStack.useItemRightClick(ItemStack.java:164)
+	at net.minecraft.server.management.ItemInWorldManager.tryUseItem(ItemInWorldManager.java:345)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:576)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+
+-- Ticking connection --
+Details:
+	Connection: net.minecraft.network.NetworkManager@473988af
+Stacktrace:
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_60, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 708579448 bytes (675 MB) / 1038876672 bytes (990 MB) up to 1038876672 bytes (990 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 30 mods loaded, 30 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Config{0.0.0} [Config] (bin) 
+	UCHIJAAAA	CraftingRecipe{0.0.0} [CraftingRecipe] (bin) 
+	UCHIJAAAA	CreativeTab{0.0.0} [CreativeTab] (bin) 
+	UCHIJAAAA	SmeltingRecipe{0.0.0} [SmeltingRecipe] (bin) 
+	UCHIJAAAA	BlockBasic{0.0.0} [BlockBasic] (bin) 
+	UCHIJAAAA	BlockMetadata{0.0.0} [BlockMetadata] (bin) 
+	UCHIJAAAA	BlockTexture{0.0.0} [BlockTexture] (bin) 
+	UCHIJAAAA	EntityMob{0.0.0} [EntityMob] (bin) 
+	UCHIJAAAA	FMLInputEvent{0.0.0} [FMLInputEvent] (bin) 
+	UCHIJAAAA	FMLPlayerEvent{0.0.0} [FMLPlayerEvent] (bin) 
+	UCHIJAAAA	TickEvent{0.0.0} [TickEvent] (bin) 
+	UCHIJAAAA	GenOre{0.0.0} [GenOre] (bin) 
+	UCHIJAAAA	GuiContainer{0.0.0} [GuiContainer] (bin) 
+	UCHIJAAAA	GuiTileEntity{0.0.0} [GuiTileEntity] (bin) 
+	UCHIJAAAA	ItemArmor{0.0.0} [ItemArmor] (bin) 
+	UCHIJAAAA	ItemBasic{0.0.0} [ItemBasic] (bin) 
+	UCHIJAAAA	ItemBow{0.0.0} [ItemBow] (bin) 
+	UCHIJAAAA	ItemFood{0.0.0} [ItemFood] (bin) 
+	UCHIJAAAA	ItemIcon{0.0.0} [ItemIcon] (bin) 
+	UCHIJAAAA	ItemTool{0.0.0} [ItemTool] (bin) 
+	UCHIJAAAA	ItemWeapon{0.0.0} [ItemWeapon] (bin) 
+	UCHIJAAAA	GuiButton{0.0.0} [GuiButton] (bin) 
+	UCHIJAAAA	BlockRenderer{0.0.0} [BlockRenderer] (bin) 
+	UCHIJAAAA	ItemRenderer{0.0.0} [ItemRenderer] (bin) 
+	UCHIJAAAA	TileEntityRenderer{0.0.0} [TileEntityRenderer] (bin) 
+	UCHIJAAAA	TestMod{0.0.0} [TestMod] (bin) 
+	UCHIJAAAA	laser_tech{1.7.10_1.0a} [Laser Tech] (bin) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 1 / 8; [EntityPlayerMP['Player364'/0, l='New World', x=-7.49, y=4.00, z=-156.11]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

@@ -1,0 +1,16 @@
+package com.test.multiblock.construct.parts;
+
+import com.test.block.construct.tileentity.ConstructStorageTileEntity;
+
+public class StoragePart extends ConstructPartBase {
+
+	public StoragePart() {
+
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return ConstructStorageTileEntity.nameForNBT;
+	}
+
+}

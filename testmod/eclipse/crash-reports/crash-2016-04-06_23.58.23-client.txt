@@ -1,0 +1,107 @@
+---- Minecraft Crash Report ----
+// Daisy, daisy...
+
+Time: 16/04/06 23:58
+Description: Rendering Particle
+
+java.lang.IllegalStateException: Already tesselating!
+	at net.minecraft.client.renderer.Tessellator.startDrawing(Tessellator.java:257)
+	at net.minecraft.client.renderer.Tessellator.startDrawingQuads(Tessellator.java:247)
+	at com.test.client.particle.Particle5.renderParticle(Particle5.java:80)
+	at net.minecraft.client.particle.EffectRenderer.renderParticles(EffectRenderer.java:162)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1351)
+	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1087)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1067)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:962)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at net.minecraft.client.renderer.Tessellator.startDrawing(Tessellator.java:257)
+	at net.minecraft.client.renderer.Tessellator.startDrawingQuads(Tessellator.java:247)
+	at com.test.client.particle.Particle5.renderParticle(Particle5.java:80)
+
+-- Particle being rendered --
+Details:
+	Particle: Particle5, Pos (427.5579151696024,57.402094810112,30.4479461103966), RGBA (0.99609375,0.99609375,0.99609375,1.0), Age 5
+	Particle Type: MISC_TEXTURE
+Stacktrace:
+	at net.minecraft.client.particle.EffectRenderer.renderParticles(EffectRenderer.java:162)
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1351)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityClientPlayerMP['Player945'/48, l='MpServer', x=430.08, y=60.62, z=19.14]]
+	Chunk stats: MultiplayerChunkCache: 40, 40
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (432,4,37), Chunk: (at 0,0,5 in 27,2; contains blocks 432,0,32 to 447,255,47), Region: (0,0; contains chunks 0,0 to 31,31, blocks 0,0,0 to 511,255,511)
+	Level time: 306281 game time, 6000 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 49 total; [EntityItem['item.tile.sandStone.default'/0, l='MpServer', x=393.19, y=55.13, z=41.75], EntityItem['item.tile.sandStone.default'/1, l='MpServer', x=392.41, y=55.13, z=43.06], EntityItem['item.tile.sandStone.default'/2, l='MpServer', x=394.16, y=54.13, z=43.19], EntityItem['item.tile.sandStone.default'/3, l='MpServer', x=395.88, y=54.13, z=42.50], EntityItem['item.tile.sandStone.default'/4, l='MpServer', x=394.84, y=54.13, z=45.59], EntityItem['item.tile.sandStone.default'/5, l='MpServer', x=398.50, y=55.13, z=46.25], EntityItem['item.tile.sandStone.default'/6, l='MpServer', x=399.22, y=55.13, z=42.50], EntityItem['item.tile.sandStone.default'/7, l='MpServer', x=395.13, y=54.13, z=41.91], EntityItem['item.tile.sandStone.default'/8, l='MpServer', x=397.38, y=54.13, z=45.47], EntityItem['item.tile.sandStone.default'/9, l='MpServer', x=397.41, y=55.13, z=41.94], EntityItem['item.tile.sandStone.default'/10, l='MpServer', x=393.94, y=55.13, z=46.91], EntityItem['item.tile.sandStone.default'/11, l='MpServer', x=391.25, y=55.13, z=44.91], EntityItem['item.tile.sandStone.default'/12, l='MpServer', x=397.19, y=54.13, z=43.78], EntityItem['item.tile.sandStone.default'/13, l='MpServer', x=395.69, y=55.13, z=41.00], EntityItem['item.tile.sandStone.default'/14, l='MpServer', x=393.13, y=55.13, z=40.13], EntityItem['item.tile.sandStone.default'/15, l='MpServer', x=396.16, y=53.13, z=43.75], EntityItem['item.tile.sandStone.default'/16, l='MpServer', x=395.13, y=53.13, z=43.34], EntityItem['item.tile.sandStone.default'/17, l='MpServer', x=396.69, y=53.13, z=44.63], EntityItem['item.tile.sandStone.default'/18, l='MpServer', x=396.03, y=56.13, z=48.19], EntityItem['item.tile.sandStone.default'/19, l='MpServer', x=405.25, y=55.13, z=31.91], EntityItem['item.tile.sandStone.default'/20, l='MpServer', x=407.34, y=54.13, z=33.81], EntityItem['item.tile.sandStone.default'/21, l='MpServer', x=406.34, y=54.13, z=35.91], EntityItem['item.tile.sandStone.default'/22, l='MpServer', x=408.53, y=53.13, z=34.88], EntityItem['item.tile.sandStone.default'/23, l='MpServer', x=407.53, y=54.13, z=36.53], EntityItem['item.tile.sandStone.default'/24, l='MpServer', x=405.53, y=54.13, z=38.25], EntityItem['item.tile.sandStone.default'/25, l='MpServer', x=411.06, y=55.13, z=33.53], EntityItem['item.tile.sandStone.default'/26, l='MpServer', x=411.88, y=55.13, z=35.88], EntityItem['item.tile.sandStone.default'/27, l='MpServer', x=408.53, y=54.13, z=35.69], EntityItem['item.tile.sandStone.default'/28, l='MpServer', x=405.13, y=54.13, z=36.16], EntityItem['item.tile.sandStone.default'/29, l='MpServer', x=405.16, y=54.13, z=32.34], EntityItem['item.tile.sandStone.default'/30, l='MpServer', x=408.50, y=55.13, z=37.72], EntityItem['item.tile.sandStone.default'/31, l='MpServer', x=407.34, y=53.13, z=34.50], EntityItem['item.tile.sandStone.default'/32, l='MpServer', x=410.78, y=55.13, z=38.44], EntityItem['item.tile.sandStone.default'/33, l='MpServer', x=404.34, y=54.13, z=33.75], EntityItem['item.tile.sandStone.default'/34, l='MpServer', x=409.38, y=55.13, z=32.00], EntityItem['item.tile.sandStone.default'/35, l='MpServer', x=403.56, y=54.13, z=44.28], EntityItem['item.tile.sandStone.default'/36, l='MpServer', x=403.38, y=53.13, z=41.88], EntityItem['item.tile.sandStone.default'/37, l='MpServer', x=403.50, y=54.13, z=39.72], EntityItem['item.tile.sandStone.default'/38, l='MpServer', x=400.81, y=55.13, z=43.31], EntityItem['item.tile.sandStone.default'/39, l='MpServer', x=402.03, y=54.13, z=43.88], EntityItem['item.tile.sandStone.default'/40, l='MpServer', x=407.16, y=55.13, z=40.78], EntityItem['item.tile.sandStone.default'/41, l='MpServer', x=402.13, y=54.13, z=40.50], EntityItem['item.tile.sandStone.default'/42, l='MpServer', x=403.66, y=54.13, z=38.13], EntityItem['item.tile.sandStone.default'/43, l='MpServer', x=401.13, y=55.13, z=37.13], EntityItem['item.tile.sandStone.default'/44, l='MpServer', x=401.06, y=55.13, z=38.50], EntityItem['item.tile.sandStone.default'/45, l='MpServer', x=401.19, y=55.13, z=44.25], EntityItem['item.tile.sandStone.default'/46, l='MpServer', x=401.56, y=54.13, z=41.34], EntityItem['item.tile.sandStone.default'/47, l='MpServer', x=405.44, y=54.13, z=42.63], EntityClientPlayerMP['Player945'/48, l='MpServer', x=430.08, y=60.62, z=19.14]]
+	Retry entities: 0 total; []
+	Server brand: fml,forge
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:415)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2566)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:984)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_77, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 742676280 bytes (708 MB) / 1037959168 bytes (989 MB) up to 1037959168 bytes (989 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 4 mods loaded, 4 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	testmod{0.0.0} [Test Mod] (bin) 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.5.0 NVIDIA 361.43' Renderer: 'GeForce GTX 970/PCIe/SSE2'
+	Launched Version: 1.7.10
+	LWJGL: 2.9.1
+	OpenGL: GeForce GTX 970/PCIe/SSE2 GL version 4.5.0 NVIDIA 361.43, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Anisotropic filtering is supported and maximum anisotropy is 16.
+Shaders are available because OpenGL 2.1 is supported.
+
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: []
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Anisotropic Filtering: Off (1)

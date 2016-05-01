@@ -1,0 +1,20 @@
+package com.test.multiblock.construct.tileentity;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+/**
+ *
+ * @author ???
+ *
+ *only for pipe connection
+ */
+public class ConstructBaseTileEntity extends TileEntity {
+
+	public ConstructBaseTileEntity() {
+
+	}
+
+}

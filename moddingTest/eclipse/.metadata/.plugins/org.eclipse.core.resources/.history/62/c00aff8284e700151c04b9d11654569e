@@ -1,0 +1,9 @@
+package com.test.server.gui;
+
+public class ClockPulserContainer {
+
+	public ClockPulserContainer() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

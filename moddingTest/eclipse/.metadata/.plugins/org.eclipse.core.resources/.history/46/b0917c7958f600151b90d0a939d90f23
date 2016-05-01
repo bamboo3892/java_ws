@@ -1,0 +1,148 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.main.TestCore;
+import com.test.network.SimpleTilePacket;
+import com.test.network.SimpleTilePacket.PacketType;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.InventoryHelper;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public abstract class ConstructInventoryBaseTileEntity extends ConstructSidedOutputerTileEntity<IConstructInventory> implements IConstructInventory {
+
+	public ItemStack[] items;
+
+	public ConstructInventoryBaseTileEntity(int grade) {
+		super(grade);
+		this.items = new ItemStack[this.getSizeInventory()];
+		for (int i = 0; i < 6; i++){
+			connection[i] = null;
+			connections[i] = new ArrayList<ConnectionEntry>();
+			index[i] = 0;
+			flagIO[i] = 2;
+		}
+	}
+
+	protected boolean itemTransfer() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		for (int i = 0; i < 6; i++){
+			if(connection[i] != null && flagIO[i] == 1){
+				if(InventoryHelper.tryPushItemEX(worldObj, this, connection[i].getTile(), ForgeDirection.getOrientation(i), ForgeDirection.getOrientation(connection[i].side))){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
+	protected void sendContentsUpdatePacket() {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		NBTTagCompound tag = new NBTTagCompound();
+		NBTTagList itemsTagList = new NBTTagList();
+		for (int slotIndex = 0; slotIndex < this.items.length; ++slotIndex){
+			if(this.items[slotIndex] != null){
+				NBTTagCompound itemTagCompound = new NBTTagCompound();
+				itemTagCompound.setByte("Slot", (byte) slotIndex);
+				this.items[slotIndex].writeToNBT(itemTagCompound);
+				itemsTagList.appendTag(itemTagCompound);
+			}
+		}
+		tag.setTag("Items", itemsTagList);
+		TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, PacketType.NBT_CONETENT, tag));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public void processCommand(PacketType type, Object value){
+		super.processCommand(type, value);
+		if(type == PacketType.NBT_CONETENT && value instanceof NBTTagCompound){
+			NBTTagCompound tag = (NBTTagCompound)value;
+			NBTTagList itemsTagList = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+			this.items = new ItemStack[this.getSizeInventory()];
+			for (int tagCounter = 0; tagCounter < itemsTagList.tagCount(); ++tagCounter){
+				NBTTagCompound itemTagCompound = (NBTTagCompound) itemsTagList.getCompoundTagAt(tagCounter);
+				byte slotIndex = itemTagCompound.getByte("Slot");
+				if(slotIndex >= 0 && slotIndex < this.items.length){
+					this.items[slotIndex] = ItemStack.loadItemStackFromNBT(itemTagCompound);
+				}
+			}
+		}
+	}
+
+	protected Class<IConstructInventory> getTargetClass() {
+		return IConstructInventory.class;
+	}
+	protected boolean shouldDistinguishSide() {
+		return true;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		if(worldObj.getTileEntity(xCoord, yCoord, zCoord) != this){
+			return false;
+		}
+		return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 50000.0D;
+	}
+	@Override
+	public boolean canInsertItem(int slot, ItemStack item, int side) {
+		return flagIO[side] == 0;
+	}
+	@Override
+	public boolean canExtractItem(int slot, ItemStack item, int side) {
+		return flagIO[side] == 1;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		updateEntry();
+		tag.setString("name", getNameForNBT());
+		NBTTagCompound[] side = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++){
+			side[i] = new NBTTagCompound();
+			side[i].setByte("io", (byte) flagIO[i]);
+			side[i].setInteger("index", solid.toIndex(connection[i].x, connection[i].y, connection[i].z, false));
+			tag.setTag("side" + i, side[i]);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
+		super.readFromNBT(nbtTagCompound);
+		NBTTagList itemsTagList = nbtTagCompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		this.items = new ItemStack[this.getSizeInventory()];
+		for (int tagCounter = 0; tagCounter < itemsTagList.tagCount(); ++tagCounter){
+			NBTTagCompound itemTagCompound = (NBTTagCompound) itemsTagList.getCompoundTagAt(tagCounter);
+			byte slotIndex = itemTagCompound.getByte("Slot");
+			if(slotIndex >= 0 && slotIndex < this.items.length){
+				this.items[slotIndex] = ItemStack.loadItemStackFromNBT(itemTagCompound);
+			}
+		}
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
+		super.writeToNBT(nbtTagCompound);
+		NBTTagList itemsTagList = new NBTTagList();
+		for (int slotIndex = 0; slotIndex < this.items.length; ++slotIndex){
+			if(this.items[slotIndex] != null){
+				NBTTagCompound itemTagCompound = new NBTTagCompound();
+				itemTagCompound.setByte("Slot", (byte) slotIndex);
+				this.items[slotIndex].writeToNBT(itemTagCompound);
+				itemsTagList.appendTag(itemTagCompound);
+			}
+		}
+		nbtTagCompound.setTag("Items", itemsTagList);
+	}
+
+}

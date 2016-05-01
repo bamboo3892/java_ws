@@ -1,0 +1,135 @@
+package com.test.multiblock;
+
+import com.test.inventory.FilterInventory;
+import com.test.multiblock.construct.tileentity.ConstructFilterUserTileEntity;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.oredict.OreDictionary;
+
+public class BlockDesignTableTileEntity extends TileEntity implements IInventory {
+
+	private ItemStack[] items = new ItemStack[9];
+	/**true : black list false : white list*/
+	public boolean filterBan;
+	public boolean useNBT;
+	public boolean useDamage;
+	public boolean useOreDictionary;
+	private int side;
+
+	public BlockDesignTableTileEntity() {
+
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public int getSizeInventory() {
+		return 9;
+	}
+	@Override
+	public ItemStack getStackInSlot(int slotIndex) {
+		if(slotIndex < 0 || slotIndex >= 9) return null;
+		return items[slotIndex];
+	}
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		items[slotIndex] = null;
+		this.markDirty();
+		return null;
+	}
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slotIndex) {
+		return null;
+	}
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack item) {
+		this.items[slotIndex] = item;
+		if(item != null && item.stackSize > getInventoryStackLimit()){
+			item.stackSize = getInventoryStackLimit();
+		}
+		this.markDirty();
+	}
+	@Override
+	public String getInventoryName() {
+		return "Filter " + ForgeDirection.getOrientation(side);
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+	@Override
+	public void markDirty() {
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return true;
+	}
+	@Override
+	public void openInventory() {}
+	@Override
+	public void closeInventory() {}
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
+		return slot >= 0 && slot <= 8;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void readFromNBT(NBTTagCompound tag) {
+		NBTTagList itemsTagList = tag.getTagList("items", Constants.NBT.TAG_COMPOUND);
+		this.items = new ItemStack[this.getSizeInventory()];
+		for (int tagCounter = 0; tagCounter < itemsTagList.tagCount(); ++tagCounter){
+			NBTTagCompound itemTagCompound = (NBTTagCompound) itemsTagList.getCompoundTagAt(tagCounter);
+			byte slotIndex = itemTagCompound.getByte("slot");
+			if(slotIndex >= 0 && slotIndex < this.items.length){
+				this.items[slotIndex] = ItemStack.loadItemStackFromNBT(itemTagCompound);
+			}
+		}
+
+		NBTTagCompound flags = tag.getCompoundTag("flags");
+		filterBan = flags.getBoolean("ban");
+		useNBT = flags.getBoolean("nbt");
+		useDamage = flags.getBoolean("damage");
+		useOreDictionary = flags.getBoolean("ore");
+	}
+
+	public void writeToNBT(NBTTagCompound tag) {
+		NBTTagList itemsTagList = new NBTTagList();
+		for (int slotIndex = 0; slotIndex < this.items.length; ++slotIndex){
+			if(this.items[slotIndex] != null){
+				NBTTagCompound itemTagCompound = new NBTTagCompound();
+				itemTagCompound.setByte("slot", (byte) slotIndex);
+				this.items[slotIndex].writeToNBT(itemTagCompound);
+				itemsTagList.appendTag(itemTagCompound);
+			}
+		}
+		tag.setTag("items", itemsTagList);
+
+		NBTTagCompound flags = new NBTTagCompound();
+		flags.setBoolean("ban", filterBan);
+		flags.setBoolean("nbt", useNBT);
+		flags.setBoolean("damage", useDamage);
+		flags.setBoolean("ore", useOreDictionary);
+		tag.setTag("flags", flags);
+	}
+
+	public static FilterInventory createFromNBT(ConstructFilterUserTileEntity tile, int side, NBTTagCompound tag) {
+		if(tag == null || !tag.hasKey("items")) return null;
+		FilterInventory filter = new FilterInventory(tile, side);
+		filter.readFromNBT(tag);
+		return filter;
+	}
+
+}

@@ -1,0 +1,71 @@
+****************************
+ Powered By MCP:             
+ http://modcoderpack.com/    
+ Searge, ProfMobius, Fesh0r, 
+ R4wk, ZeuX, IngisKahn, bspkrs
+ MCP Data version : unknown
+****************************
+All projects evaluated.
+Selected primary task 'DefaultTaskParameter{taskName='build',projectPath='null'}'
+Tasks to be executed: [task ':compileApiJava', task ':processApiResources', task ':apiClasses', task ':sourceMainJava', task ':compileJava', task ':processResources', task ':classes', task ':jar', task ':compileTestJava', task ':processTestResources', task ':testClasses', task ':test', task ':extractMcpData', task ':getVersionJson', task ':extractUserDev', task ':genSrgs', task ':reobf', task ':assemble', task ':check', task ':build']
+:compileApiJava (Thread[main,5,main]) started.
+:compileApiJava
+Skipping task ':compileApiJava' as it has no source files.
+:compileApiJava UP-TO-DATE
+:compileApiJava (Thread[main,5,main]) completed. Took 0.01 secs.
+:processApiResources (Thread[main,5,main]) started.
+:processApiResources
+Skipping task ':processApiResources' as it has no source files.
+:processApiResources UP-TO-DATE
+:processApiResources (Thread[main,5,main]) completed. Took 0.001 secs.
+:apiClasses (Thread[main,5,main]) started.
+:apiClasses
+Skipping task ':apiClasses' as it has no actions.
+:apiClasses UP-TO-DATE
+:apiClasses (Thread[main,5,main]) completed. Took 0.001 secs.
+:sourceMainJava (Thread[main,5,main]) started.
+:sourceMainJava
+Executing task ':sourceMainJava' (up-to-date check took 1.167 secs) due to:
+  No history is available.
+:sourceMainJava (Thread[main,5,main]) completed. Took 1.671 secs.
+:compileJava (Thread[main,5,main]) started.
+:compileJava
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.pom]
+file or directory 'D:\eclipse\workspace\moddingTest\libs', not found
+Executing task ':compileJava' (up-to-date check took 4.591 secs) due to:
+  No history is available.
+All input files are considered out-of-date for incremental task ':compileJava'.
+file or directory 'D:\eclipse\workspace\moddingTest\libs', not found
+Compiling with JDK Java compiler API.
+警告: [options] ブートストラップ・クラスパスが-source 1.6と一緒に設定されていません
+D:\eclipse\workspace\moddingTest\build\sources\java\com\test\multiblock\construct\parts\InventoryPartBase.java:21: エラー: シンボルを見つけられません
+			this.connection[i] = solid.toCoord(index);
+			    ^
+  シンボル: 変数 connection
+D:\eclipse\workspace\moddingTest\build\sources\java\com\test\multiblock\construct\parts\InventoryPartBase.java:34: エラー: シンボルを見つけられません
+				side[i].setInteger("index", solid.toIndex(connection[i], false));
+				                                          ^
+  シンボル:   変数 connection
+  場所: クラス InventoryPartBase
+注意:入力ファイルの操作のうち、未チェックまたは安全ではないものがあります。
+注意:詳細は、-Xlint:uncheckedオプションを指定して再コンパイルしてください。
+エラー2個
+警告1個
+:compileJava FAILED
+:compileJava (Thread[main,5,main]) completed. Took 6.127 secs.
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler error output for details.
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --debug option to get more log output.
+
+BUILD FAILED
+
+Total time: 13.057 secs

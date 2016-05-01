@@ -1,0 +1,11 @@
+package com.test.item;
+
+import net.minecraft.item.Item;
+
+public class ItemCraftingFilter extends Item {
+
+	public ItemCraftingFilter() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

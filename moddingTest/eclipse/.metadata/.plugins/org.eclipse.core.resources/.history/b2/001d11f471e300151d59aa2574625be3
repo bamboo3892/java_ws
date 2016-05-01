@@ -1,0 +1,27 @@
+package com.test.server.packet;
+
+import com.test.packet.MaltiTileGenPacket;
+import com.test.packet.MaltiTileGenReplyPacket;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.ChatComponentTranslation;
+
+public class MaltiTileGenPacketHandler implements IMessageHandler<MaltiTileGenPacket, MaltiTileGenReplyPacket> {
+
+	public MaltiTileGenPacketHandler() {}
+
+	@SideOnly(Side.SERVER)
+	@Override
+	public MaltiTileGenReplyPacket onMessage(MaltiTileGenPacket message, MessageContext ctx) {
+		ctx.getServerHandler().playerEntity.addChatMessage(new ChatComponentTranslation("Receive new id request"));
+		//get new id
+		
+		//return 
+		return null;
+	}
+
+}

@@ -1,0 +1,50 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import com.test.client.gui.ConstructFurnaceGUI;
+import com.test.client.gui.ConstructStorageGui;
+import com.test.client.gui.InformationGui;
+import com.test.client.gui.SightStealerGui;
+import com.test.client.gui.TestBlockGuiContainer;
+import com.test.client.gui.TileTestBlockGuiContainer;
+import com.test.multiblock.construct.tileentity.ConstructFurnaceTileEntity;
+import com.test.server.gui.ConstructFurnaceContainer;
+import com.test.server.gui.ConstructStorageContainer;
+import com.test.server.gui.TestBlockContainer;
+import com.test.server.gui.TileTestBlockContainer;
+
+import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.world.World;
+
+public class GuiHandler implements IGuiHandler{
+
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		switch(ID){
+		case TESTBLOCK_GUI_ID : return new TestBlockContainer(player.inventory);
+		case TILETESTBLOCK_GUI_ID : return new TileTestBlockContainer(player.inventory, world.getTileEntity(x,  y,  z));
+		case INFORMATION_GUI_ID : return null;
+		case SIGHTSTEALER_GUI_ID : return null;
+		case FURNACE_GUI_ID : return new ConstructFurnaceContainer(player.inventory, (ConstructFurnaceTileEntity)world.getTileEntity(x,  y,  z));
+		case STORAGE_GUI_ID : return new ConstructStorageContainer(player.inventory, (IInventory)world.getTileEntity(x,  y,  z));
+		default : return null;
+		}
+	}
+
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		switch(ID){
+		case TESTBLOCK_GUI_ID : return new TestBlockGuiContainer(player.inventory);
+		case TILETESTBLOCK_GUI_ID : return new TileTestBlockGuiContainer(player.inventory, world.getTileEntity(x,  y,  z));
+		case INFORMATION_GUI_ID : return new InformationGui(player);
+		case SIGHTSTEALER_GUI_ID : return new SightStealerGui(player);
+		case FURNACE_GUI_ID : return new ConstructFurnaceGUI(player.inventory, (ConstructFurnaceTileEntity)world.getTileEntity(x,  y,  z));
+		case STORAGE_GUI_ID : return new ConstructStorageGui(player.inventory, (IInventory)world.getTileEntity(x,  y,  z));
+		default : return null;
+		}
+	}
+
+}

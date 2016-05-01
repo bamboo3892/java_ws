@@ -1,0 +1,129 @@
+package com.test.utils;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class InventoryHelper {
+
+	public static boolean tryPushItemEX(World world, IInventory start, IInventory goal, ForgeDirection startSide, ForgeDirection goalSide) {
+		if(start instanceof ISidedInventory){
+			ISidedInventory backSidedInv = (ISidedInventory) start;
+			int[] accessible = backSidedInv.getAccessibleSlotsFromSide(startSide.ordinal());
+			for (int slot : accessible){
+				if(backSidedInv.getStackInSlot(slot) != null){
+					ItemStack item = backSidedInv.getStackInSlot(slot).copy();
+					item.stackSize = 1;
+					if(backSidedInv.canExtractItem(slot, item, startSide.ordinal())){
+						if(InventoryHelper.tryPushItem(world, goal, goalSide, item)){
+							backSidedInv.decrStackSize(slot, 1);
+							backSidedInv.markDirty();
+							return true;
+						}
+					}
+				}
+			}
+		}else{
+			for (int slot = 0; slot < start.getSizeInventory(); slot++){
+				if(start.getStackInSlot(slot) != null){
+					ItemStack item = start.getStackInSlot(slot).copy();
+					item.stackSize = 1;
+					if(InventoryHelper.tryPushItem(world, goal, goalSide, item)){
+						start.decrStackSize(slot, 1);
+						start.markDirty();
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public static boolean tryPushItem(World world, IInventory goal, ForgeDirection side, ItemStack item, boolean simulate) {
+		if(goal == null || item == null){
+			return false;
+		}
+		if(goal instanceof ISidedInventory){
+			ISidedInventory sided = (ISidedInventory) goal;
+			int[] accessible = sided.getAccessibleSlotsFromSide(side.ordinal());
+			ItemStack[] goalInv = new ItemStack[accessible.length];
+			for (int i = 0; i < accessible.length; i++){
+				if(!sided.isItemValidForSlot(accessible[i], item)) continue;
+				if(!sided.canInsertItem(accessible[i], item, side.ordinal())) continue;
+				goalInv[i] = sided.getStackInSlot(accessible[i]) == null ? null : sided.getStackInSlot(accessible[i]).copy();
+				int stackable = getStackableSize(item, goalInv[i], sided.getInventoryStackLimit());
+				if(stackable > 0){
+					item.stackSize -= stackable;
+					if(goalInv[i] != null){
+						goalInv[i].stackSize += stackable;
+					}else{
+						goalInv[i] = item.copy();
+						goalInv[i].stackSize = stackable;
+					}
+					if(item.stackSize <= 0){//transfer complete
+						if(!simulate){
+							for (int j = 0; j <= i; j++){
+								sided.setInventorySlotContents(accessible[j], goalInv[j]);
+							}
+							sided.markDirty();
+						}
+						return true;
+					}
+				}
+			}
+			//transfer imcomplete
+			return false;
+		}else{
+			IInventory inv = (IInventory) goal;
+			ItemStack[] goalInv = new ItemStack[inv.getSizeInventory()];
+			for (int i = 0; i < inv.getSizeInventory(); i++){
+				if(!inv.isItemValidForSlot(i, item)) continue;
+				goalInv[i] = inv.getStackInSlot(i) == null ? null : inv.getStackInSlot(i).copy();
+				int stackable = getStackableSize(item, goalInv[i], inv.getInventoryStackLimit());
+				if(stackable > 0){
+					item.stackSize -= stackable;
+					if(goalInv[i] != null){
+						goalInv[i].stackSize += stackable;
+					}else{
+						goalInv[i] = item.copy();
+						goalInv[i].stackSize = stackable;
+					}
+					if(item.stackSize <= 0){//transfer complete
+						if(!simulate){
+							for (int j = 0; j <= i; j++){
+								inv.setInventorySlotContents(j, goalInv[j]);
+							}
+							inv.markDirty();
+						}
+						return true;
+					}
+				}
+			}
+			//transfer imcomplete
+			return false;
+		}
+	}
+
+	public static int getStackableSize(ItemStack target, ItemStack current, int invMaxStackSize) {
+		if(target != null){
+			if(current != null){
+				if(target.isItemEqual(current) && ItemStack.areItemStackTagsEqual(target, current)){
+					return Math.min(target.stackSize, Math.min(invMaxStackSize, target.getMaxStackSize()) - current.stackSize);
+				}
+			}else{
+				return Math.min(target.stackSize, Math.min(invMaxStackSize, target.getMaxStackSize()));
+			}
+		}
+		return 0;
+	}
+
+	public static boolean isItemStackable(ItemStack target, ItemStack current, int invMaxStackSize) {
+		if(target == null || current == null) return false;
+		if(target.getItem() == current.getItem() && target.getItemDamage() == current.getItemDamage()){
+			return (current.stackSize + target.stackSize) <= current.getMaxStackSize() && (current.stackSize + target.stackSize) <= invMaxStackSize;
+		}
+		return false;
+	}
+}

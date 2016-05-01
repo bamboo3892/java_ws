@@ -1,0 +1,27 @@
+package com.test.multiblock.construct.block;
+
+import com.test.block.construct.tileentity.ConstructInterfaceTileEntity;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class ConstructInterface extends ConstructFunctionalBase {
+
+	public ConstructInterface() {
+		setBlockName("interface");
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new ConstructInterfaceTileEntity();
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister register) {
+		this.blockIcon = register.registerIcon("wood_plank");
+        this.front = register.registerIcon("wood_plank");
+        this.top = register.registerIcon("wood_plank");
+	}
+
+}

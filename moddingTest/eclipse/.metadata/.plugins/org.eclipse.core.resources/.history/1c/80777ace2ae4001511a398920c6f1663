@@ -1,0 +1,32 @@
+package com.test.block;
+
+import com.test.block.tileentity.MaltiBlockTileEntity;
+import com.test.main.TestCore;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class MaltiBlock extends BlockContainer {
+
+	public static int[] materials = {};
+
+	public MaltiBlock() {
+		super(Material.iron);
+		setCreativeTab(TestCore.testCreativeTab);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new MaltiBlockTileEntity();
+	}
+
+	@SideOnly(Side.SERVER)
+	public static synchronized int getNewID(){
+		return 1;
+	}
+
+}

@@ -1,0 +1,93 @@
+package com.test.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.block.construct.block.ConstructFunctionalBase;
+import com.test.block.construct.tileentity.ConstructFunctionalBaseTileEntity;
+import com.test.utils.ConnectionEntry;
+
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class BlockPipeTileEntity  extends TileEntity {
+
+	public boolean[] connection;
+	private boolean needUpdate = true;
+
+	public BlockPipeTileEntity() {
+
+	}
+
+	@Override
+	public void updateEntity(){
+		checkConnection();
+		if(needUpdate) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public void checkConnection(){
+		boolean[] connection = new boolean[6];
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getBlock(newX, newY, newZ) instanceof ConstructFunctionalBase || worldObj.getBlock(newX, newY, newZ) instanceof BlockPipe){
+				connection[dir.ordinal()] = true;
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		this.connection = connection;
+	}
+
+	public void setConnectedBlocks(ArrayList<BlockPipeTileEntity> checkedPipes, ArrayList<ConnectionEntry> tiles){
+		boolean[] connection = new boolean[6];
+		checkedPipes.add(this);
+		for(ForgeDirection dir : ForgeDirection.values()){
+			if(dir.ordinal() >= 6) break;
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			if(worldObj.getTileEntity(newX, newY, newZ) instanceof BlockPipeTileEntity){
+				connection[dir.ordinal()] = true;
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				if(!isChecked(checkedPipes, pipe)){
+					pipe.setConnectedBlocks(checkedPipes, tiles);
+				}
+			}else if(worldObj.getTileEntity(newX, newY, newZ) instanceof ConstructFunctionalBaseTileEntity){
+				connection[dir.ordinal()] = true;
+				ConstructFunctionalBaseTileEntity tile = (ConstructFunctionalBaseTileEntity)worldObj.getTileEntity(newX, newY, newZ);
+				ConnectionEntry entry = new ConnectionEntry(tile, dir.getOpposite().ordinal());
+				if(!isChecked(tiles, entry)){
+					tiles.add(entry);
+				}
+			}else{
+				connection[dir.ordinal()] = false;
+			}
+		}
+		this.connection = connection;
+	}
+
+	private boolean isChecked(ArrayList<BlockPipeTileEntity> checkedPipes, BlockPipeTileEntity pipe){
+		for(BlockPipeTileEntity tmpPipe : checkedPipes){
+			if(tmpPipe == pipe){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isChecked(ArrayList<ConnectionEntry> connectedBlocks, ConnectionEntry entry){
+		for(ConnectionEntry tmpEntry : connectedBlocks){
+			if(tmpEntry.equals(entry)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+}
+
+
+
+

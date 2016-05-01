@@ -1,0 +1,305 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.main.TestCore;
+import com.test.network.SimpleTilePacket;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+
+public class ConstructInterfaceTileEntity extends ConstructBaseTileEntity implements IConstructInventory, ILinkConnectionUser {
+
+	public static String nameForNBT = "interface";
+
+	public ConnectionEntry<IConstructInventory> connection = null;
+	protected boolean needUpdateEntry = true;
+
+	public ConstructInterfaceTileEntity() {
+		this(0);
+	}
+
+	public ConstructInterfaceTileEntity(int grade) {
+		super(grade);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if(needUpdateEntry){
+			updateEntry();
+			needUpdateEntry = false;
+		}
+	}
+
+	@Override
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(this.connection != null){
+			if(worldObj.getBlock(this.connection.x, this.connection.y, this.connection.z) != null){
+				worldObj.getBlock(this.connection.x, this.connection.y, this.connection.z).onBlockActivated(worldObj, this.connection.x, this.connection.y, this.connection.z, player, side, hitX, hitY, hitZ);
+			}
+		}
+	}
+	@Override
+	public void onShiftRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(worldObj.isRemote){
+			spawnCennectionParticle("cloud");
+		}else{
+			//do nothing
+		}
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return false;
+	}
+
+	@Override
+	public void onTileRemoved() {
+
+	}
+
+	protected boolean updateEntry() {
+		if(connection != null){
+			TileEntity tile = worldObj.getTileEntity(connection.x, connection.y, connection.z);
+			if(tile instanceof IConstructInventory && !tile.isInvalid()){
+				connection.setTile((IConstructInventory) tile);
+			}else{
+				connection = null;
+			}
+		}
+		if(!worldObj.isRemote) sendConnectionUpdatePacket(false);
+		return true;
+	}
+
+	public void spawnCennectionParticle(String name) {
+		if(!worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		if(connection != null){
+			for (int n = 0; n < 7; n++){
+				double xOffset = (n & 1) == 1 ? -0.5 : 0.5;
+				double yOffset = (n & 2) == 2 ? -0.5 : 0.5;
+				double zOffset = (n & 4) == 4 ? -0.5 : 0.5;
+				worldObj.spawnParticle(name, connection.x + xOffset + 0.5, connection.y + yOffset + 0.5, connection.z + zOffset + 0.5, 0.0D, 0.0D, 0.0D);
+			}
+		}
+	}
+
+	/**server only*/
+	protected void sendConnectionUpdatePacket(boolean spawanParticle) {
+		if(worldObj.isRemote) throw new NullPointerException("called on invalid side : " + (worldObj.isRemote ? "Client" : "Server"));
+		NBTTagCompound tag = new NBTTagCompound();
+		if(connection != null){
+			connection.writeToNBT(tag);
+		}
+		if(spawanParticle) tag.setBoolean("connectP", true);
+		TestCore.packetDispatcher.sendToAll(new SimpleTilePacket(xCoord, yCoord, zCoord, SimpleTilePacket.NBT_CONNECTION, tag));
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public boolean tryConnect(ConstructBaseTileEntity tile) {
+		if(tile instanceof IConstructInventory && tile != this && tile.grade <= this.grade){
+			this.connection = new ConnectionEntry(tile);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void processCommand(byte command, Object value) {
+		super.processCommand(command, value);
+		if(command == SimpleTilePacket.NBT_CONNECTION && value instanceof NBTTagCompound){//should client
+			NBTTagCompound tag = (NBTTagCompound) value;
+			connection = ConnectionEntry.createFromNBT(tag);
+			needUpdateEntry = true;
+			if(tag.getBoolean("connectP")) this.spawnCennectionParticle("cloud");
+		}
+	}
+
+	@Override
+	public int getSizeInventory() {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().getSizeInventory();
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int slotIndex) {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().getStackInSlot(slotIndex);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().decrStackSize(slotIndex, amount);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slotIndex) {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().getStackInSlotOnClosing(slotIndex);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		if(connection != null && connection.getTile() != null){
+			connection.getTile().setInventorySlotContents(slotIndex, itemStack);
+			return;
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public String getInventoryName() {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().getInventoryName();
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().hasCustomInventoryName();
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().getInventoryStackLimit();
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().isUseableByPlayer(player);
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public void openInventory() {
+		if(connection != null && connection.getTile() != null){
+			connection.getTile().openInventory();
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public void closeInventory() {
+		if(connection != null && connection.getTile() != null){
+			connection.getTile().closeInventory();
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		if(connection != null && connection.getTile() != null){
+			return connection.getTile().isItemValidForSlot(slotIndex, itemStack);
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int slotIndex) {
+		if(connection != null && connection.getTile() instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection.getTile();
+			return inv.getAccessibleSlotsFromSide(slotIndex);
+		}else if(connection != null && connection.getTile() instanceof IInventory){
+			int[] slot = new int[connection.getTile().getSizeInventory()];
+			for (int n = 0; n < slot.length; n++){
+				slot[n] = n;
+			}
+			return slot;
+		}else{
+			return new int[0];
+		}
+	}
+
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+		if(connection != null && connection.getTile() instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection.getTile();
+			return inv.canInsertItem(slotIndex, itemStack, side);
+		}else if(connection != null && connection.getTile() instanceof IInventory){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+		if(connection != null && connection.getTile() instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection.getTile();
+			return inv.canExtractItem(slotIndex, itemStack, side);
+		}else if(connection != null && connection.getTile() instanceof IInventory){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		this.updateEntry();
+		tag.setString("name", getNameForNBT());
+		tag.setInteger("index", solid.toIndex(connection.x, connection.y, connection.z, false));
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		NBTTagCompound entrytag = tag.getCompoundTag("entry");
+		connection = ConnectionEntry.createFromNBT(entrytag);
+		needUpdateEntry = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		if(connection != null){
+			NBTTagCompound entryTag = new NBTTagCompound();
+			connection.writeToNBT(entryTag);
+			tag.setTag("entry", entryTag);
+		}
+	}
+
+}

@@ -1,0 +1,54 @@
+package com.test.multiblock.construct.block;
+
+import com.test.main.TestCore;
+import com.test.multiblock.construct.tileentity.ConstructInterfaceTileEntity;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class ConstructInterface extends ConstructFunctionalBase {
+
+	public ConstructInterface() {
+		setBlockName("interface");
+	}
+
+	@Override
+	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if (player.getHeldItem() == null) {
+			if(world.getTileEntity(x, y, z) instanceof ConstructInterfaceTileEntity){
+				ConstructInterfaceTileEntity tile = (ConstructInterfaceTileEntity)world.getTileEntity(x, y, z);
+				tile.spawnCennectionParticle();
+			}
+			return true;
+		} else if (player.getHeldItem().getItem() == TestCore.wrench) {
+			return false;
+		} else {
+			if(world.getTileEntity(x, y, z) instanceof ConstructInterfaceTileEntity){
+				ConstructInterfaceTileEntity tile = (ConstructInterfaceTileEntity)world.getTileEntity(x, y, z);
+				if(tile.connection != null && tile.connection.tile != null){
+					if(world.getBlock(tile.connection.tile.xCoord, tile.connection.tile.yCoord, tile.connection.tile.zCoord) != null){
+						world.getBlock(tile.connection.tile.xCoord, tile.connection.tile.yCoord, tile.connection.tile.zCoord)
+								.onBlockActivated(world, tile.connection.tile.xCoord, tile.connection.tile.yCoord, tile.connection.tile.zCoord, player, side, hitX, hitY, hitZ);
+					}
+				}
+			}
+			return true;
+		}
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new ConstructInterfaceTileEntity();
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister register) {
+		this.blockIcon = Blocks.enchanting_table.getIcon(1, 0);
+        this.front = Blocks.enchanting_table.getIcon(1, 0);
+        this.top = Blocks.enchanting_table.getIcon(1, 0);
+	}
+
+}

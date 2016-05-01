@@ -1,0 +1,11 @@
+package com.test.multiblock;
+
+import net.minecraft.tileentity.TileEntity;
+
+public class DisassemblyTableTileEntity extends TileEntity {
+
+	public DisassemblyTableTileEntity() {
+
+	}
+
+}

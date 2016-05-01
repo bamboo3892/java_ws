@@ -1,0 +1,20 @@
+package com.test.server.gui;
+
+import com.test.multiblock.construct.tileentity.ConstructInterfaceTileEntity;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+
+public class ConstructInterfaceContainer extends Container {
+
+	public ConstructInterfaceContainer(IInventory player, ConstructInterfaceTileEntity tile) {
+
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+		return true;
+	}
+
+}

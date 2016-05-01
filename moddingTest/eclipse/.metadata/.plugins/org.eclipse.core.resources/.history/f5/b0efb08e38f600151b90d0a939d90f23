@@ -1,0 +1,252 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.main.TestCore;
+import com.test.utils.ConnectionEntry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ChatComponentText;
+
+public class ConstructInterfaceTileEntity extends ConstructSimpleOutPuter<IConstructInventory> implements ISidedInventory, ILinkConnectionUser {
+
+	public static String nameForNBT = "interface";
+
+	public ConnectionEntry<IConstructInventory> connection = null;
+	protected boolean needUpdateEntry = true;
+
+	public ConstructInterfaceTileEntity() {
+		this(0);
+	}
+
+	public ConstructInterfaceTileEntity(int grade) {
+		super(grade);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if(needUpdateEntry){
+			updateEntry();
+			needUpdateEntry = false;
+		}
+	}
+
+	@Override
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(this.connection != null){
+			if(worldObj.getBlock(this.connection.x, this.connection.y, this.connection.z) != null){
+				worldObj.getBlock(this.connection.x, this.connection.y, this.connection.z).onBlockActivated(worldObj, this.connection.x, this.connection.y, this.connection.z, player, side, hitX, hitY, hitZ);
+			}
+		}
+	}
+	@Override
+	public void onShiftRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(worldObj.isRemote){
+			spawnCennectionParticle("cloud");
+		}else{
+			//do nothing
+		}
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return false;
+	}
+
+	public void needUpdateEntry() {
+
+	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public boolean tryConnect(ConstructBaseTileEntity tile) {
+		return false;
+	}
+
+	@Override
+	public int getSizeInventory() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.getSizeInventory();
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int slotIndex) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.getStackInSlot(slotIndex);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.decrStackSize(slotIndex, amount);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slotIndex) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.getStackInSlotOnClosing(slotIndex);
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			inv.setInventorySlotContents(slotIndex, itemStack);
+			return;
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public String getInventoryName() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.getInventoryName();
+		}else{
+			return null;
+		}
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.hasCustomInventoryName();
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.getInventoryStackLimit();
+		}else{
+			return 0;
+		}
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.isUseableByPlayer(player);
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public void openInventory() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			inv.openInventory();
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public void closeInventory() {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			inv.closeInventory();
+		}else{
+			return;
+		}
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			return inv.isItemValidForSlot(slotIndex, itemStack);
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int slotIndex) {
+		if(connection != null && connection instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection;
+			return inv.getAccessibleSlotsFromSide(slotIndex);
+		}else if(connection != null && connection instanceof IInventory){
+			IInventory inv = (IInventory) connection;
+			int[] slot = new int[inv.getSizeInventory()];
+			for (int n = 0; n < slot.length; n++){
+				slot[n] = n;
+			}
+			return slot;
+		}else{
+			return new int[0];
+		}
+	}
+
+	@Override
+	public boolean canInsertItem(int slotIndex, ItemStack itemStack, int side) {
+		if(connection != null && connection instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection;
+			return inv.canInsertItem(slotIndex, itemStack, side);
+		}else if(connection != null && connection instanceof IInventory){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean canExtractItem(int slotIndex, ItemStack itemStack, int side) {
+		if(connection != null && connection instanceof ISidedInventory){
+			ISidedInventory inv = (ISidedInventory) connection;
+			return inv.canExtractItem(slotIndex, itemStack, side);
+		}else if(connection != null && connection instanceof IInventory){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	@Override
+	protected Class getTargetClass() {
+		return IConstructInventory.class;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+	}
+
+}

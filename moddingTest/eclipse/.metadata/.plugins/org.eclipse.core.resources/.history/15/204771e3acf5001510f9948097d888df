@@ -1,0 +1,14 @@
+package com.test.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+public interface IConstructFilter {
+
+	void onRightClicked(World world, int x, int y, int z, int side);
+
+	ItemStack removeFilter();
+
+	boolean canTransferItem(ItemStack itemStack);
+
+}

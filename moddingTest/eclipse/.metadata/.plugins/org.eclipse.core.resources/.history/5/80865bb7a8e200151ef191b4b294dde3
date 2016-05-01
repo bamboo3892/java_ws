@@ -1,0 +1,114 @@
+package com.test.main;
+
+import org.lwjgl.input.Keyboard;
+
+import com.test.creativeTabs.TestCreativeTab;
+
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+
+@Mod(modid = TestCore.MODID, version = TestCore.VERSION)
+public class TestCore {
+
+	public static final String MODID   = "TestMod";
+	public static final String VERSION = "0.0.0";
+
+	@Mod.Instance(MODID)
+	public static TestCore instance;
+	@SidedProxy(clientSide = "com.test.main.ClientProxy", serverSide = "com.test.main.CommonProxy")
+	public static CommonProxy proxy;
+
+	//configuration
+	public static boolean isHoge;
+
+	//key binding
+	public static final KeyBinding inputKey = new KeyBinding("key.inputKey.name", Keyboard.KEY_I, "sample.inputEvent.name");
+
+	//block instance
+	public static Block testBlock;
+	public static Block tileTestBlock;
+	public static Block pipe;
+	public static Block furnace;
+	public static Block blockFrame;
+	public static Block blockFrameLine;
+
+	//item instance
+	public static Item testItem;
+	public static Item sightStealer;
+	public static Item wrench;
+
+	//creative tab
+	public static final CreativeTabs testCreativeTab = new TestCreativeTab("testCreativeTab");
+
+	//GUI ID
+	public static final int TESTBLOCK_GUI_ID = 0;
+	public static final int TILETESTBLOCK_GUI_ID = 1;
+	public static final int INFORMATION_GUI_ID = 2;
+	public static final int SIGHTSTEALER_GUI_ID = 3;
+
+	//render ID
+	@SideOnly(Side.CLIENT)
+	public static final int TESTBLOCK_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static final int BLOCKPIPE_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static final int FURNACECONSTRUCT_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static final int BLOCKFRAME_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	public static final int BLOCKFRAMELINE_RENDER_ID = RenderingRegistry.getNextAvailableRenderId();
+	
+	//integration
+	public static boolean integrationTE = false;
+	
+	public static Block blockCopper;
+	public static Block blockTin;
+	public static Block blockSilver;
+	public static Block blockLead;
+	public static Block blockNickel;
+	public static Block blockPlatinum;
+	public static Block blockMithril;
+	public static Block blockElectrum;
+	public static Block blockInvar;
+	public static Block blockBronze;
+	public static Block blockSignalum;
+	public static Block blockLumium;
+	public static Block blockEnderium;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Mod.EventHandler
+	public void preInit(FMLPreInitializationEvent event) {
+		proxy.loadConfiguration(event.getSuggestedConfigurationFile());
+		proxy.registerBlock();
+		proxy.registerItem();
+		proxy.registerKeyBinding();
+		FMLCommonHandler.instance().bus().register(new EventHandler());
+	}
+
+	@Mod.EventHandler
+	public void init(FMLInitializationEvent event) {
+		proxy.registerTileEntity();
+		proxy.registerRecipes();
+		proxy.registerRenderer();
+		NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
+	}
+
+	@Mod.EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+
+	}
+
+}
+
+

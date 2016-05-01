@@ -1,0 +1,121 @@
+package test;
+
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class GamePanel extends JPanel implements ActionListener, KeyListener{
+
+	static int FPS = 20;
+	private Timer timer;
+	private BufferedImage backGround;
+	private static BufferedImage[] ImageNumber = new BufferedImage[10];
+	private final String path = "BackGround.png";
+	private Blocks blocks;
+	private Box box[][] = new Box[10][20];
+	private int score = 0;
+	private int nextBlock;
+
+	public GamePanel(JFrame jf) {
+		try {
+			backGround = ImageIO.read(new File(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		setSize(Main.WIDTH,Main.HEIGHT);
+		//いろいろ初期化
+		timer = new Timer(1000/FPS,this);
+		timer.start();
+		this.blocks = new Blocks(this);
+		for(int i=0;i<10;i++){
+			for(int j=0;j<20;j++){
+				box[i][j] = new Box(i, j);
+			}
+		}
+		jf.add(this);
+	}
+
+	public void paintComponent(Graphics g) {
+		//背景描写
+		paintBackground(g);
+		//Blockを動かす処理
+		String command = blocks.move(g);
+		if(command == "fall"){
+			//何もしない
+		}else if(command == "place"){
+			//消えるところの処理
+			checkAndDeleteLine();
+		}
+		//Blockを描画
+		for(int i=0;i<10;i++){
+			for(int j=0;j<20;j++){
+				box[i][j].paint(g);
+			}
+		}
+		//数字を描画
+		paintNumber();
+		//NEXTを描画
+		paintNEXT();
+	}
+
+	private void checkAndDeleteLine() {
+		
+	}
+
+	private void paintNumber() {
+		//scoreを使ってスコアを描画
+	}
+
+	private void paintNEXT(){
+		//nextBlockを使ってNEXTを描画
+		//一つずつifで分岐して描写
+	}
+
+	private void paintBackground(Graphics g) {
+		g.drawImage(backGround, 0, 0, this);
+	}
+
+	public Box[][] getBoxes(){
+		return box;
+	}
+	
+	public static void initialize(){
+		for(int i=0;i<10;i++){
+			try {
+				ImageNumber[i] = ImageIO.read(new File(i+".png"));
+			} catch (IOException e) {e.printStackTrace();}
+		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+	}
+
+}

@@ -1,0 +1,30 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import java.util.List;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+
+public class IntegrationHandler {
+
+	public static void checkIntegration(){
+		integrationTE = isModContained("TestMod");
+	}
+
+	public static void registerBlock(){
+		if(integrationTE){
+			
+		}
+	}
+
+	private static boolean isModContained(String modid){
+		List<ModContainer> mods = Loader.instance().getModList();
+		for(ModContainer mod : mods){
+			if(mod.getModId() == modid) return true;
+		}
+		return false;
+	}
+
+}

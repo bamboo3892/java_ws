@@ -1,0 +1,158 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.utils.ConnectionEntry;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class ConstructInterfaceTileEntity extends ConstructBaseTileEntity implements IInventory{
+
+	public static String nameForNBT = "interface";
+
+	public ConnectionEntry connection = null;
+	/**this list does not contain this tile*/
+	private ArrayList<ConnectionEntry> connections  = new ArrayList<ConnectionEntry>();
+	private int index = 0;
+	private boolean needCheck = true;
+	public IInventory connectedInventory;
+
+	public ConstructInterfaceTileEntity() {
+
+	}
+
+	public void checkConnection() {
+		ArrayList<BlockPipeTileEntity> checkedPipe = new ArrayList<BlockPipeTileEntity>();
+		for (int side = 0; side < 6; side++) {
+			connections.clear();
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			int newX = xCoord + dir.offsetX;
+			int newY = yCoord + dir.offsetY;
+			int newZ = zCoord + dir.offsetZ;
+			TileEntity tile = worldObj.getTileEntity(newX, newY, newZ);
+			if (tile instanceof BlockPipeTileEntity) {
+				BlockPipeTileEntity pipe = (BlockPipeTileEntity) tile;
+				pipe.setConnectedBlocks(checkedPipe, connections);
+			} else if (tile instanceof ConstructInventoryBaseTileEntity) {
+				ConstructInventoryBaseTileEntity func = (ConstructInventoryBaseTileEntity) tile;
+				connections.add(new ConnectionEntry(func, ForgeDirection.getOrientation(side).getOpposite().ordinal()));
+			}
+		}
+		if (connections.size() <= 1) {
+			index = 0;
+			connection = null;
+		}
+		if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	public boolean connectNextBlock() {
+		checkConnection();
+		if (connections.size() <= 1) {
+			index = 0;
+			connection = null;
+			return false;
+		} else {
+			index = (index >= connections.size() - 1 ? 1 : index + 1);
+			connection = connections.get(index);
+			return true;
+		}
+	}
+
+	@Override
+	public int getSizeInventory() {
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int p_70301_1_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public String getInventoryName() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public boolean hasCustomInventoryName() {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		// TODO 自動生成されたメソッド・スタブ
+		return 0;
+	}
+
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
+
+	@Override
+	public void openInventory() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public void closeInventory() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		index = tag.getInteger("index");
+		needCheck = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		checkConnection();
+		tag.setInteger("index", index);
+		super.writeToNBT(tag);
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+}

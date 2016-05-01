@@ -1,0 +1,32 @@
+package main;
+
+import java.awt.EventQueue;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import ai.AISheet;
+import ai.RandomAI;
+
+public class Start {
+
+	public static final int panelSize = 604;
+
+	public static Map<String, Class<? extends AISheet>> AIList = new HashMap<String, Class<? extends AISheet>>();;
+
+	public static void main(String[] args) throws IOException {
+		AIList.put("Rondom AI", RandomAI.class);
+
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try{
+					InitGui frame = new InitGui();
+					frame.setVisible(true);
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+}

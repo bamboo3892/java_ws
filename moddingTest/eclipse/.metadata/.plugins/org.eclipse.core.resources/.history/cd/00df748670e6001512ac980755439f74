@@ -1,0 +1,84 @@
+package com.test.block.construct.block;
+
+import com.test.main.TestCore;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+public abstract class ConstructFunctionalBase extends BlockContainer {
+
+	//side icon = block icon
+	protected IIcon top;
+	protected IIcon front;
+
+	public ConstructFunctionalBase(){
+		super(Material.rock);
+		setCreativeTab(TestCore.testCreativeTab);
+		this.setLightOpacity(255);
+	}
+
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase livingBase, ItemStack itemStack){
+		int l = MathHelper.floor_double((double)(livingBase.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		if (l == 0){
+			world.setBlockMetadataWithNotify(x, y, z, 2, 2);
+		}else if (l == 1){
+			world.setBlockMetadataWithNotify(x, y, z, 5, 2);
+		}else if (l == 2){
+			world.setBlockMetadataWithNotify(x, y, z, 3, 2);
+		}else if (l == 3){
+			world.setBlockMetadataWithNotify(x, y, z, 4, 2);
+		}
+	}
+
+	@Override
+	public boolean isOpaqueCube(){
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock(){
+		return false;
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess p_149646_1_, int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_){
+		return true;
+	}
+
+	@Override
+	public int getRenderType(){
+		return TestCore.CONSTRUCTBASE_RENDER_ID;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+    public IIcon getIcon(int side, int meta){
+        return side == 1 ? this.top : (side == 0 ? this.top : (side != meta ? this.blockIcon : this.front));
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public abstract void registerBlockIcons(IIconRegister p_149651_1_);
+
+	/*
+	 *return TileEntity extending FunctionalConstructBaseTileEntity
+	 */
+	@Override
+	public abstract TileEntity createNewTileEntity(World world, int meta);
+
+}
+
+
+
+

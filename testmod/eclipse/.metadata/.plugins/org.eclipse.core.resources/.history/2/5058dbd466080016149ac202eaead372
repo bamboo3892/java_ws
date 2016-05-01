@@ -1,0 +1,9 @@
+package com.test.nei;
+
+public class NewRecipeRegister {
+
+	public NewRecipeRegister() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

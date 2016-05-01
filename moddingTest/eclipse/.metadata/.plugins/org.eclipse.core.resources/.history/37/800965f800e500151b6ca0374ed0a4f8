@@ -1,0 +1,103 @@
+package com.test.block;
+
+import java.util.List;
+
+import com.test.block.tileentity.BlockPipeTileEntity;
+import com.test.main.TestCore;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+/*
+ * metadata
+ * 0 : item pipe
+ * 1 : fluid pipe
+ * 2 : energy pipe
+ */
+public class BlockPipe extends ConstructBase{
+
+	public BlockPipe() {
+		super();
+		setBlockName("block");
+		setBlockTextureName("block_coal");
+	}
+
+	@Override
+	public void onBlockAdded(World world, int x, int y, int z) {
+		super.onBlockAdded(world, x, y, z);
+		if(!(world.getTileEntity(x, y, z) instanceof BlockPipeTileEntity)) return;
+		BlockPipeTileEntity tile = (BlockPipeTileEntity)world.getTileEntity(x, y, z);
+		tile.checkConnection();
+	}
+
+	@Override
+	public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB aabb, List list, Entity entity){
+		this.setBlockBounds(5F / 16F, 5F / 16F, 5F / 16F, 11F / 16F, 11F / 16F, 11F / 16F);
+		super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		if(!(world.getTileEntity(x, y, z) instanceof BlockPipeTileEntity)) return;
+		BlockPipeTileEntity tile = (BlockPipeTileEntity)world.getTileEntity(x, y, z);
+		if(tile.connection == null) return;
+		if(tile.connection[0]){
+			this.setBlockBounds(5F / 16F, 0F / 16F, 5F / 16F, 11F / 16F, 11F / 16F, 11F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		if(tile.connection[1]){
+			this.setBlockBounds(5F / 16F, 5F / 16F, 5F / 16F, 11F / 16F, 16F / 16F, 11F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		if(tile.connection[2]){
+			this.setBlockBounds(5F / 16F, 5F / 16F, 0F / 16F, 11F / 16F, 11F / 16F, 11F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		if(tile.connection[3]){
+			this.setBlockBounds(5F / 16F, 5F / 16F, 5F / 16F, 11F / 16F, 11F / 16F, 16F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		if(tile.connection[4]){
+			this.setBlockBounds(0F / 16F, 5F / 16F, 5F / 16F, 11F / 16F, 11F / 16F, 11F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		if(tile.connection[5]){
+			this.setBlockBounds(5F / 16F, 5F / 16F, 5F / 16F, 16F / 16F, 11F / 16F, 11F / 16F);
+			super.addCollisionBoxesToList(world, x, y, z, aabb, list, entity);
+		}
+		this.setBlockBounds(5F / 16F, 5F / 16F, 5F / 16F, 11F / 16F, 11F / 16F, 11F / 16F);
+		this.setBlockBoundsForItemRender();
+	}
+
+	@Override
+	public boolean isOpaqueCube(){
+		return false;
+	}
+
+	@Override
+	public boolean renderAsNormalBlock(){
+		return false;
+	}
+
+	@Override
+	public boolean shouldSideBeRendered(IBlockAccess p_149646_1_, int p_149646_2_, int p_149646_3_, int p_149646_4_, int p_149646_5_){
+		return true;
+	}
+
+	@Override
+	public int getRenderType(){
+		return TestCore.BLOCKPIPE_RENDER_ID;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+		return new BlockPipeTileEntity();
+	}
+
+}
+
+
+
+
+
+
+

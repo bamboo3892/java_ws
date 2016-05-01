@@ -1,0 +1,30 @@
+package com.test.api.utils;
+
+import com.test.block.tileentity.ConstructFunctionalBaseTileEntity;
+
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class ConnectionEntry {
+
+	public ConstructFunctionalBaseTileEntity tile;
+	public int side;
+
+	public ConnectionEntry(ConstructFunctionalBaseTileEntity tile, int side) {
+		this.tile = tile;
+		this.side = side;
+	}
+
+	@Override
+	public boolean equals(Object o){
+		if(o instanceof ConnectionEntry) {
+			ConnectionEntry entry = (ConnectionEntry)o;
+			return this.tile == entry.tile && this.side == entry.side;
+		}
+		return false;
+	}
+
+	public String getText(){
+		return tile.getClass().getSimpleName() + " " + ForgeDirection.getOrientation(side).toString();
+	}
+
+}

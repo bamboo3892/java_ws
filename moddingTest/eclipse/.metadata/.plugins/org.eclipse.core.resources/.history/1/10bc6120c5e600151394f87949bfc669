@@ -1,0 +1,22 @@
+package com.test.multiblock.construct.parts;
+
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.nbt.NBTTagCompound;
+
+public class InventoryPartBase extends ConstructPartBase {
+
+	public InventoryPartBase() {
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag, RectangularSolid solid) {
+
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return null;
+	}
+
+}

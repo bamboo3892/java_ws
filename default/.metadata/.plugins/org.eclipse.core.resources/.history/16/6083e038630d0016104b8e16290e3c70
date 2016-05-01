@@ -1,0 +1,30 @@
+package main;
+
+import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+public class Start {
+
+	private static JFrame jf;
+	public static MyPanel panel;
+	public static final int panelSize = 604;
+	public static boolean player[] = new boolean[3];//player:true
+
+	public static void main(String[] args) throws IOException{
+		
+		
+		
+		player[1] = true;
+		player[2] = false;
+		jf = new JFrame("Othello");
+		jf.setBounds(300, 300, panelSize+6, panelSize+35);
+		jf.setDefaultCloseOperation(3);
+		jf.setResizable(false);
+		panel = new MyPanel();
+		jf.add(panel);
+		jf.setVisible(true);
+	}
+
+}

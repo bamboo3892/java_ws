@@ -1,0 +1,33 @@
+package com.test.multiblock;
+
+import com.test.block.ITestModBlock;
+import com.test.main.TestCore;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class DisassemblyTable extends BlockContainer implements ITestModBlock {
+
+	public DisassemblyTable() {
+		super(Material.iron);
+		this.setCreativeTab(TestCore.testCreativeTab);
+		this.setLightOpacity(0);
+		this.setHardness(1.5F);
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return new DisassemblyTableTileEntity();
+	}
+
+	@Override
+	public EnumRarity getRarity(ItemStack itemStack) {
+		return EnumRarity.epic;
+	}
+
+}

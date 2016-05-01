@@ -1,0 +1,119 @@
+package com.test.main;
+
+import org.lwjgl.input.Mouse;
+
+import com.test.multiblock.construct.block.ConstructRepeater;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+
+public class EventHandler {
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void inputMouse(InputEvent.MouseInputEvent event) {
+		if(Mouse.isButtonDown(2)){
+			FMLClientHandler.instance().getClient().thePlayer.addChatMessage(new ChatComponentTranslation("Mouse Wheel is Pressed"));
+		}
+	}
+
+	@SubscribeEvent
+	public void toolTip(ItemTooltipEvent event) {
+		Item item = event.itemStack.getItem();
+		if(item != null){
+			//item
+			if(item == TestCore.craftingFilter){
+				NBTTagCompound tag = event.itemStack.getTagCompound();
+				if(tag != null){
+					NBTTagCompound productTag = tag.getCompoundTag("product");
+					NBTTagList materialTagList = tag.getTagList("material", Constants.NBT.TAG_COMPOUND);
+					if(productTag != null && materialTagList != null){
+						ItemStack product = ItemStack.loadItemStackFromNBT(productTag);
+						ItemStack[] material = new ItemStack[materialTagList.tagCount()];
+						for (int tagCounter = 0; tagCounter < materialTagList.tagCount(); ++tagCounter){
+							NBTTagCompound materialTag = (NBTTagCompound) materialTagList.getCompoundTagAt(tagCounter);
+							material[tagCounter] = ItemStack.loadItemStackFromNBT(materialTag);
+						}
+						if(product != null){
+							event.toolTip.add("Product : " + product.getDisplayName() + " x" + product.stackSize);
+							event.toolTip.add("Material :");
+							for(int i=0;i<material.length;i++){
+								if(material[i] != null){
+									event.toolTip.add("   " + material[i].getDisplayName() + " x" + material[i].stackSize);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			//itemBlock
+			Block block = Block.getBlockFromItem(item);
+			if(block instanceof ConstructRepeater){
+				event.toolTip.add("Has One Signal History.");
+				event.toolTip.add("Every Signal Resets This.");
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void interactTest(EntityInteractEvent event) {
+		//FMLClientHandler.instance().getClient().renderViewEntity = (EntityLivingBase)event.target;
+		/*
+		System.out.println(event.entity + "" + event.entityLiving + "" + event.entityPlayer + " : " + event.target);
+		if(!event.entityPlayer.worldObj.isRemote) return;
+		if(event.entityPlayer.getCurrentEquippedItem() == null) return;
+		if(event.entityPlayer.getCurrentEquippedItem().getItem() != TestCore.sightStealer) return;
+		int x = event.entityPlayer.serverPosX;
+		int y = event.entityPlayer.serverPosY;
+		int z = event.entityPlayer.serverPosZ;
+		event.entityPlayer.openGui(TestCore.instance, TestCore.SIGHTSTEALER_GUI_ID, event.entityPlayer.worldObj, x, y, z);
+		SightStealer.registerEvent(event);
+		System.out.println("register");
+		*/
+	}
+
+	@SubscribeEvent
+	public void onCraftedHook(PlayerEvent.ItemCraftedEvent event) {}
+
+	@SubscribeEvent
+	public void onSmeltedHook(PlayerEvent.ItemSmeltedEvent event) {}
+
+	@SubscribeEvent
+	public void onPickedUpHook(PlayerEvent.ItemPickupEvent event) {}
+
+	@SubscribeEvent
+	public void onServerTick(TickEvent.ServerTickEvent event) {
+		if(event.phase == Phase.END){
+			TestCore.proxy.sendPacket();
+		}
+	}
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event) {}
+
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event) {}
+
+	@SubscribeEvent
+	public void onPlayerTick(TickEvent.PlayerTickEvent event) {}
+
+	@SubscribeEvent
+	public void onRenderTick(TickEvent.RenderTickEvent event) {}
+
+}

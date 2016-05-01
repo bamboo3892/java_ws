@@ -1,0 +1,9 @@
+package com.test.inventory;
+
+public class CraftingFilterInventory {
+
+	public CraftingFilterInventory() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

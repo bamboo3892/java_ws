@@ -1,0 +1,7 @@
+package com.test.multiblock.construct.tileentity;
+
+public interface ISignalReceiver {
+
+	public void onSignalReceived();
+
+}

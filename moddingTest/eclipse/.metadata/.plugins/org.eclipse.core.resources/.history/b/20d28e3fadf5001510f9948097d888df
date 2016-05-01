@@ -1,0 +1,19 @@
+package com.test.inventory;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+public abstract class IConstructFilter {
+
+	public abstract void onRightClicked(World world, int x, int y, int z, int side);
+
+	public abstract ItemStack removeFilter();
+
+	public abstract boolean canTransferItem(ItemStack itemStack);
+
+	public abstract void readFronNBT(NBTTagCompound tag);
+
+	public abstract void writeToNBT(NBTTagCompound tag);
+
+}

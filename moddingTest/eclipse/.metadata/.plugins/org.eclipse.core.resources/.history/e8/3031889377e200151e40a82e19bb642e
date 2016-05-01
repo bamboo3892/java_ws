@@ -1,0 +1,70 @@
+package com.test.client.renderer;
+
+import org.lwjgl.opengl.GL11;
+
+import com.test.api.TestRenderHelper;
+import com.test.main.TestCore;
+
+import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.IBlockAccess;
+
+public class BlockFrameLineRenderer implements ISimpleBlockRenderingHandler {
+
+	public BlockFrameLineRenderer() {
+
+	}
+
+	@Override
+	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
+
+	}
+
+	@Override
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+		GL11.glPushMatrix();
+		int meta = world.getBlockMetadata(x, y, z);
+		renderer.setOverrideBlockTexture(Blocks.iron_block.getBlockTextureFromSide(0));
+		if(meta == 0){
+			TestRenderHelper.renderCubeFrame(x, y, z, block, 0, 0, 0, 1, 1, 1, 3F/16F, renderer);
+			renderer.setRenderBounds(2F/16F, 2F/16F, 2F/16F, 14F/16F, 14F/16F, 14F/16F);
+			renderer.renderStandardBlock(block, x, y, z);
+		}else if(meta == 1){
+			renderBasePiller(world, x, y, z, block, renderer);
+		}else if(meta == 2){
+			GL11.glRotatef(90, 0, 1, 1);
+			renderBasePiller(world, x, y, z, block, renderer);
+		}else if(meta == 3){
+			GL11.glRotatef(90, 1, 0, 0);
+			renderBasePiller(world, x, y, z, block, renderer);
+		}
+		GL11.glPopMatrix();
+		return true;
+	}
+
+	private void renderBasePiller(IBlockAccess world, int x, int y, int z, Block block, RenderBlocks renderer){
+		renderer.setRenderBounds(0F/16F, 0F/16F, 0F/16F, 3F/16F, 16F/16F, 3F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(13F/16F, 0F/16F, 0F/16F, 16F/16F, 16F/16F, 3F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(0F/16F, 0F/16F, 13F/16F, 3F/16F, 16F/16F, 16F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(13F/16F, 0F/16F, 13F/16F, 16F/16F, 16F/16F, 16F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+		renderer.setRenderBounds(2F/16F, 0F/16F, 2F/16F, 14F/16F, 16F/16F, 14F/16F);
+		renderer.renderStandardBlock(block, x, y, z);
+	}
+
+	@Override
+	public boolean shouldRender3DInInventory(int modelId) {
+		return false;
+	}
+
+	@Override
+	public int getRenderId() {
+		return TestCore.BLOCKFRAMELINE_RENDER_ID;
+	}
+
+}

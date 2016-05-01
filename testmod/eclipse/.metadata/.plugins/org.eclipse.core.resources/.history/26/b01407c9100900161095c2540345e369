@@ -1,0 +1,9 @@
+package com.test.client.renderer;
+
+import net.minecraft.tileentity.TileEntity;
+
+public interface IConstructRenderer {
+
+	void renderTileEntityAt(TileEntity tile, double tileX, double tileY, double tileZ, float partialTicks);
+
+}

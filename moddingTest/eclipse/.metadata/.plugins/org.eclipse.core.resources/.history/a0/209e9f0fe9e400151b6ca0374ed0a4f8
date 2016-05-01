@@ -1,0 +1,37 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import com.test.block.tileentity.BlockFrameTileEntity;
+import com.test.client.renderer.BlockFrameLaserRenderer;
+import com.test.client.renderer.BlockFrameLineRenderer;
+import com.test.client.renderer.BlockFrameRenderer;
+import com.test.client.renderer.BlockPipeRenderer;
+import com.test.client.renderer.FurnaceConstructRenderer;
+import com.test.client.renderer.ItemMultiBlockRenderer;
+import com.test.client.renderer.TestBlockRenderer;
+
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+
+public class ClientProxy extends CommonProxy{
+
+	@Override
+	public void registerKeyBinding(){
+		ClientRegistry.registerKeyBinding(inputKey);
+	}
+
+	@Override
+	public void registerRenderer(){
+		RenderingRegistry.registerBlockHandler(new TestBlockRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockPipeRenderer());
+		RenderingRegistry.registerBlockHandler(new FurnaceConstructRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockFrameRenderer());
+		RenderingRegistry.registerBlockHandler(new BlockFrameLineRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(BlockFrameTileEntity.class,new BlockFrameLaserRenderer());
+		//MinecraftForgeClient.registerItemRenderer(itemMultiBlock, new ItemMultiBlockRenderer());
+	}
+
+}

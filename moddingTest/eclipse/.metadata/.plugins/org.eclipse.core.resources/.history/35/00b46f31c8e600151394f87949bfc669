@@ -1,0 +1,9 @@
+package com.test.client.gui;
+
+public class ConstructInterfaceGui {
+
+	public ConstructInterfaceGui() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

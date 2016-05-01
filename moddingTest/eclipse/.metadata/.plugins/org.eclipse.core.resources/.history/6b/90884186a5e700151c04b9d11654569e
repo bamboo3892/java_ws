@@ -1,0 +1,21 @@
+package com.test.packet;
+
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.netty.buffer.ByteBuf;
+
+public class MaltiTileGenReplyPacket implements IMessage {
+
+	public MaltiTileGenReplyPacket() {
+	}
+
+	@Override
+	public void fromBytes(ByteBuf buf) {
+
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+
+	}
+
+}

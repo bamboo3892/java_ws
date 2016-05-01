@@ -1,0 +1,578 @@
+package com.test.multiblock;
+
+import java.util.Random;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.Point;
+
+import com.test.client.IHUDUser;
+import com.test.inventory.AbstractFilter;
+import com.test.inventory.FilterInventory;
+import com.test.inventory.IFilterUser;
+import com.test.main.TestCore;
+import com.test.network.SimpleTilePacket;
+import com.test.network.SimpleTilePacket.PacketType;
+import com.test.tileentity.ISimpleTilePacketUser;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.InventoryHelper;
+import com.test.utils.Position;
+
+import cofh.api.energy.IEnergyHandler;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class MultiBlockCasingTileEntity extends TileEntity implements ISimpleTilePacketUser, ISidedInventory, IEnergyHandler, IFilterUser, IHUDUser {
+
+	/**0 : input 1 : output 2 : disabled*/
+	public int[] flagIO = new int[6];
+	public ConnectionEntry<MultiBlockCoreTileEntity> coreTile = null;
+	private AbstractFilter[] filter = new AbstractFilter[6];
+
+	private boolean needCheckCoreTile;
+
+	public MultiBlockCasingTileEntity() {
+		for (int i = 0; i < 6; i++){
+			flagIO[i] = 2;
+		}
+	}
+
+	public boolean onRightClicked(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.getHeldItem() != null && (player.getHeldItem().getItem() == TestCore.filter || player.getHeldItem().getItem() == TestCore.craftingFilter)) return false;
+		if(filter[side] != null){
+			filter[side].onRightClicked(worldObj, xCoord, yCoord, zCoord, side, player);
+			return true;
+		}else if(isConnected()){
+			coreTile.getTile().onRightClicked(world, x, y, z, player, side, hitX, hitY, hitZ);
+			return true;
+		}
+		return false;
+	}
+
+	public void onShiftRightClicked(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(isConnected()){
+			coreTile.getTile().onShiftRightClicked(world, x, y, z, player, side, hitX, hitY, hitZ);
+		}
+	}
+
+	public boolean onRightClickedByWrench(World world, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		if(player.isSneaking() && filter[side] != null){
+			ItemStack filter = this.removeFilter(side);
+			if(filter != null && !worldObj.isRemote){
+				ForgeDirection dir = ForgeDirection.getOrientation(side);
+				worldObj.spawnEntityInWorld(new EntityItem(worldObj, xCoord + dir.offsetX + 0.5, yCoord + dir.offsetY + 0.5, zCoord + dir.offsetZ + 0.5, filter));
+			}
+			worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+		}else if(isConnected()){
+			if(!player.isSneaking()){
+				ForgeDirection dir = ForgeDirection.getOrientation(side);
+				if(!(worldObj.getBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof MultiBlockCasing)){
+					flagIO[side] = flagIO[side] == 0 ? 1 : flagIO[side] == 1 ? 2 : 0;
+					TestCore.proxy.markForTileUpdate(this.getPosition(), PacketType.FLAG_IO);
+					return true;
+				}
+			}else{
+				if(!worldObj.isRemote){
+					boolean b = coreTile.getTile().switchPausing();
+					player.addChatMessage(new ChatComponentText(b ? "Multi Block Stopped!" : "Multi Block Started!"));
+				}
+			}
+		}
+		return false;
+	}
+
+	public void onLeftClicked(EntityPlayer player, int side, double xCoord, double yCoord, double zCoord) {
+
+	}
+
+	@Override
+	public void updateEntity() {
+		if(needCheckCoreTile){
+			if(coreTile != null){
+				if(worldObj.getTileEntity(coreTile.x, coreTile.y, coreTile.z) instanceof MultiBlockCoreTileEntity){
+					MultiBlockCoreTileEntity tile = (MultiBlockCoreTileEntity) worldObj.getTileEntity(coreTile.x, coreTile.y, coreTile.z);
+					coreTile = new ConnectionEntry<MultiBlockCoreTileEntity>(tile);
+				}
+			}
+			needCheckCoreTile = false;
+		}
+		if(!worldObj.isRemote && isConnected()) itemTransfer();
+	}
+
+	private boolean itemTransfer() {
+		int[] priority = new int[6];
+		IInventory inv[] = new IInventory[6];
+		for (int side = 0; side < 6; side++){
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			if(worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ) instanceof IInventory){
+				inv[side] = (IInventory) worldObj.getTileEntity(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ);
+				if(flagIO[side] == 1 || flagIO[side] == 0){
+					if(filter[side] != null){
+						priority[side] = filter[side].getPriority();
+					}else{
+						priority[side] = 0;
+					}
+				}else{
+					priority[side] = 0;
+				}
+			}
+		}
+		int[] order = new int[6];
+		for (int i = 0; i < 6; i++){
+			order[i] = -1;
+		}
+		for (int i = AbstractFilter.MAX_PRIORITY; i >= 0; i--){
+			for (int side = 0; side < 6; side++){
+				if(priority[side] == i){
+					int index = 0;
+					while (order[index] != -1)
+						index++;
+					order[index] = side;
+				}
+			}
+		}
+		for (int index = 0; index < 6; index++){
+			int side = order[index];
+			if(side == -1) return false;
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			if(inv[side] != null && (flagIO[side] == 1 || flagIO[side] == 0)){
+				if(inv[side] instanceof MultiBlockCasingTileEntity && ((MultiBlockCasingTileEntity) inv[side]).getCoreTie() == this.getCoreTie()) continue;
+				if(inv[side] == this.getCoreTie()) continue;
+				if(filter[side] == null){
+					if(flagIO[side] == 1){
+						if(InventoryHelper.tryPushItemEX(this, inv[side], dir, dir.getOpposite(), coreTile.getTile().getMaxTransfer(side))){
+							return true;
+						}
+					}else if(flagIO[side] == 0){
+						if(InventoryHelper.tryPushItemEX(inv[side], this, dir.getOpposite(), dir, coreTile.getTile().getMaxTransfer(side))){
+							return true;
+						}
+					}
+				}else{
+					if(flagIO[side] == 1){
+						if(filter[side].tranferItem(this, inv[side], dir.ordinal(), dir.getOpposite().ordinal(), coreTile.getTile().getMaxTransfer(side))){
+							return true;
+						}
+					}else if(flagIO[side] == 0){
+						if(filter[side].tranferItem(inv[side], this, dir.getOpposite().ordinal(), dir.ordinal(), coreTile.getTile().getMaxTransfer(side))){
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean isConnected() {
+		return !(this.coreTile == null || coreTile.getTile() == null);
+	}
+	public MultiBlockCoreTileEntity getCoreTie() {
+		if(this.isConnected()){
+			return coreTile.getTile();
+		}
+		return null;
+	}
+	public boolean connect(MultiBlockCoreTileEntity tile) {
+		if(!isConnected()){
+			this.coreTile = new ConnectionEntry(tile);
+			TestCore.proxy.markForTileUpdate(this.getPosition(), PacketType.NBT_CONNECTION);
+			return true;
+		}
+		return false;
+	}
+	public void disconnect() {
+		this.coreTile = null;
+		for (int i = 0; i < 6; i++){
+			flagIO[i] = 2;
+		}
+		Random rand = worldObj.rand;
+		for (int i = 0; i < 6; i++){
+			if(filter[i] != null){
+				ItemStack itemStack = filter[i].getFilterItem();
+				double x = (double) ((float) xCoord + rand.nextFloat() * 0.8F + 0.1F);
+				double y = (double) ((float) yCoord + rand.nextFloat() * 0.8F + 0.1F);
+				double z = (double) ((float) zCoord + rand.nextFloat() * 0.8F + 0.1F);
+				EntityItem entityitem = new EntityItem(worldObj, x, y, z, itemStack);
+				entityitem.motionX = (double) ((float) rand.nextGaussian() * 0.05F);
+				entityitem.motionY = (double) ((float) rand.nextGaussian() * 0.05F + 0.2F);
+				entityitem.motionZ = (double) ((float) rand.nextGaussian() * 0.05F);
+				if(worldObj.spawnEntityInWorld(entityitem)){
+					this.removeFilter(i);
+				}
+			}
+		}
+		TestCore.proxy.markForTileUpdate(this.getPosition(), PacketType.FLAG_IO);
+		TestCore.proxy.markForTileUpdate(this.getPosition(), PacketType.NBT_CONNECTION);
+	}
+
+	public void updateFilter() {
+		TestCore.proxy.markForTileUpdate(getPosition(), PacketType.FILTER2);
+	}
+	public boolean setFilter(int side, AbstractFilter filter) {
+		if(side >= 0 && side < 6 && this.filter[side] == null){
+			if(this.isConnected()){
+				ForgeDirection dir = ForgeDirection.getOrientation(side);
+				if(worldObj.isAirBlock(xCoord + dir.offsetX, yCoord + dir.offsetY, zCoord + dir.offsetZ)){
+					this.filter[side] = filter;
+					this.updateFilter();
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	public AbstractFilter getFilter(int side) {
+		if(side >= 0 && side < 6){
+			return this.filter[side];
+		}
+		return null;
+	}
+	public ItemStack removeFilter(int side) {
+		if(filter[side] == null){
+			return null;
+		}else{
+			ItemStack itemStack = filter[side].getFilterItem();
+			filter[side] = null;
+			this.updateFilter();
+			return itemStack;
+		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**contents items update*/
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		if(coreTile != null && coreTile.getTile() != null){
+			TestCore.proxy.markForTileUpdate(coreTile.getTile().getPosition(), PacketType.NBT_CONTENT);
+		}
+	}
+
+	/**callled on only server*/
+	@Override
+	public SimpleTilePacket getPacket(PacketType type) {
+		if(type == PacketType.FLAG_IO){
+			String str = "";
+			for (int i = 0; i < 6; i++){
+				str += flagIO[i];
+			}
+			return new SimpleTilePacket(this, PacketType.FLAG_IO, str);
+		}else if(type == PacketType.NBT_CONNECTION){
+			NBTTagCompound tag = new NBTTagCompound();
+			if(coreTile != null){
+				coreTile.writeToNBT(tag);
+			}
+			return new SimpleTilePacket(this, PacketType.NBT_CONNECTION, tag);
+		}else if(type == PacketType.FILTER2){
+			NBTTagCompound tag = new NBTTagCompound();
+			for (int side = 0; side < 6; side++){
+				if(filter[side] == null) continue;
+				NBTTagCompound filterTag = new NBTTagCompound();
+				filter[side].writeToNBT(filterTag);
+				tag.setTag("filter" + side, filterTag);
+			}
+			return new SimpleTilePacket(this, PacketType.FILTER2, tag);
+		}
+		return null;
+	}
+
+	@Override
+	public void processCommand(PacketType type, Object value) {
+		if(type == PacketType.FLAG_IO && value instanceof String){//should client
+			String str = (String) value;
+			if(str.length() == 6){
+				for (int i = 0; i < 6; i++){
+					flagIO[i] = Character.getNumericValue(str.charAt(i));
+				}
+			}
+			worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+		}else if(type == PacketType.NBT_CONNECTION && value instanceof NBTTagCompound){//should client
+			NBTTagCompound tag = (NBTTagCompound) value;
+			coreTile = ConnectionEntry.createFromNBT(tag);
+			needCheckCoreTile = true;
+		}else if(type == PacketType.FILTER && value instanceof String){
+			String str = (String) value;
+			int side = Character.getNumericValue(str.charAt(0));
+			if(filter[side] instanceof FilterInventory){
+				FilterInventory f = (FilterInventory) filter[side];
+				int damage = Character.getNumericValue(str.charAt(1));
+				int nbt = Character.getNumericValue(str.charAt(2));
+				int oreDict = Character.getNumericValue(str.charAt(3));
+				int ban = Character.getNumericValue(str.charAt(4));
+				int priority = Character.getNumericValue(str.charAt(5));
+				if(side >= 0 && side <= 5 && damage != -1 && nbt != -1 && oreDict != -1 && ban != -1 && priority != -1){
+					f.useDamage = damage == 1;
+					f.useNBT = nbt == 1;
+					f.useOreDictionary = oreDict == 1;
+					f.filterBan = ban == 1;
+					f.priority = priority;
+				}
+			}
+		}else if(type == PacketType.FILTER2 && value instanceof NBTTagCompound){
+			for (int side = 0; side < 6; side++){
+				NBTTagCompound sideTag = ((NBTTagCompound) value).getCompoundTag("filter" + side);
+				filter[side] = AbstractFilter.createFromNBT(this, side, sideTag);
+			}
+			worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+		}
+	}
+	@Override
+	public final Position getPosition() {
+		return new Position(xCoord, yCoord, zCoord);
+	}
+
+	@Override
+	public final Packet getDescriptionPacket() {
+		NBTTagCompound nbtTagCompound = new NBTTagCompound();
+		this.writeToNBT(nbtTagCompound);
+		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbtTagCompound);
+	}
+
+	@Override
+	public final void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		NBTTagCompound nbtTagCompound = pkt.func_148857_g();
+		this.readFromNBT(nbtTagCompound);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		if(isConnected()){
+			return this.coreTile.getTile().getSizeInventory();
+		}
+		return 0;
+	}
+	@Override
+	public ItemStack getStackInSlot(int slot) {
+		if(isConnected()){
+			return this.coreTile.getTile().getStackInSlot(slot);
+		}
+		return null;
+	}
+	@Override
+	public ItemStack decrStackSize(int slot, int amount) {
+		if(isConnected()){
+			return this.coreTile.getTile().decrStackSize(slot, amount);
+		}
+		return null;
+	}
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slot) {
+		if(isConnected()){
+			return this.coreTile.getTile().getStackInSlotOnClosing(slot);
+		}
+		return null;
+	}
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack itemStack) {
+		if(isConnected()){
+			this.coreTile.getTile().setInventorySlotContents(slot, itemStack);
+		}
+	}
+	@Override
+	public String getInventoryName() {
+		if(isConnected()){
+			return this.coreTile.getTile().getInventoryName();
+		}
+		return null;
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
+		if(isConnected()){
+			return this.coreTile.getTile().hasCustomInventoryName();
+		}
+		return false;
+	}
+	@Override
+	public int getInventoryStackLimit() {
+		if(isConnected()){
+			return this.coreTile.getTile().getInventoryStackLimit();
+		}
+		return 0;
+	}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(isConnected()){
+			return this.coreTile.getTile().isUseableByPlayer(player);
+		}
+		return false;
+	}
+	@Override
+	public void openInventory() {
+		if(isConnected()){
+			this.coreTile.getTile().openInventory();
+		}
+	}
+	@Override
+	public void closeInventory() {
+		if(isConnected()){
+			this.coreTile.getTile().closeInventory();
+		}
+	}
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
+		if(isConnected()){
+			return this.coreTile.getTile().isItemValidForSlot(slot, itemStack);
+		}
+		return false;
+	}
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		if(isConnected()){
+			return this.coreTile.getTile().getAccessibleSlotsFromSide(side);
+		}
+		return new int[0];
+	}
+	@Override
+	public boolean canInsertItem(int slot, ItemStack itemStack, int side) {
+		if(isConnected()){
+			if(filter[side] != null){
+				return filter[side].canTransferItem(itemStack) && this.coreTile.getTile().canInsertItem(slot, itemStack, side);
+			}
+			return this.coreTile.getTile().canInsertItem(slot, itemStack, side);
+		}
+		return false;
+	}
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
+		if(isConnected()){
+			if(filter[side] != null){
+				return filter[side].canTransferItem(itemStack) && this.coreTile.getTile().canInsertItem(slot, itemStack, side);
+			}
+			return this.coreTile.getTile().canExtractItem(slot, itemStack, side);
+		}
+		return false;
+	}
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		if(isConnected()){
+			return this.coreTile.getTile().canConnectEnergy(from);
+		}
+		return false;
+	}
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		if(isConnected()){
+			return this.coreTile.getTile().receiveEnergy(from, maxReceive, simulate);
+		}
+		return 0;
+	}
+	@Override
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		if(isConnected()){
+			return this.coreTile.getTile().extractEnergy(from, maxExtract, simulate);
+		}
+		return 0;
+	}
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		if(isConnected()){
+			return this.coreTile.getTile().getEnergyStored(from);
+		}
+		return 0;
+	}
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		if(isConnected()){
+			return this.coreTile.getTile().getMaxEnergyStored(from);
+		}
+		return 0;
+	}
+
+	public static final ResourceLocation HUD_TEXTURE = new ResourceLocation(TestCore.MODID + ":textures/gui/container/aaa.png");
+
+	@Override
+	public void renderHUD(Minecraft mc, double renderTicks, MovingObjectPosition mop) {
+
+		//		GL11.glBegin(GL11.GL_QUADS);
+		//		GL11.glTexCoord2f(0, 0);
+		//		GL11.glVertex2i(0, 0);
+		//		GL11.glTexCoord2f(0, 1);
+		//		GL11.glVertex2i(0, sizeY);
+		//		GL11.glTexCoord2f(1, 1);
+		//		GL11.glVertex2i(sizeX, sizeY);
+		//		GL11.glTexCoord2f(1, 0);
+		//		GL11.glVertex2i(sizeX, 0);
+		//		GL11.glEnd();
+
+		if(this.isConnected() && renderTicks < 60){
+
+			ScaledResolution sr = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+			Point center = new Point(sr.getScaledWidth() / 2, sr.getScaledHeight() / 2);
+
+			String message = coreTile.getTile().getInterfaceString(mop.sideHit);
+			int length = mc.fontRenderer.getStringWidth(message);
+			float alpha = (float) (1.0 - renderTicks / 60);
+			int color = ((int) (alpha * 255) << 24) | 0x04FFFFFF;
+			//System.out.println(Integer.toHexString(color));
+
+			GL11.glPushMatrix();
+			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glTranslatef(center.getX(), center.getY(), 0);
+			GL11.glTranslatef(-length / 2, 20, 0);
+			mc.fontRenderer.drawString(message, 0, 0, color, true);
+			GL11.glPopMatrix();
+		}
+	}
+	@Override
+	public boolean comparePastRenderObj(Object object, MovingObjectPosition past, MovingObjectPosition current) {
+		return object != null && object.getClass() == this.getClass() && past != null && current != null && past.sideHit == current.sideHit;
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		for (int i = 0; i < 6; i++){
+			NBTTagCompound sideTag = tag.getCompoundTag("side" + i);
+			flagIO[i] = sideTag.getByte("io");
+		}
+		for (int side = 0; side < 6; side++){
+			NBTTagCompound sideTag = tag.getCompoundTag("filter" + side);
+			filter[side] = AbstractFilter.createFromNBT(this, side, sideTag);
+		}
+		this.coreTile = ConnectionEntry.createFromNBT(tag.getCompoundTag("core"));
+		this.needCheckCoreTile = true;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		NBTTagCompound[] sideTag = new NBTTagCompound[6];
+		for (int i = 0; i < 6; i++){
+			sideTag[i] = new NBTTagCompound();
+			sideTag[i].setByte("io", (byte) flagIO[i]);
+			tag.setTag("side" + i, sideTag[i]);
+		}
+		for (int side = 0; side < 6; side++){
+			if(filter[side] == null) continue;
+			NBTTagCompound filterTag = new NBTTagCompound();
+			filter[side].writeToNBT(filterTag);
+			tag.setTag("filter" + side, filterTag);
+		}
+		if(isConnected()){
+			NBTTagCompound coreTag = new NBTTagCompound();
+			coreTile.writeToNBT(coreTag);
+			tag.setTag("core", coreTag);
+		}
+	}
+
+}

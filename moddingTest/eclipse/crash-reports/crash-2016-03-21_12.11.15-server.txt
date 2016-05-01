@@ -1,0 +1,83 @@
+---- Minecraft Crash Report ----
+// Hey, that tickles! Hehehe!
+
+Time: 16/03/21 12:11
+Description: Exception ticking world
+
+java.lang.NullPointerException: Exception ticking world
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.checkConnectionToEntryForSide(ConstructSidedOutputerTileEntity.java:230)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.checkConnectionToEntry(ConstructSidedOutputerTileEntity.java:191)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.writeToNBT(ConstructSidedOutputerTileEntity.java:294)
+	at com.test.multiblock.construct.tileentity.ConstructInventoryBaseTileEntity.writeToNBT(ConstructInventoryBaseTileEntity.java:94)
+	at com.test.multiblock.construct.tileentity.ConstructStorageTileEntity.writeToNBT(ConstructStorageTileEntity.java:125)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.getDescriptionPacket(ConstructSidedOutputerTileEntity.java:263)
+	at net.minecraft.server.management.PlayerManager$PlayerInstance.sendTileToAllPlayersWatchingChunk(PlayerManager.java:632)
+	at net.minecraft.server.management.PlayerManager$PlayerInstance.sendChunkUpdate(PlayerManager.java:574)
+	at net.minecraft.server.management.PlayerManager.updatePlayerInstances(PlayerManager.java:80)
+	at net.minecraft.world.WorldServer.tick(WorldServer.java:193)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:692)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.checkConnectionToEntryForSide(ConstructSidedOutputerTileEntity.java:230)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.checkConnectionToEntry(ConstructSidedOutputerTileEntity.java:191)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.writeToNBT(ConstructSidedOutputerTileEntity.java:294)
+	at com.test.multiblock.construct.tileentity.ConstructInventoryBaseTileEntity.writeToNBT(ConstructInventoryBaseTileEntity.java:94)
+	at com.test.multiblock.construct.tileentity.ConstructStorageTileEntity.writeToNBT(ConstructStorageTileEntity.java:125)
+	at com.test.multiblock.construct.tileentity.ConstructSidedOutputerTileEntity.getDescriptionPacket(ConstructSidedOutputerTileEntity.java:263)
+	at net.minecraft.server.management.PlayerManager$PlayerInstance.sendTileToAllPlayersWatchingChunk(PlayerManager.java:632)
+	at net.minecraft.server.management.PlayerManager$PlayerInstance.sendChunkUpdate(PlayerManager.java:574)
+	at net.minecraft.server.management.PlayerManager.updatePlayerInstances(PlayerManager.java:80)
+	at net.minecraft.world.WorldServer.tick(WorldServer.java:193)
+
+-- Affected level --
+Details:
+	Level name: New World
+	All players: 1 total; [EntityPlayerMP['Player236'/24896, l='New World', x=-45.87, y=56.00, z=-1278.00]]
+	Chunk stats: ServerChunkCache: 626 Drop: 0
+	Level seed: 226933035836818915
+	Level generator: ID 01 - flat, ver 0. Features enabled: true
+	Level generator options: 2;7,3x1,52x24;2;
+	Level spawn location: World: (-37,4,-1280), Chunk: (at 11,0,0 in -3,-80; contains blocks -48,0,-1280 to -33,255,-1265), Region: (-1,-3; contains chunks -32,-96 to -1,-65, blocks -512,0,-1536 to -1,255,-1025)
+	Level time: 1745 game time, 1745 day time
+	Level dimension: 0
+	Level storage version: 0x04ABD - Anvil
+	Level weather: Rain time: 178230 (now: false), thunder time: 140735 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: true
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:692)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_60, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 762926624 bytes (727 MB) / 1038876672 bytes (990 MB) up to 1038876672 bytes (990 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 4 mods loaded, 4 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAAAAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAAAAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAAAAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAAAAAAA	testmod{0.0.0} [Test Mod] (bin) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 1 / 8; [EntityPlayerMP['Player236'/24896, l='New World', x=-45.87, y=56.00, z=-1278.00]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

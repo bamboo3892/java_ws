@@ -1,0 +1,134 @@
+package com.test.multiblock.construct.parts;
+
+import com.test.client.gui.ConstructStorageGui;
+import com.test.multiblock.construct.tileentity.ConstructStorageTileEntity;
+import com.test.server.gui.ConstructStorageContainer;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class StoragePart extends InventoryBasePart {
+
+	public StoragePart() {
+
+	}
+	
+	@Override
+	public boolean isOpenGuiOnClicked() {
+		return true;
+	}
+	
+	@Override
+	public Object getGuiElement(EntityPlayer player, boolean serverSide) {
+		if(serverSide){
+			return new ConstructStorageContainer(player.inventory, this);
+		}else{
+			return new ConstructStorageGui(player.inventory, this);
+		}
+	}
+
+	@Override
+	public void updatePart() {
+		super.updatePart();
+		itemTransfer();
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public int getSizeInventory() {
+		return 27;
+	}
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		int[] slots = new int[27];
+		for (int i = 0; i < 27; i++){
+			slots[i] = i;
+		}
+		return slots;
+	}
+	@Override
+	public ItemStack getStackInSlot(int slotIndex) {
+		if(slotIndex >= 0 && slotIndex < this.items.length){
+			return this.items[slotIndex];
+		}
+		return null;
+	}
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int splitStackSize) {
+		if(this.items[slotIndex] != null){
+			if(this.items[slotIndex].stackSize <= splitStackSize){
+				ItemStack tmpItemStack = items[slotIndex];
+				this.items[slotIndex] = null;
+				this.markDirty();
+				return tmpItemStack;
+			}
+			ItemStack splittedItemStack = this.items[slotIndex].splitStack(splitStackSize);
+			if(this.items[slotIndex].stackSize == 0){
+				this.items[slotIndex] = null;
+			}
+			this.markDirty();
+			return splittedItemStack;
+		}
+		return null;
+	}
+	@Override
+	public ItemStack getStackInSlotOnClosing(int slotIndex) {
+		return items[slotIndex];
+	}
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+		this.items[slotIndex] = itemStack;
+		if(itemStack != null && itemStack.stackSize > getInventoryStackLimit()){
+			itemStack.stackSize = getInventoryStackLimit();
+		}
+		this.markDirty();
+	}
+	@Override
+	public String getInventoryName() {
+		return "Storage";
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+	@Override
+	public void openInventory() {}
+	@Override
+	public void closeInventory() {}
+	@Override
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		return true;
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTagCompound, RectangularSolid solid) {
+		super.readFromNBT(nbtTagCompound, solid);
+	}
+	
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTagCompound, RectangularSolid solid) {
+		super.writeToNBT(nbtTagCompound, solid);
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return ConstructStorageTileEntity.nameForNBT;
+	}
+
+	@Override
+	protected Block getRenderBlock() {
+		return Blocks.planks;
+	}
+
+}

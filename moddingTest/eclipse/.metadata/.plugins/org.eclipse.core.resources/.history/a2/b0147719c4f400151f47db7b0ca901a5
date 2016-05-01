@@ -1,0 +1,140 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.Random;
+
+import com.test.client.particle.ParticleTest2;
+import com.test.utils.RectangularSolid;
+
+import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyReceiver;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class ConstructEnergyProviderTileEntity extends ConstructBaseTileEntity implements IEnergyReceiver {
+
+	public static final String nameForNBT = "energyprovider";
+	public static final int[] storage = { 400000, 2000000, 20000000, 80000000 , 100000000};
+	public static final int[] transfer = { 400000, 400000, 400000, 400000, 400000};
+
+	private EnergyStorage energyStorage;
+	private int pastEnergyLevel;
+
+	private boolean undateRender = true;
+
+	public ConstructEnergyProviderTileEntity() {
+		this(0);
+	}
+
+	public ConstructEnergyProviderTileEntity(int grade) {
+		super(grade);
+		energyStorage = new EnergyStorage(storage[grade], transfer[grade]);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+		if(!worldObj.isRemote){
+
+			/*
+			if(energyStorage.getEnergyStored() < energyStorage.getMaxEnergyStored()){
+				energyStorage.setEnergyStored(energyStorage.getEnergyStored() + 10000);
+			}else{
+				energyStorage.setEnergyStored(0);
+			}
+			*/
+
+			int energyLevel = getEvergyLevel();
+			if(pastEnergyLevel != energyLevel){
+				pastEnergyLevel = energyLevel;
+				undateRender = true;
+				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+			}
+		}else{
+			if(undateRender){
+				worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord);
+				undateRender = false;
+			}
+		}
+	}
+	@Override
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ){}
+	@Override
+	public void onShiftRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ){}
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return false;
+	}
+
+	public int sendEnergy(IConstructEnergyReceiver receiver, int maxSend) {
+		int send = energyStorage.extractEnergy(maxSend, false);
+		TileEntity tile = (TileEntity) receiver;
+		Random rand = worldObj.rand;
+		for (int i = 0; i < (int) ((float) send / 50F); i++){
+			double startX = xCoord + 0.4 + rand.nextDouble() * 0.2;
+			double startY = yCoord + 0.4 + rand.nextDouble() * 0.2;
+			double startZ = zCoord + 0.4 + rand.nextDouble() * 0.2;
+			double endX = tile.xCoord - startX + 0.5;
+			double endY = tile.yCoord - startY + 0.5;
+			double endZ = tile.zCoord - startZ + 0.5;
+			ParticleTest2 particle = new ParticleTest2(worldObj, startX, startY, startZ, endX, endY, endZ);
+			particle.set1();
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		}
+		return send;
+	}
+
+	public int getEvergyLevel() {
+		return (int) ((float) energyStorage.getEnergyStored() / (float) energyStorage.getMaxEnergyStored() * 15F);
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public boolean canConnectEnergy(ForgeDirection from) {
+		return true;
+	}
+	@Override
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		return energyStorage.receiveEnergy(maxReceive, simulate);
+	}
+	@Override
+	public int getEnergyStored(ForgeDirection from) {
+		return energyStorage.getEnergyStored();
+	}
+	@Override
+	public int getMaxEnergyStored(ForgeDirection from) {
+		return energyStorage.getMaxEnergyStored();
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		energyStorage.readFromNBT(tag);
+		energyStorage.setEnergyStored(energyStorage.getMaxEnergyStored());
+		this.undateRender = tag.getBoolean("undateRender");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		energyStorage.writeToNBT(tag);
+		tag.setBoolean("undateRender", undateRender);
+		undateRender = false;
+	}
+
+}

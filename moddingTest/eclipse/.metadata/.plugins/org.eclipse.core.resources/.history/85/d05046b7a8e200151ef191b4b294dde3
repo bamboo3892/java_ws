@@ -1,0 +1,15 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+public class IntegrationHandler {
+
+	public static void checkIntegration(){
+
+	}
+
+	public static void registerBlock(){
+
+	}
+
+}

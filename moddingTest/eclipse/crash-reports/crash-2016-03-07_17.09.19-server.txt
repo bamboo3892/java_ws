@@ -1,0 +1,100 @@
+---- Minecraft Crash Report ----
+// I let you down. Sorry :(
+
+Time: 16/03/07 17:09
+Description: Ticking memory connection
+
+java.lang.NullPointerException: Ticking memory connection
+	at com.test.block.tileentity.MaltiBlockTileEntity.createTileFromNBT(MaltiBlockTileEntity.java:44)
+	at com.test.item.itemBlock.ItemMaltiBlock.placeBlockAt(ItemMaltiBlock.java:26)
+	at net.minecraft.item.ItemBlock.onItemUse(ItemBlock.java:116)
+	at net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(ForgeHooks.java:507)
+	at net.minecraft.item.ItemStack.tryPlaceItemIntoWorld(ItemStack.java:142)
+	at net.minecraft.server.management.ItemInWorldManager.activateBlockOrUseItem(ItemInWorldManager.java:422)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:593)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at com.test.block.tileentity.MaltiBlockTileEntity.createTileFromNBT(MaltiBlockTileEntity.java:44)
+	at com.test.item.itemBlock.ItemMaltiBlock.placeBlockAt(ItemMaltiBlock.java:26)
+	at net.minecraft.item.ItemBlock.onItemUse(ItemBlock.java:116)
+	at net.minecraftforge.common.ForgeHooks.onPlaceItemIntoWorld(ForgeHooks.java:507)
+	at net.minecraft.item.ItemStack.tryPlaceItemIntoWorld(ItemStack.java:142)
+	at net.minecraft.server.management.ItemInWorldManager.activateBlockOrUseItem(ItemInWorldManager.java:422)
+	at net.minecraft.network.NetHandlerPlayServer.processPlayerBlockPlacement(NetHandlerPlayServer.java:593)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:74)
+	at net.minecraft.network.play.client.C08PacketPlayerBlockPlacement.processPacket(C08PacketPlayerBlockPlacement.java:122)
+	at net.minecraft.network.NetworkManager.processReceivedPackets(NetworkManager.java:241)
+
+-- Ticking connection --
+Details:
+	Connection: net.minecraft.network.NetworkManager@3fc19a9f
+Stacktrace:
+	at net.minecraft.network.NetworkSystem.networkTick(NetworkSystem.java:182)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:726)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_60, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 694536912 bytes (662 MB) / 1038876672 bytes (990 MB) up to 1038876672 bytes (990 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 30 mods loaded, 30 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAAAAAAAAAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAAAAAAAAAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAAAAAAAAAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAAAAAAAAAAAA	Config{0.0.0} [Config] (bin) 
+	UCHIJAAAAAAAAAAAAAA	CraftingRecipe{0.0.0} [CraftingRecipe] (bin) 
+	UCHIJAAAAAAAAAAAAAA	CreativeTab{0.0.0} [CreativeTab] (bin) 
+	UCHIJAAAAAAAAAAAAAA	SmeltingRecipe{0.0.0} [SmeltingRecipe] (bin) 
+	UCHIJAAAAAAAAAAAAAA	BlockBasic{0.0.0} [BlockBasic] (bin) 
+	UCHIJAAAAAAAAAAAAAA	BlockMetadata{0.0.0} [BlockMetadata] (bin) 
+	UCHIJAAAAAAAAAAAAAA	BlockTexture{0.0.0} [BlockTexture] (bin) 
+	UCHIJAAAAAAAAAAAAAA	EntityMob{0.0.0} [EntityMob] (bin) 
+	UCHIJAAAAAAAAAAAAAA	FMLInputEvent{0.0.0} [FMLInputEvent] (bin) 
+	UCHIJAAAAAAAAAAAAAA	FMLPlayerEvent{0.0.0} [FMLPlayerEvent] (bin) 
+	UCHIJAAAAAAAAAAAAAA	TickEvent{0.0.0} [TickEvent] (bin) 
+	UCHIJAAAAAAAAAAAAAA	GenOre{0.0.0} [GenOre] (bin) 
+	UCHIJAAAAAAAAAAAAAA	GuiContainer{0.0.0} [GuiContainer] (bin) 
+	UCHIJAAAAAAAAAAAAAA	GuiTileEntity{0.0.0} [GuiTileEntity] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemArmor{0.0.0} [ItemArmor] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemBasic{0.0.0} [ItemBasic] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemBow{0.0.0} [ItemBow] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemFood{0.0.0} [ItemFood] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemIcon{0.0.0} [ItemIcon] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemTool{0.0.0} [ItemTool] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemWeapon{0.0.0} [ItemWeapon] (bin) 
+	UCHIJAAAAAAAAAAAAAA	GuiButton{0.0.0} [GuiButton] (bin) 
+	UCHIJAAAAAAAAAAAAAA	BlockRenderer{0.0.0} [BlockRenderer] (bin) 
+	UCHIJAAAAAAAAAAAAAA	ItemRenderer{0.0.0} [ItemRenderer] (bin) 
+	UCHIJAAAAAAAAAAAAAA	TileEntityRenderer{0.0.0} [TileEntityRenderer] (bin) 
+	UCHIJAAAAAAAAAAAAAA	TestMod{0.0.0} [TestMod] (bin) 
+	UCHIJAAAAAAAAAAAAAA	laser_tech{1.7.10_1.0a} [Laser Tech] (bin) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 1 / 8; [EntityPlayerMP['Player539'/79442, l='New World', x=-156.43, y=57.00, z=-726.77]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

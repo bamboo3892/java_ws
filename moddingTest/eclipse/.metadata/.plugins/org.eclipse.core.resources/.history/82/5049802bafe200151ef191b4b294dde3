@@ -1,0 +1,84 @@
+package com.test.main;
+
+import org.lwjgl.input.Mouse;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
+
+public class EventHandler {
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void inputKey(InputEvent.KeyInputEvent event){
+		if (TestCore.inputKey.isPressed()){
+			FMLClientHandler
+					.instance()
+					.getClient()
+					.thePlayer
+					.addChatMessage(new ChatComponentTranslation(TestCore.inputKey.getKeyCode() + " is Pressed"));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void inputMouse(InputEvent.MouseInputEvent event){
+		if (Mouse.isButtonDown(2)){
+			FMLClientHandler
+					.instance()
+					.getClient()
+					.thePlayer
+					.addChatMessage(new ChatComponentTranslation("Mouse Wheel is Pressed"));
+		}
+	}
+
+	@SubscribeEvent
+	public void interactTest(EntityInteractEvent event) {
+		//FMLClientHandler.instance().getClient().renderViewEntity = (EntityLivingBase)event.target;
+		/*
+		System.out.println(event.entity + "" + event.entityLiving + "" + event.entityPlayer + " : " + event.target);
+		if(!event.entityPlayer.worldObj.isRemote) return;
+		if(event.entityPlayer.getCurrentEquippedItem() == null) return;
+		if(event.entityPlayer.getCurrentEquippedItem().getItem() != TestCore.sightStealer) return;
+		int x = event.entityPlayer.serverPosX;
+		int y = event.entityPlayer.serverPosY;
+		int z = event.entityPlayer.serverPosZ;
+		event.entityPlayer.openGui(TestCore.instance, TestCore.SIGHTSTEALER_GUI_ID, event.entityPlayer.worldObj, x, y, z);
+		SightStealer.registerEvent(event);
+		System.out.println("register");
+		*/
+	}
+
+	@SubscribeEvent
+	public void onCraftedHook(PlayerEvent.ItemCraftedEvent event){
+		
+	}
+
+	@SubscribeEvent
+	public void onSmeltedHook(PlayerEvent.ItemSmeltedEvent event){}
+
+	@SubscribeEvent
+	public void onPickedUpHook(PlayerEvent.ItemPickupEvent event){}
+
+	@SubscribeEvent
+	public void onServerTick(TickEvent.ServerTickEvent event){}
+
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent event){}
+
+	@SubscribeEvent
+	public void onWorldTick(TickEvent.WorldTickEvent event){}
+
+	@SubscribeEvent
+	public void onPlayerTick(TickEvent.PlayerTickEvent event){}
+
+	@SubscribeEvent
+	public void onRenderTick(TickEvent.RenderTickEvent event){}
+
+}

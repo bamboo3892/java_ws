@@ -1,0 +1,103 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import com.test.client.gui.ConstructFilterGui;
+import com.test.client.gui.ConstructFurnaceGUI;
+import com.test.client.gui.ConstructStorageGui;
+import com.test.client.gui.DesignTableGui;
+import com.test.client.gui.GuiSliderInput;
+import com.test.client.gui.InformationGui;
+import com.test.client.gui.TestBlockGuiContainer;
+import com.test.client.gui.TileTestBlockGuiContainer;
+import com.test.multiblock.construct.tileentity.ConstructFilterUserTileEntity;
+import com.test.multiblock.construct.tileentity.ConstructFurnaceTileEntity;
+import com.test.server.gui.ConstructFilterContainer;
+import com.test.server.gui.ConstructFurnaceContainer;
+import com.test.server.gui.ConstructStorageContainer;
+import com.test.server.gui.DesignTableContainer;
+import com.test.server.gui.SliderInputContainer;
+import com.test.server.gui.TestBlockContainer;
+import com.test.server.gui.TileTestBlockContainer;
+import com.test.tileentity.IGuiSliderUser;
+
+import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.world.World;
+
+public class GuiHandler implements IGuiHandler {
+
+	@Override
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		switch (ID) {
+		case TESTBLOCK_GUI_ID:
+			return new TestBlockContainer(player.inventory);
+		case TILETESTBLOCK_GUI_ID:
+			return new TileTestBlockContainer(player.inventory, world.getTileEntity(x, y, z));
+		case INFORMATION_GUI_ID:
+			return null;
+		case SIGHTSTEALER_GUI_ID:
+			return null;
+		case FURNACE_GUI_ID:
+			return new ConstructFurnaceContainer(player.inventory, (ConstructFurnaceTileEntity) world.getTileEntity(x, y, z));
+		case STORAGE_GUI_ID:
+			return new ConstructStorageContainer(player.inventory, (IInventory) world.getTileEntity(x, y, z));
+		case SLIDERINPUT_GUI_ID:
+			return new SliderInputContainer((IGuiSliderUser) world.getTileEntity(x, y, z));
+		case FILTER_GUI_ID_0:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[0]);
+		case FILTER_GUI_ID_1:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[1]);
+		case FILTER_GUI_ID_2:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[2]);
+		case FILTER_GUI_ID_3:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[3]);
+		case FILTER_GUI_ID_4:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[4]);
+		case FILTER_GUI_ID_5:
+			return new ConstructFilterContainer(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)).filter[5]);
+		case DESIGN_TABLE_GUI:
+			return new DesignTableContainer();
+		default:
+			return null;
+		}
+	}
+
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		switch (ID) {
+		case TESTBLOCK_GUI_ID:
+			return new TestBlockGuiContainer(player.inventory);
+		case TILETESTBLOCK_GUI_ID:
+			return new TileTestBlockGuiContainer(player.inventory, world.getTileEntity(x, y, z));
+		case INFORMATION_GUI_ID:
+			return new InformationGui(player);
+		case SIGHTSTEALER_GUI_ID:
+			return null;
+		case FURNACE_GUI_ID:
+			return new ConstructFurnaceGUI(player.inventory, (ConstructFurnaceTileEntity) world.getTileEntity(x, y, z));
+		case STORAGE_GUI_ID:
+			return new ConstructStorageGui(player.inventory, (IInventory) world.getTileEntity(x, y, z));
+		case SLIDERINPUT_GUI_ID:
+			return new GuiSliderInput((IGuiSliderUser) world.getTileEntity(x, y, z));
+		case FILTER_GUI_ID_0:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 0);
+		case FILTER_GUI_ID_1:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 1);
+		case FILTER_GUI_ID_2:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 2);
+		case FILTER_GUI_ID_3:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 3);
+		case FILTER_GUI_ID_4:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 4);
+		case FILTER_GUI_ID_5:
+			return new ConstructFilterGui(player.inventory, ((ConstructFilterUserTileEntity) world.getTileEntity(x, y, z)), 5);
+		case DESIGN_TABLE_GUI:
+			return new DesignTableGui();
+		default:
+			return null;
+		}
+	}
+
+}

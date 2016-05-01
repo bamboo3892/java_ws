@@ -1,0 +1,16 @@
+package com.test.multiblock.construct.parts;
+
+import com.test.block.construct.tileentity.ConstructInterfaceTileEntity;
+
+public class InterfacePart extends ConstructPartBase {
+
+	public InterfacePart() {
+
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return ConstructInterfaceTileEntity.nameForNBT;
+	}
+
+}

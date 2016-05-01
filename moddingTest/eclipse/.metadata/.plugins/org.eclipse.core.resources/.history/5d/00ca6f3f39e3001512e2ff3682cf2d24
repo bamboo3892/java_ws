@@ -1,0 +1,50 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import java.util.List;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+
+public class IntegrationHandler {
+
+	public static final String THERMAL_EXPANSION = "ThermalFoundation";
+
+	public static void checkIntegration(){
+		integrationTE = isModContained(THERMAL_EXPANSION);
+	}
+
+	public static void registerBlock(){
+		blockCopper = OreDictionary.getOreID("blockCopper");
+		blockTin = OreDictionary.getOreID("blockTin");
+		blockSilver = OreDictionary.getOreID("blockSilver");
+		blockLead = OreDictionary.getOreID("blockLead");
+		blockNickel = OreDictionary.getOreID("blockNickel");
+		blockPlatinum = OreDictionary.getOreID("blockPlatinum");
+		blockMithril = OreDictionary.getOreID("blockMithril");
+		blockElectrum = OreDictionary.getOreID("blockElectrum");
+		blockInvar = OreDictionary.getOreID("blockInvar");
+		blockBronze = OreDictionary.getOreID("blockBronze");
+		blockSignalum = OreDictionary.getOreID("blockSignalum");
+		blockLumium = OreDictionary.getOreID("blockLumium");
+		blockEnderium = OreDictionary.getOreID("blockEnderium");
+	}
+
+	private static boolean isModContained(String modid){
+		List<ModContainer> mods = Loader.instance().getModList();
+		for(ModContainer mod : mods){
+			System.out.println(mod.getModId());
+			if(mod.getModId().equals(modid)) return true;
+		}
+		return false;
+	}
+
+}
+
+
+

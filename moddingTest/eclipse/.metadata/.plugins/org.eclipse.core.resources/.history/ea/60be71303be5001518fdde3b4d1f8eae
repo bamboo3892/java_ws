@@ -1,0 +1,18 @@
+package com.test.server.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+
+public class ConstructFurnaceContainer extends Container {
+
+	public ConstructFurnaceContainer() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer p_75145_1_) {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
+
+}

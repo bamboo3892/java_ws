@@ -1,0 +1,9 @@
+package com.test.client.renderer;
+
+public class ItemMultiBlockRenderer {
+
+	public ItemMultiBlockRenderer() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

@@ -1,0 +1,11 @@
+package com.test.main;
+
+public class IntegrationHandler {
+
+	public IntegrationHandler() {
+		
+		
+		
+	}
+
+}

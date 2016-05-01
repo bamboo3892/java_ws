@@ -1,0 +1,17 @@
+package com.test.server.gui;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+
+public class DesignTableContainer extends Container {
+
+	public DesignTableContainer() {
+
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
+		return true;
+	}
+
+}

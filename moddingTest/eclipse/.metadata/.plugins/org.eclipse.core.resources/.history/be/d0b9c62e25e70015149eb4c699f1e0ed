@@ -1,0 +1,106 @@
+package com.test.multiblock.construct.tileentity;
+
+import java.util.ArrayList;
+
+import com.test.multiblock.BlockPipeTileEntity;
+import com.test.utils.ConnectionEntry;
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.util.ForgeDirection;
+
+public class ConstructClockPulserTileEntity extends ConstructBaseTileEntity {
+
+	public static final String nameForNBT = "clockPulser";
+
+	public ConnectionEntry[] connection = new ConnectionEntry[6];
+	/**each list's index 0 is always rootback tile*/
+	private ArrayList<ConnectionEntry>[] connections = new ArrayList[6];
+	private int[] index = new int[6];
+	private boolean needCheck = true;
+
+	private int  updateTickFraction = ConstructInventoryBaseTileEntity.updateTickFractionaa++;
+
+	public ConstructClockPulserTileEntity() {
+		for (int i = 0; i < 6; i++) {
+			connection[i] = null;
+			connections[i] = new ArrayList<ConnectionEntry>();
+			index[i] = 0;
+		}
+	}
+
+	public void updateEntity() {
+		if (needCheck || worldObj.getTotalWorldTime() % 20 == updateTickFraction % 20) {
+			checkConnection();
+			needCheck = false;
+		}
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		return false;
+	}
+
+	public void checkConnection() {
+		for (int i = 0; i < 6; i++) {
+			checkConnectionForSide(i);
+		}
+		if (!worldObj.isRemote) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	}
+
+	private void checkConnectionForSide(int side) {
+		connections[side].clear();
+		connections[side].add(new ConnectionEntry(this, ForgeDirection.getOrientation(side).ordinal()));
+		ForgeDirection dir = ForgeDirection.getOrientation(side);
+		int newX = xCoord + dir.offsetX;
+		int newY = yCoord + dir.offsetY;
+		int newZ = zCoord + dir.offsetZ;
+		TileEntity tile = worldObj.getTileEntity(newX, newY, newZ);
+		if (tile instanceof BlockPipeTileEntity) {
+			BlockPipeTileEntity pipe = (BlockPipeTileEntity) tile;
+			pipe.getConnectedInvsWithSide(new ArrayList<BlockPipeTileEntity>(), connections[side]);
+		} else if (tile instanceof ConstructInventoryBaseTileEntity) {
+			ConstructInventoryBaseTileEntity func = (ConstructInventoryBaseTileEntity) tile;
+			connections[side]
+					.add(new ConnectionEntry(func, ForgeDirection.getOrientation(side).getOpposite().ordinal()));
+		}
+		if (connections[side].size() <= 1) {
+			index[side] = 0;
+			connection[side] = null;
+		}else if(index[side] != 0 && index[side] < connections[side].size()){
+			connection[side] = connections[side].get(index[side]);
+		}
+	}
+
+	public boolean connectNextBlock(int side) {
+		checkConnectionForSide(side);
+		if (connections[side].size() <= 1) {
+			index[side] = 0;
+			connection[side] = null;
+			return false;
+		} else {
+			index[side] = (index[side] >= connections[side].size() - 1 ? 1 : index[side] + 1);
+			connection[side] = connections[side].get(index[side]);
+			return true;
+		}
+	}
+
+	public int changeIO(int side) {
+		if (side < 0 || side >= 6) return 3;
+		flagIO[side] = flagIO[side] == 2 ? 0 : flagIO[side] + 1;
+		return flagIO[side];
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+
+	}
+
+}

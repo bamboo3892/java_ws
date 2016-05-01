@@ -1,0 +1,9 @@
+package com.test.nei;
+
+public class CatchRecipeHandler {
+
+	public CatchRecipeHandler() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

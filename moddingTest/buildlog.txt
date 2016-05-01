@@ -1,0 +1,56 @@
+Starting Build
+Settings evaluated using empty settings script.
+Projects loaded. Root project using build file 'D:\eclipse\workspace\moddingTest\build.gradle'.
+Included projects: [root project 'moddingTest']
+Evaluating root project 'moddingTest' using build file 'D:\eclipse\workspace\moddingTest\build.gradle'.
+Compiling build file 'D:\eclipse\workspace\moddingTest\build.gradle' using StatementExtractingScriptTransformer.
+Compiling build file 'D:\eclipse\workspace\moddingTest\build.gradle' using BuildScriptTransformer.
+****************************
+ Powered By MCP:             
+ http://modcoderpack.com/    
+ Searge, ProfMobius, Fesh0r, 
+ R4wk, ZeuX, IngisKahn, bspkrs
+ MCP Data version : unknown
+****************************
+All projects evaluated.
+Selected primary task 'DefaultTaskParameter{taskName='build',projectPath='null'}'
+Tasks to be executed: [task ':compileApiJava', task ':processApiResources', task ':apiClasses', task ':sourceMainJava', task ':compileJava', task ':processResources', task ':classes', task ':jar', task ':compileTestJava', task ':processTestResources', task ':testClasses', task ':test', task ':extractMcpData', task ':getVersionJson', task ':extractUserDev', task ':genSrgs', task ':reobf', task ':assemble', task ':check', task ':build']
+:compileApiJava (Thread[main,5,main]) started.
+:compileApiJava
+Skipping task ':compileApiJava' as it has no source files.
+:compileApiJava UP-TO-DATE
+:compileApiJava (Thread[main,5,main]) completed. Took 0.01 secs.
+:processApiResources (Thread[main,5,main]) started.
+:processApiResources
+Skipping task ':processApiResources' as it has no source files.
+:processApiResources UP-TO-DATE
+:processApiResources (Thread[main,5,main]) completed. Took 0.001 secs.
+:apiClasses (Thread[main,5,main]) started.
+:apiClasses
+Skipping task ':apiClasses' as it has no actions.
+:apiClasses UP-TO-DATE
+:apiClasses (Thread[main,5,main]) completed. Took 0.001 secs.
+:sourceMainJava (Thread[main,5,main]) started.
+:sourceMainJava
+Executing task ':sourceMainJava' (up-to-date check took 1.167 secs) due to:
+  No history is available.
+:sourceMainJava (Thread[main,5,main]) completed. Took 1.671 secs.
+:compileJava (Thread[main,5,main]) started.
+:compileJava
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-parser-combinators_2.11/1.0.1/scala-parser-combinators_2.11-1.0.1.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-swing_2.11/1.0.1/scala-swing_2.11-1.0.1.pom]
+Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/org/scala-lang/scala-xml_2.11/1.0.2/scala-xml_2.11-1.0.2.pom]
+file or directory 'D:\eclipse\workspace\moddingTest\libs', not found
+Executing task ':compileJava' (up-to-date check took 4.591 secs) due to:
+  No history is available.
+All input files are considered out-of-date for incremental task ':compileJava'.
+file or directory 'D:\eclipse\workspace\moddingTest\libs', not found
+Compiling with JDK Java compiler API.
+:compileJava FAILED
+:compileJava (Thread[main,5,main]) completed. Took 6.127 secs.
+
+BUILD FAILED
+
+Total time: 13.057 secs
+Stopped 0 compiler daemon(s).

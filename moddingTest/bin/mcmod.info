@@ -1,0 +1,16 @@
+[
+{
+  "modid": "laser_tech",
+  "name": "Laser Tech",
+  "description": "This is a mod based on laser technology.",
+  "version": "1.0",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["OldDirectory"],
+  "credits": "",
+  "logoFile": "logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]

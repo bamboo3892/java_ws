@@ -1,0 +1,38 @@
+package com.test.server.gui;
+
+import com.test.multiblock.construct.tileentity.ConstructInterfaceTileEntity;
+import com.test.multiblock.construct.tileentity.ConstructStorageTileEntity;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
+public class ConstructInterfaceContainer extends Container {
+
+	private Container connectedContainer;
+
+	public ConstructInterfaceContainer(IInventory player, ConstructInterfaceTileEntity tile) {
+		if(tile.connection.tile instanceof ConstructStorageTileEntity){
+			connectedContainer = new ConstructStorageContainer(player, tile);
+		}
+	}
+
+	@Override
+	public boolean canInteractWith(EntityPlayer player) {
+		return connectedContainer == null ? false : connectedContainer.canInteractWith(player);
+	}
+
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
+		return connectedContainer.transferStackInSlot(player, slotIndex);
+	}
+
+	/**
+	 * Called when the container is closed.
+	 */
+	public void onContainerClosed(EntityPlayer player) {
+		connectedContainer.onContainerClosed(player);
+	}
+
+}

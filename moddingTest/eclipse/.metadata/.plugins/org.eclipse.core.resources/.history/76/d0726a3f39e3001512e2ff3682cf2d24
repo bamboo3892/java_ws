@@ -1,0 +1,46 @@
+package com.test.main;
+
+import static com.test.main.TestCore.*;
+
+import java.util.List;
+
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+public class IntegrationHandler {
+
+	public static final String THERMAL_EXPANSION = "ThermalFoundation";
+
+	public static void checkIntegration(){
+		integrationTE = isModContained(THERMAL_EXPANSION);
+	}
+
+	public static void registerBlock(){
+		if(integrationTE){
+			blockCopper = GameRegistry.findBlock(THERMAL_EXPANSION, "blockCopper");
+			blockTin = GameRegistry.findBlock(THERMAL_EXPANSION, "blockTin");
+			blockSilver = GameRegistry.findBlock(THERMAL_EXPANSION, "blockSilver");
+			blockLead = GameRegistry.findBlock(THERMAL_EXPANSION, "blockLead");
+			blockNickel = GameRegistry.findBlock(THERMAL_EXPANSION, "blockNickel");
+			blockPlatinum = GameRegistry.findBlock(THERMAL_EXPANSION, "blockPlatinum");
+			blockMithril = GameRegistry.findBlock(THERMAL_EXPANSION, "blockMithril");
+			blockElectrum = GameRegistry.findBlock(THERMAL_EXPANSION, "blockElectrum");
+			blockInvar = GameRegistry.findBlock(THERMAL_EXPANSION, "blockInvar");
+			blockBronze = GameRegistry.findBlock(THERMAL_EXPANSION, "blockBronze");
+			blockSignalum = GameRegistry.findBlock(THERMAL_EXPANSION, "blockSignalum");
+			blockLumium = GameRegistry.findBlock(THERMAL_EXPANSION, "blockLumium");
+			blockEnderium = GameRegistry.findBlock(THERMAL_EXPANSION, "blockEnderium");
+		}
+	}
+
+	private static boolean isModContained(String modid){
+		List<ModContainer> mods = Loader.instance().getModList();
+		for(ModContainer mod : mods){
+			System.out.println(mod.getModId());
+			if(mod.getModId().equals(modid)) return true;
+		}
+		return false;
+	}
+
+}

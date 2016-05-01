@@ -1,0 +1,11 @@
+package com.test.server.gui;
+
+import com.test.multiblock.construct.tileentity.ConstructClockPulserTileEntity;
+
+public class ClockPulserContainer {
+
+	public ClockPulserContainer(ConstructClockPulserTileEntity tile) {
+
+	}
+
+}

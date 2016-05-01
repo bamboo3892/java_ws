@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="worldObj.mar" key="selection"/>
+		<item value="true" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="worldObj.mar"/>
+			<item value="items"/>
+			<item value="worldObj"/>
+			<item value="OreDictionary.getOreID"/>
+			<item value="func_77949_a"/>
+			<item value="func_74775_l"/>
+			<item value="func_74764_b"/>
+			<item value="func_77978_p()"/>
+		</list>
+		<list key="replacehistory">
+			<item value="items[0]"/>
+			<item value="findOre"/>
+			<item value="loadItemStackFromNBT"/>
+			<item value="getTagCompound"/>
+			<item value="getBoolean"/>
+			<item value="getTagCompound()"/>
+			<item value="getItem()"/>
+			<item value="1"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="361" key="DIALOG_WIDTH"/>
+		<item value="1|Yu Gothic UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Yu Gothic UI" key="DIALOG_FONT_NAME"/>
+		<item value="444" key="DIALOG_HEIGHT"/>
+		<item value="1362" key="DIALOG_X_ORIGIN"/>
+		<item value="334" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>

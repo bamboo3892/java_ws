@@ -1,0 +1,18 @@
+package com.test.client.gui;
+
+import com.test.server.gui.DesignTableContainer;
+
+import net.minecraft.client.gui.inventory.GuiContainer;
+
+public class DesignTableGui extends GuiContainer {
+
+	public DesignTableGui() {
+		super(new DesignTableContainer());
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float parcialTick, int mouseX, int mouseY) {
+
+	}
+
+}

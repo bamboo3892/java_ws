@@ -1,0 +1,72 @@
+package com.test.multiblock;
+
+import com.test.item.itemBlock.ItemMultiBlock;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+
+public class DisassemblyTableTileEntity extends TileEntity implements IInventory {
+
+	private ItemStack multiBlock;
+
+	public DisassemblyTableTileEntity() {
+
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public int getSizeInventory() {
+		return 1;
+	}
+	@Override
+	public ItemStack getStackInSlot(int slotIndex) {
+		return slotIndex == 0 ? multiBlock : null;
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slotIndex, int amount) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+	@Override
+	public final ItemStack getStackInSlotOnClosing(int slotIndex) {
+		return slotIndex == 0 ? multiBlock : null;
+	}
+	@Override
+	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
+
+	}
+	@Override
+	public String getInventoryName() {
+		return null;
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+	@Override
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		if(worldObj.getTileEntity(xCoord, yCoord, zCoord) != this){
+			return false;
+		}
+		return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 50000.0D;
+	}
+	@Override
+	public void openInventory() {}
+	@Override
+	public void closeInventory() {}
+	@Override
+	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
+		return slotIndex != 0 && itemStack != null && itemStack.getItem() instanceof ItemMultiBlock;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}

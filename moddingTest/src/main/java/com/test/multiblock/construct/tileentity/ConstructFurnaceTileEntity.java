@@ -1,0 +1,302 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.main.TestCore;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemHoe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class ConstructFurnaceTileEntity extends ConstructInventoryBaseTileEntity {
+
+	public static String nameForNBT = "furnace";
+	public static final int[] processSpeed = { 5, 10, 20, 40, 200 };
+	private static final int[] slotsTop = new int[] { 0 };
+	private static final int[] slotsBottom = new int[] { 2, 1 };
+	private static final int[] slotsSides = new int[] { 1 };
+
+	public int furnaceBurnTime;
+	public int currentItemBurnTime;
+	public int furnaceCookTime;
+	private String customInventoryName;
+
+	public ConstructFurnaceTileEntity(){
+		this(0);
+	}
+
+	public ConstructFurnaceTileEntity(int grade) {
+		super(grade);
+	}
+
+	public void onRightClicked(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		player.openGui(TestCore.instance, TestCore.FURNACE_GUI_ID, worldObj, xCoord, yCoord, zCoord);
+	}
+
+	public void updateEntity() {
+		boolean flag = this.furnaceBurnTime > 0;
+		boolean changed = false;
+
+		if(!this.worldObj.isRemote){
+
+			if(this.furnaceBurnTime != 0 || this.items[1] != null && this.items[0] != null){
+
+				//burn fuel
+				if(this.furnaceBurnTime < 200 && this.canSmelt()){
+					this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.items[1]);
+
+					if(this.furnaceBurnTime > 0){
+						changed = true;
+
+						if(this.items[1] != null){
+							--this.items[1].stackSize;
+
+							//bucket
+							if(this.items[1].stackSize == 0){
+								this.items[1] = items[1].getItem().getContainerItem(items[1]);
+							}
+						}
+					}
+				}
+
+				//process
+				if(this.isBurning() && this.canSmelt()){
+					this.furnaceCookTime += processSpeed[grade];
+
+					if(this.furnaceCookTime >= 200){
+						this.furnaceCookTime = 0;
+						furnaceBurnTime -= 200;
+						this.smeltItem();
+						changed = true;
+					}
+				}else{
+					this.furnaceCookTime = 0;
+				}
+			}
+
+			if(flag != this.furnaceBurnTime > 0){
+				changed = true;
+			}
+
+			if(itemTransfer()) changed = false;
+
+		}
+
+		if(changed){
+			this.markDirty();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getCookProgressScaled(int p_145953_1_) {
+		return this.furnaceCookTime * p_145953_1_ / 200;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getBurnTimeRemainingScaled(int p_145955_1_) {
+		if(this.currentItemBurnTime == 0){
+			this.currentItemBurnTime = 200;
+		}
+
+		return this.furnaceBurnTime * p_145955_1_ / this.currentItemBurnTime;
+	}
+
+	public boolean isBurning() {
+		return this.furnaceBurnTime > 0;
+	}
+
+	private boolean canSmelt() {
+		if(this.items[0] == null){
+			return false;
+		}else{
+			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.items[0]);
+			if(itemstack == null) return false;
+			if(this.items[2] == null) return true;
+			if(!this.items[2].isItemEqual(itemstack)) return false;
+			int result = items[2].stackSize + itemstack.stackSize;
+			return result <= getInventoryStackLimit() && result <= this.items[2].getMaxStackSize();
+		}
+	}
+
+	public void smeltItem() {
+		if(this.canSmelt()){
+			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.items[0]);
+
+			if(this.items[2] == null){
+				this.items[2] = itemstack.copy();
+			}else if(this.items[2].getItem() == itemstack.getItem()){
+				this.items[2].stackSize += itemstack.stackSize;
+			}
+
+			--this.items[0].stackSize;
+
+			if(this.items[0].stackSize <= 0){
+				this.items[0] = null;
+			}
+		}
+	}
+
+	public static int getItemBurnTime(ItemStack itemStack) {
+		if(itemStack == null){
+			return 0;
+		}else{
+			Item item = itemStack.getItem();
+
+			if(item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air){
+				Block block = Block.getBlockFromItem(item);
+
+				if(block == Blocks.wooden_slab){
+					return 150;
+				}
+
+				if(block.getMaterial() == Material.wood){
+					return 300;
+				}
+
+				if(block == Blocks.coal_block){
+					return 16000;
+				}
+			}
+
+			if(item instanceof ItemTool && ((ItemTool) item).getToolMaterialName().equals("WOOD")) return 200;
+			if(item instanceof ItemSword && ((ItemSword) item).getToolMaterialName().equals("WOOD")) return 200;
+			if(item instanceof ItemHoe && ((ItemHoe) item).getToolMaterialName().equals("WOOD")) return 200;
+			if(item == Items.stick) return 100;
+			if(item == Items.coal) return 1600;
+			if(item == Items.lava_bucket) return 20000;
+			if(item == Item.getItemFromBlock(Blocks.sapling)) return 100;
+			if(item == Items.blaze_rod) return 2400;
+			return GameRegistry.getFuelValue(itemStack);
+		}
+	}
+
+	public static boolean isItemFuel(ItemStack itemStack) {
+		return getItemBurnTime(itemStack) > 0;
+	}
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public int getSizeInventory() {
+		return 3;
+	}
+	@Override
+	public ItemStack getStackInSlot(int index) {
+		return this.items[index];
+	}
+	@Override
+	public ItemStack decrStackSize(int index, int size) {
+		if(this.items[index] != null){
+			ItemStack itemstack;
+
+			if(this.items[index].stackSize <= size){
+				itemstack = this.items[index];
+				this.items[index] = null;
+				return itemstack;
+			}else{
+				itemstack = this.items[index].splitStack(size);
+
+				if(this.items[index].stackSize == 0){
+					this.items[index] = null;
+				}
+
+				return itemstack;
+			}
+		}else{
+			return null;
+		}
+	}
+	@Override
+	public ItemStack getStackInSlotOnClosing(int index) {
+		if(this.items[index] != null){
+			ItemStack itemstack = this.items[index];
+			this.items[index] = null;
+			return itemstack;
+		}else{
+			return null;
+		}
+	}
+	@Override
+	public void setInventorySlotContents(int index, ItemStack itemStack) {
+		this.items[index] = itemStack;
+
+		if(itemStack != null && itemStack.stackSize > this.getInventoryStackLimit()){
+			itemStack.stackSize = this.getInventoryStackLimit();
+		}
+	}
+	@Override
+	public String getInventoryName() {
+		return this.hasCustomInventoryName() ? this.customInventoryName : "container.furnace";
+	}
+	@Override
+	public boolean hasCustomInventoryName() {
+		return this.customInventoryName != null && this.customInventoryName.length() > 0;
+	}
+	public void func_145951_a(String name) {
+		this.customInventoryName = name;
+	}
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+	@Override
+	public void openInventory() {}
+	@Override
+	public void closeInventory() {}
+	@Override
+	public boolean isItemValidForSlot(int index, ItemStack itemStack) {
+		return index == 2 ? false : (index == 1 ? isItemFuel(itemStack) : true);
+	}
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
+		return side == 0 ? slotsBottom : (side == 1 ? slotsTop : slotsSides);
+	}
+	@Override
+	public boolean canInsertItem(int index, ItemStack itemStack, int side) {
+		return this.isItemValidForSlot(index, itemStack) && flagIO[side] == 0;
+	}
+	@Override
+	public boolean canExtractItem(int index, ItemStack irwmstack, int side) {
+		return (side != 0 || index != 1 || irwmstack.getItem() == Items.bucket) && flagIO[side] == 1;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public String getNameForNBT() {
+		return nameForNBT;
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tagCompound) {
+		super.writeToNBT(tagCompound);
+		tagCompound.setShort("BurnTime", (short) this.furnaceBurnTime);
+		tagCompound.setShort("CookTime", (short) this.furnaceCookTime);
+		if(this.hasCustomInventoryName()){
+			tagCompound.setString("CustomName", this.customInventoryName);
+		}
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tagCompound) {
+		super.readFromNBT(tagCompound);
+		this.furnaceBurnTime = tagCompound.getShort("BurnTime");
+		this.furnaceCookTime = tagCompound.getShort("CookTime");
+		this.currentItemBurnTime = getItemBurnTime(this.items[1]);
+		if(tagCompound.hasKey("CustomName", 8)){
+			this.customInventoryName = tagCompound.getString("CustomName");
+		}
+	}
+
+}

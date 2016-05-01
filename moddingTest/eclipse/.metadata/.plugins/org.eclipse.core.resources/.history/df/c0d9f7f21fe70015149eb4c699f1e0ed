@@ -1,0 +1,32 @@
+package com.test.multiblock.construct.tileentity;
+
+import com.test.utils.RectangularSolid;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class ConstructClockPulserTileEntity extends ConstructBaseTileEntity {
+
+	public ConstructClockPulserTileEntity() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+	@Override
+	public boolean onRightClickedByWrench(EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+		// TODO 自動生成されたメソッド・スタブ
+		return false;
+	}
+
+	@Override
+	public String getNameForNBT() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	@Override
+	public void writeDetailToNBTForItemStack(NBTTagCompound tag, RectangularSolid solid) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+}
