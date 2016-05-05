@@ -1,0 +1,57 @@
+package file;
+
+import java.io.File;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+public class JarFileSousa {
+
+	public static void main(String[] args) throws Exception {
+
+		// カレントディレクトリにあるjarファイルを指定
+		File file = new File(System.getProperty("user.dir"), "hello.jar");
+		try (JarFile jarFile = new JarFile(file)){
+			Manifest manifest = jarFile.getManifest(); //マニフェストの取得
+
+			// jarファイル内のファイルとディレクトリを表示
+			printEntries(jarFile);
+
+			// マニフェストの内容を表示
+			printManifestAttributes(manifest);
+
+			// jarファイル内のファイルを読み込む
+			printFile(jarFile, "META-INF/MANIFEST.MF");
+
+			// マニフェストの属性取得
+			String className = getManifestAttribute(manifest, "JarCall-Class");
+			System.out.println("[JarCall-Class]=[" + className + "]");
+
+			// jarファイル内のクラスを呼び出す
+			callCalc(file, className);
+		}
+	}
+
+	/**
+	 * jarファイル内のファイルとディレクトリの一覧を表示する
+	 *
+	 * @param jarFile	jarファイル
+	 */
+	//	private static void printEntries(JarFile jarFile) {
+	//		System.out.println("↓JarEntry");
+	//
+	//		for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements();){
+	//			JarEntry entry = e.nextElement();
+	//			String dir = entry.isDirectory() ? "D" : "F";
+	//			System.out.printf("[%s]%s%n", dir, entry.getName());
+	//		}
+	//	}
+	private static void printEntries(JarFile jarFile) {
+		System.out.println("↓JarEntry");
+
+		jarFile.stream().forEach(entry -> {
+			String dir = entry.isDirectory() ? "D" : "F";
+			System.out.printf("[%s]%s%n", dir, entry.getName());
+		});
+	}
+
+}

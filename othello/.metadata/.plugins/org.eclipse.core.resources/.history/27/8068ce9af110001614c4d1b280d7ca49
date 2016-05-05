@@ -1,0 +1,47 @@
+package main;
+
+import java.util.Map.Entry;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+import api.AISheet;
+
+public class AIChooseGui extends JFrame {
+
+	private static final long serialVersionUID = 7298487213402425577L;
+
+	private IAIChooser chooser;
+	private int ID;
+	private JScrollPane scrollPane;
+	private JTextArea mainPane;
+
+	public AIChooseGui(IAIChooser chooser, int ID) {
+		this.chooser = chooser;
+		this.ID = ID;
+
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		scrollPane = new JScrollPane();
+		scrollPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(scrollPane);
+
+		mainPane = new JTextArea();
+		for (Entry<String, Class<? extends AISheet>> entry : Start.AIMap.entrySet()){
+			mainPane.append(entry.getKey());
+		}
+		scrollPane.setViewportView(mainPane);
+
+		pack();
+		setVisible(true);
+	}
+
+	public interface IAIChooser {
+
+		void setAIName(int ID, String AIName);
+
+	}
+
+}

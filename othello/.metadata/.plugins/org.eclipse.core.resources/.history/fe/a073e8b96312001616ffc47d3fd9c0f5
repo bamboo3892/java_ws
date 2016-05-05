@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package api;
+
+/**
+ * @author 匡生
+ *
+ */
+public @interface OthelloAI {
+
+}

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <tabs>
+    <Tab text="Game">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <bottom>
+                  <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" hgap="5.0" prefHeight="37.0" prefWidth="600.0" vgap="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="83.0" text="Start" />
+                     </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </FlowPane>
+               </bottom>
+               <center>
+                  <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <items>
+                        <FlowPane hgap="5.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <children>
+                              <Label text="Sente" />
+                              <ComboBox prefWidth="150.0" promptText="Select AI" />
+                           </children>
+                        </FlowPane>
+                        <FlowPane hgap="5.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0">
+                           <children>
+                              <Label text="Gote" />
+                              <ComboBox prefWidth="150.0" promptText="Select AI" />
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </FlowPane>
+                     </items>
+                  </SplitPane>
+               </center>
+            </BorderPane>
+         </content>
+    </Tab>
+    <Tab text="AI Buttle">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <bottom>
+                  <FlowPane alignment="CENTER_RIGHT" hgap="5.0" prefHeight="40.0" prefWidth="600.0" vgap="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" text="Button" />
+                     </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </FlowPane>
+               </bottom>
+               <center>
+                  <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+               </center>
+            </BorderPane>
+         </content>
+    </Tab>
+      <Tab text="Opetion">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>

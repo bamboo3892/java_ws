@@ -1,0 +1,49 @@
+package ai;
+
+import java.io.Serializable;
+
+import api.AISheet;
+import api.ILearnableAI;
+
+public class TestAI extends AISheet implements ILearnableAI, Serializable {
+
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public String getAIName() {
+		return "Test AI";
+	}
+
+	@Override
+	public void decideNextPlace() {
+		for (int i = 0; i < 8; i++){
+			for (int j = 0; j < 8; j++){
+				if(canPlace(i, j)){
+					this.nextX = i;
+					this.nextY = j;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void setMetaFromSavedObject(Object o) {
+
+	}
+
+	@Override
+	public boolean canLearnFrom(AISheet ai) {
+		return true;
+	}
+
+	@Override
+	public String learnFrom(AISheet otherAI) {
+		return "Learn";
+	}
+
+	@Override
+	public Serializable getSaveObjectClone() {
+		return this;
+	}
+
+}

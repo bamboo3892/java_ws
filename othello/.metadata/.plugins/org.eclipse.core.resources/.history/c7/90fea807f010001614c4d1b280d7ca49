@@ -1,0 +1,23 @@
+package main;
+
+import javax.swing.JFrame;
+
+public class AIChooseGui extends JFrame {
+
+	private static final long serialVersionUID = 7298487213402425577L;
+
+	private IAIChooser chooser;
+	private int ID;
+
+	public AIChooseGui(IAIChooser chooser, int ID) {
+		this.chooser = chooser;
+		this.ID = ID;
+	}
+
+	public interface IAIChooser {
+
+		void setAIName();
+
+	}
+
+}

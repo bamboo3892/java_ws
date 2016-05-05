@@ -1,0 +1,132 @@
+package main;
+
+public class Sheet {
+
+	/**void:0, black:1, white:2*/
+	protected int box[][] = new int[8][8];
+	protected int teban;
+
+	public Sheet() {
+
+	}
+
+	public Sheet(int[][] box, int teban) {
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++){
+				this.box[i][j] = box[i][j];
+			}
+		this.teban = teban;
+	}
+
+	protected boolean isFilled() {
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++){
+				if(box[i][j] != 1 && box[i][j] != 2) return false;
+			}
+		return true;
+	}
+
+	protected boolean isTherePlaceToPutStone(int teban) {
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++){
+				if(canPlace(box, i, j, teban, true)) return true;
+			}
+		return false;
+	}
+
+	protected boolean isTherePlaceToPutStone() {
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++){
+				if(canPlace(i, j)) return true;
+			}
+		return false;
+	}
+
+	protected boolean canPlaceAtAndReverse(int x, int y) {
+		return canPlace(x, y, false);
+	}
+
+	protected boolean canPlace(int x, int y) {
+		return canPlace(x, y, teban, true);
+	}
+
+	protected boolean canPlace(int x, int y, boolean simulate) {
+		return canPlace(x, y, teban, simulate);
+	}
+
+	protected boolean canPlace(int x, int y, int teban, boolean simulate) {
+		return canPlace(box, x, y, teban, simulate);
+		//		if(box[x][y] != 0){
+		//			//System.out.println("The place already has a stone");
+		//			return false;
+		//		}
+		//		boolean b = false;
+		//		for (int henniX = -1; henniX < 2; henniX++){
+		//			flag: for (int henniY = -1; henniY < 2; henniY++){
+		//				if(henniX == 0 && henniY == 0) continue flag;
+		//				int reverseCount = 0;
+		//				for (int i = 1; i < 8; i++){
+		//					if(x + henniX * i < 0 || x + henniX * i > 7 || y + henniY * i < 0 || y + henniY * i > 7) continue flag;
+		//					if(box[x + henniX * i][y + henniY * i] == (teban == 1 ? 2 : 1)){
+		//						reverseCount++;
+		//					}else if(box[x + henniX * i][y + henniY * i] == teban && reverseCount != 0){
+		//						b = true;
+		//					}else{
+		//						continue flag;
+		//					}
+		//				}
+		//			}
+		//		}
+		//		return b;
+	}
+
+	/**simulate : actualy reverse the stones*/
+	public static boolean canPlace(int[][] pbox, int x, int y, int teban, boolean simulate) {
+		if(pbox[x][y] != 0){
+			return false;
+		}
+		boolean b = false;
+		for (int henniX = -1; henniX < 2; henniX++){
+			flag: for (int henniY = -1; henniY < 2; henniY++){
+				if(henniX == 0 && henniY == 0) continue flag;
+				int reverseCount = 0;
+				for (int i = 1; i < 8; i++){
+					if(x + henniX * i < 0 || x + henniX * i > 7 || y + henniY * i < 0 || y + henniY * i > 7) continue flag;
+					if(pbox[x + henniX * i][y + henniY * i] == (teban == 1 ? 2 : 1)){
+						reverseCount++;
+					}else if(pbox[x + henniX * i][y + henniY * i] == teban && reverseCount != 0){
+						if(!simulate){
+							for (int j = 0; j < reverseCount + 1; j++)
+								pbox[x + henniX * j][y + henniY * j] = teban;
+						}
+						b = true;
+					}else{
+						continue flag;
+					}
+				}
+			}
+		}
+		return b;
+	}
+
+	/**return winner's teban*/
+	protected int judge() {
+		return judge(this.box);
+	}
+
+	/**return winner's teban*/
+	public static int judge(int[][] pbox) {
+		int black = 0;
+		int white = 0;
+		for (int i = 0; i < 8; i++)
+			for (int j = 0; j < 8; j++){
+				if(pbox[i][j] == 1){
+					black++;
+				}else if(pbox[i][j] == 2){
+					white++;
+				}
+			}
+		return black < white ? 2 : 1;
+	}
+
+}

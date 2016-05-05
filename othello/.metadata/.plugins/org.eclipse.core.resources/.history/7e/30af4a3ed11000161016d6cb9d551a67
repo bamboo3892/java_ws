@@ -1,0 +1,35 @@
+package ai;
+
+public class OldAI extends AISheet {
+
+	public int[][] notcorner = { { 0, 2, 2, 3 }, { 2, 4, 5, 6 }, { 2, 5, 1, 1 }, { 3, 6, 1, 20 } };
+	public int[][] corner = { { 0, 2, 3, 4 }, { 2, 3, 4, 9 }, { 3, 4, 9, 10 }, { 4, 9, 10, 0 } };
+
+	@Override
+	public void decideNextPlace() {
+		int currentValue = 0;
+		for (int x = 0; x < 2; x++){
+			for (int y = 0; y < 2; y++){
+				int offsetX = x * 2 - 1;
+				int offsetY = y * 2 - 1;
+				for (int m = 0; m < 4; m++){
+					for (int n = 0; n < 4; n++){
+						int searchX = (int) (3.5 + (0.5 + m) * offsetX);
+						int searchY = (int) (3.5 + (0.5 + n) * offsetY);
+						if(canPlace(searchX, searchY)){
+							if(getValue(m, n, this.box[(int) (3.5 + (0.5 + 3) * offsetX)][(int) (3.5 + (0.5 + 3) * offsetY)] == teban) >= currentValue){
+								this.nextX = searchX;
+								this.nextY = searchY;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public int getValue(int offsetX, int offsetY, boolean corner) {
+		return corner ? this.corner[offsetX][offsetY] : this.notcorner[offsetX][offsetY];
+	}
+
+}

@@ -1,0 +1,33 @@
+package api;
+
+import java.io.Serializable;
+
+/**
+ *
+ * @author bamboo3892
+ */
+public interface ILearnableAI {
+
+	public void setMetaFromSavedObject(Object o);
+
+	/**
+	 * Return whether this can learn from param AI.
+	 * @param ai
+	 * @return result
+	 */
+	public boolean canLearnFrom(AISheet ai);
+
+	/**
+	 * Learn from otherAI
+	 * @param otherAI
+	 * @return message
+	 */
+	public String learnFrom(AISheet otherAI);
+
+	/**
+	 * Be sure to return object's clone
+	 * @return object clone to be saved
+	 */
+	public Serializable getSaveObject();
+
+}

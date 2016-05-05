@@ -1,0 +1,30 @@
+package file;
+
+public class JarFileSousa {
+
+	public static void main(String[] args) throws Exception {
+
+		// カレントディレクトリにあるjarファイルを指定
+		File file = new File(System.getProperty("user.dir"), "hello.jar");
+		try (JarFile jarFile = new JarFile(file)){
+			Manifest manifest = jarFile.getManifest(); //マニフェストの取得
+
+			// jarファイル内のファイルとディレクトリを表示
+			printEntries(jarFile);
+
+			// マニフェストの内容を表示
+			printManifestAttributes(manifest);
+
+			// jarファイル内のファイルを読み込む
+			printFile(jarFile, "META-INF/MANIFEST.MF");
+
+			// マニフェストの属性取得
+			String className = getManifestAttribute(manifest, "JarCall-Class");
+			System.out.println("[JarCall-Class]=[" + className + "]");
+
+			// jarファイル内のクラスを呼び出す
+			callCalc(file, className);
+		}
+	}
+
+}

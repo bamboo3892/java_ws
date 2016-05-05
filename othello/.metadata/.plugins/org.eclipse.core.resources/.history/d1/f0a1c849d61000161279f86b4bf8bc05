@@ -1,0 +1,153 @@
+package file;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Iterator;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
+public class JarFileSousa {
+
+	public static void main(String[] args) throws Exception {
+
+		// カレントディレクトリにあるjarファイルを指定
+		File file = new File(System.getProperty("user.dir"), "RandomAI.jar");
+		try (JarFile jarFile = new JarFile(file)){
+			Manifest manifest = jarFile.getManifest(); //マニフェストの取得
+
+			// jarファイル内のファイルとディレクトリを表示
+			printEntries(jarFile);
+
+			// マニフェストの内容を表示
+			printManifestAttributes(manifest);
+
+			// jarファイル内のファイルを読み込む
+			printFile(jarFile, "META-INF/MANIFEST.MF");
+
+			// マニフェストの属性取得
+			String className = getManifestAttribute(manifest, "JarCall-Class");
+			System.out.println("[JarCall-Class]=[" + className + "]");
+
+			// jarファイル内のクラスを呼び出す
+			callCalc(file, className);
+		}
+	}
+
+	/**
+	 * jarファイル内のファイルとディレクトリの一覧を表示する
+	 *
+	 * @param jarFile	jarファイル
+	 */
+	//	private static void printEntries(JarFile jarFile) {
+	//		System.out.println("↓JarEntry");
+	//
+	//		for (Enumeration<JarEntry> e = jarFile.entries(); e.hasMoreElements();){
+	//			JarEntry entry = e.nextElement();
+	//			String dir = entry.isDirectory() ? "D" : "F";
+	//			System.out.printf("[%s]%s%n", dir, entry.getName());
+	//		}
+	//	}
+	private static void printEntries(JarFile jarFile) {
+		System.out.println("↓JarEntry");
+
+		jarFile.stream().forEach(entry -> {
+			String dir = entry.isDirectory() ? "D" : "F";
+			System.out.printf("[%s]%s%n", dir, entry.getName());
+		});
+	}
+
+	/**
+	 * マニフェストの内容を全て表示する
+	 *
+	 * @param manifest	マニフェスト
+	 */
+	private static void printManifestAttributes(Manifest manifest) {
+		System.out.println("↓MainAttributes");
+
+		Attributes ma = manifest.getMainAttributes();
+		for (Iterator<Object> i = ma.keySet().iterator(); i.hasNext();){
+			Object key = i.next();
+			String val = (String) ma.get(key);
+			System.out.printf("[%s]=[%s]%n", key, val);
+		}
+	}
+
+	/**
+	 * マニフェストの属性を取得する
+	 *
+	 * @param manifest	マニフェスト
+	 * @param key	キー
+	 * @return 	値
+	 */
+	private static String getManifestAttribute(Manifest manifest, String key) {
+		Attributes a = manifest.getMainAttributes();
+		return a.getValue(key);
+	}
+
+	/**
+	 * jarファイル内のファイルの内容を出力する
+	 *
+	 * @param jarFile	jarファイル
+	 * @param name	ファイル名
+	 * @throws IOException
+	 */
+	private static void printFile(JarFile jarFile, String name) throws IOException {
+		System.out.println("↓printFile");
+
+		JarEntry entry = jarFile.getJarEntry(name);
+
+		// テキストファイルとして読み込む
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(jarFile.getInputStream(entry)))){
+			reader.lines().forEach(text -> { // JDK1.8
+				System.out.println(text);
+			});
+		}
+	}
+
+	/**
+	 * jarファイル内のクラスを呼び出す
+	 *
+	 * @param file		jarファイル
+	 * @param className	呼び出すクラス名
+	 * @throws Exception
+	 */
+	private static void callCalc(File file, String className) throws Exception {
+		System.out.println("↓クラスとしてロード");
+
+		URL[] urls = { file.toURI().toURL() };
+		ClassLoader loader = URLClassLoader.newInstance(urls);
+
+		// クラスをロード
+		Class<?> clazz = loader.loadClass(className);
+		//Class<?> clazz = Class.forName(className, true, loader);	…ClassLoader#loadClass()と同じ
+		System.out.println(clazz);
+
+		//呼び出すメソッドは「int calc(int a, int b)」
+		// リフレクションを使って呼び出す実験
+		{
+			Object obj = clazz.newInstance();
+
+			Method method = clazz.getMethod("calc", int.class, int.class);
+			int ret = (Integer) method.invoke(obj, 12, 34);
+
+			System.out.println("リフレクション経由戻り値：" + ret);
+		}
+
+		//		// インターフェースを使って呼び出す実験
+		//		{
+		//			JarCall obj = (JarCall) clazz.newInstance();
+		//
+		//			int ret = obj.calc(12, 34);
+		//
+		//			System.out.println("インターフェース経由戻り値：" + ret);
+		//		}
+	}
+
+}

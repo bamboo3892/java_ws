@@ -1,0 +1,37 @@
+package ai;
+
+import main.Sheet;
+
+public abstract class AISheet extends Sheet {
+
+	protected int nextX;
+	protected int nextY;
+	protected int originalTeban;
+
+	/**all ai must have  default constructor*/
+	public AISheet() {
+		super();
+	}
+
+	@Deprecated
+	public AISheet(int[][] box, int teban) {
+		super(box, teban);
+	}
+
+	public Sheet set(int[][] box, int teban) {
+		super.set(box, teban);
+		this.originalTeban = teban;
+		return this;
+	}
+
+	public abstract void decideNextPlace();
+
+	public final int getNextX() {
+		return nextX;
+	}
+
+	public final int getNextY() {
+		return nextY;
+	}
+
+}

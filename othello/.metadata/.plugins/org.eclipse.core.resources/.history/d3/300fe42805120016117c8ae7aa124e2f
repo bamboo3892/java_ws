@@ -1,0 +1,25 @@
+package test;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+public class FileTest {
+
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+		File file = new File(System.getProperty("user.dir"), "file");
+		file.createNewFile();
+		ObjectInputStream input = new ObjectInputStream(new FileInputStream(file));
+		ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(file));
+		output.writeObject(1000);
+		Object o = input.readObject();
+		System.out.println(o);
+		input.close();
+		output.close();
+	}
+
+}

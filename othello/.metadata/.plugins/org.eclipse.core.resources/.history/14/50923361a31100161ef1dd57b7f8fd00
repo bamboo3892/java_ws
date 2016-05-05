@@ -1,0 +1,69 @@
+package main;
+
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+import api.AISheet;
+
+public class LearningGui extends JFrame implements ActionListener {
+
+	private static final long serialVersionUID = -584037256605831173L;
+
+	public static final int TEBAN_RANDOM = 0;
+	public static final int TEBAN_SENTE_FIXED = 1;
+	public static final int TEBAN_GOTE_FIXED = 2;
+
+	private Thread learningThread;
+	private LearningSheet sheet;
+	private JPanel contentPane;
+	private JTextArea textArea;
+	private JButton btn;
+
+	/**
+	 *
+	 * @param learnable
+	 * @param otherAI
+	 * @param repeat
+	 * @param saveRate
+	 * @param tebanCommand
+	 */
+	public LearningGui(AISheet learnable, AISheet otherAI, int repeat, int saveRate, int tebanCommand) {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 326, 379);
+
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+
+		textArea = new JTextArea();
+		contentPane.add(textArea, BorderLayout.CENTER);
+
+		btn = new JButton("start");
+		btn.addActionListener(this);
+		contentPane.add(btn, BorderLayout.SOUTH);
+
+		setVisible(true);
+
+		sheet = new LearningSheet(this, learnable, otherAI, repeat, saveRate, tebanCommand);
+	}
+
+	public void addLog(String message) {
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == btn && learningThread == null){
+			learningThread = new Thread("Learning Thread", sheet);
+		}
+	}
+
+}

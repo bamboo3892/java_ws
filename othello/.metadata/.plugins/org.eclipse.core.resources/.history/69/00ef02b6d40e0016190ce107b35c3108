@@ -1,0 +1,11 @@
+package ai;
+
+public class EstimateAIMk2 extends AISheet {
+
+	@Override
+	public void decideNextPlace() {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+}

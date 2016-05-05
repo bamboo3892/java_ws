@@ -1,0 +1,17 @@
+package api;
+
+public interface ILearnableAI {
+
+	public void setGeneFromMeta();
+
+	public void setNextGene();
+
+	public AISheet setFromSavedObject(Object o);
+
+	public boolean canLearnFrom(AISheet ai);
+
+	public void learn(AISheet otherAI);
+
+	public Object getSaveObject();
+
+}

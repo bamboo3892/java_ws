@@ -1,0 +1,28 @@
+package test;
+
+import javax.swing.JFrame;
+
+public class Main{
+
+	static final int WIDTH = 712;
+	static final int HEIGHT = 768;
+	static JFrame jf;
+
+	public static void main(String args[]){
+
+		initialize();
+
+		jf = new JFrame("TestAnimation!");
+		jf.setBounds(30, 30, WIDTH+5, HEIGHT+34);
+		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE );
+		jf.setResizable(false);
+		new GamePanel(jf);
+		jf.setVisible(true);
+	}
+
+	private static void initialize(){
+		GamePanel.initialize();
+		Box.initialize();
+	}
+
+}

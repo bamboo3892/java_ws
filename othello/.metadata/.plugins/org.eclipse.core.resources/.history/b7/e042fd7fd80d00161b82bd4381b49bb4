@@ -1,0 +1,36 @@
+package main;
+
+public abstract class AISheet extends Sheet {
+
+	protected int nextX;
+	protected int nextY;
+
+	public AISheet() {
+
+	}
+
+	public AISheet(int[][] box, int teban) {
+		super(box, teban);
+	}
+
+	public abstract void decideNextPlace();
+
+	public final int getNextX() {
+		return nextX;
+	}
+
+	public final int getNextY() {
+		return nextY;
+	}
+
+	@Override
+	public final void finalize() {
+		try{
+			super.finalize();
+		}catch (Throwable e){
+			e.printStackTrace();
+		}
+		System.gc();
+	}
+
+}
