@@ -1,5 +1,7 @@
 package ai;
 
+import api.AISheet;
+
 public class PracticalAdvancedAI extends AISheet {
 
 	public PracticalAdvancedAI() {
@@ -23,6 +25,11 @@ public class PracticalAdvancedAI extends AISheet {
 			this.nextX = sheet.getNextX();
 			this.nextY = sheet.getNextY();
 		}
+	}
+
+	@Override
+	public String getAIName() {
+		return "Practical Advanced AI";
 	}
 
 }

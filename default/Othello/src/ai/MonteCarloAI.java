@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import api.AISheet;
+
 public class MonteCarloAI extends AISheet {
 
 	protected int roop = 10000;
@@ -88,6 +90,11 @@ public class MonteCarloAI extends AISheet {
 		int num = (int) (rand.nextFloat() * n);
 		if(!canPlaceAtAndReverse(x.get(num), y.get(num))) System.out.println("error?");
 		return nextAssumption(teban == 1 ? 2 : 1, false);
+	}
+
+	@Override
+	public String getAIName() {
+		return "MonteCarlo AI";
 	}
 
 }

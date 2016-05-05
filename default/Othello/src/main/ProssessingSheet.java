@@ -4,12 +4,13 @@ import java.awt.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-import ai.AISheet;
+import api.AISheet;
+import api.Sheet;
 
 public class ProssessingSheet extends Sheet implements Runnable {
 
 	private boolean player[] = new boolean[3];
-	private MyPanel panel;
+	private MainPanel panel;
 	private AISheet AI1;
 	private AISheet AI2;
 	private List<Sheet> history = new LinkedList<Sheet>();
@@ -20,7 +21,7 @@ public class ProssessingSheet extends Sheet implements Runnable {
 	private int lastPlacedStoneX;
 	private int lastPlacedStoneY;
 
-	public ProssessingSheet(MyPanel panel, AISheet ai1, AISheet ai2) {
+	public ProssessingSheet(MainPanel panel, AISheet ai1, AISheet ai2) {
 		super();
 		box[3][4] = box[4][3] = 1;
 		box[3][3] = box[4][4] = 2;

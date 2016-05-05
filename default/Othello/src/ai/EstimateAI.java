@@ -10,6 +10,9 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.Random;
 
+import api.AISheet;
+import api.ILearnableAI;
+
 public class EstimateAI extends AISheet implements ILearnableAI {
 
 	//protected int originalTeban;
@@ -499,6 +502,11 @@ public class EstimateAI extends AISheet implements ILearnableAI {
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public String getAIName() {
+		return "Estimate AI";
 	}
 }
 

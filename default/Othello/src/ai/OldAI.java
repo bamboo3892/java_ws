@@ -1,5 +1,7 @@
 package ai;
 
+import api.AISheet;
+
 public class OldAI extends AISheet {
 
 	public int[][] notcorner = { { 0, 2, 2, 3 }, { 2, 4, 5, 6 }, { 2, 5, 1, 1 }, { 3, 6, 1, 20 } };
@@ -30,6 +32,11 @@ public class OldAI extends AISheet {
 
 	public int getValue(int offsetX, int offsetY, boolean corner) {
 		return corner ? this.corner[offsetX][offsetY] : this.notcorner[offsetX][offsetY];
+	}
+
+	@Override
+	public String getAIName() {
+		return "Old AI";
 	}
 
 }

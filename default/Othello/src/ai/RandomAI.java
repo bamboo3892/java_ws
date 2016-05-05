@@ -2,6 +2,8 @@ package ai;
 
 import java.util.LinkedList;
 
+import api.AISheet;
+
 public class RandomAI extends AISheet {
 
 	public RandomAI() {
@@ -27,6 +29,11 @@ public class RandomAI extends AISheet {
 		int index = (int) (Math.random() * listX.size());
 		this.nextX = listX.get(index);
 		this.nextY = listY.get(index);
+	}
+
+	@Override
+	public String getAIName() {
+		return "Random AI";
 	}
 
 }

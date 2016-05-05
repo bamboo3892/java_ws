@@ -2,6 +2,7 @@ package ai;
 
 import java.util.LinkedList;
 
+import api.AISheet;
 import main.SLock;
 
 public class AdvancedAI extends AISheet implements Runnable {
@@ -29,6 +30,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 		this.slock = p_slock;
 	}
 
+	@Override
 	public AISheet set(int[][] box, int teban) {
 		for (int i = 0; i < 8; i++)
 			for (int j = 0; j < 8; j++){
@@ -99,13 +101,13 @@ public class AdvancedAI extends AISheet implements Runnable {
 			return;
 		}
 		int nnn = 0;
-	
+
 		float max = 0f;
 		int maxX = 0;
 		int maxY = 0;
 		this.box = getList(0);
 		this.teban = originalTeban;
-	
+
 		for(int i=0;i<8;i++) for(int j=0;j<8;j++) {
 			this.box = getList(0);
 			this.teban = originalTeban;
@@ -167,7 +169,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 	/*
 		private float nextAssumption(int p_teban, int p_index){//return assessment point
 			//boxには試行すべきものが入っている
-	
+
 			if(isFilled()){
 				return judge(box, originalTeban) ? 1f : 0f;
 			}
@@ -177,7 +179,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 					return judge(box, originalTeban) ? 1f : 0f;
 				}
 				this.teban = p_teban;
-	
+
 				this.box = getList(p_index);
 				this.teban = p_teban;
 				changeList(box, p_index+1);
@@ -185,7 +187,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 				float point = nextAssumption(p_teban==1 ? 2 : 1, p_index+1);
 				return point;
 			}
-	
+
 			if(p_teban == originalTeban){
 				float max = 0f;
 				this.box = getList(p_index);
@@ -326,6 +328,11 @@ public class AdvancedAI extends AISheet implements Runnable {
 				tbox[i][j] = boxHistory.get(index)[i][j];
 			}
 		return tbox;
+	}
+
+	@Override
+	public String getAIName() {
+		return "Guilty Perfect AI";
 	}
 
 }
