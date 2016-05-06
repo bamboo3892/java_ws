@@ -1,0 +1,30 @@
+package application;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+
+public class MainController {
+
+	@FXML
+	private ComboBox<String> cBoxGameMode;
+
+	@FXML
+	public void onGameModeChanged(ActionEvent event) {
+		System.out.println("Controller: button clicked");
+	}
+
+	@FXML // This method is called by the FXMLLoader when initialization is complete
+	public void initialize() {
+		assert combo != null : "fx:id=\"combo\" was not injected: check your FXML file 'ComboboxExample.fxml'.";
+		assert text != null : "fx:id=\"text\" was not injected: check your FXML file 'ComboboxExample.fxml'.";
+
+		// Initialize your logic here: all @FXML variables will have been injected
+		combo.getItems().clear();
+		combo.getItems().addAll("John Lennon", "Mick Jagger", "David Bowie");
+		combo.getItems().add("Others...");
+
+		text.setText("List : ");
+	}
+
+}

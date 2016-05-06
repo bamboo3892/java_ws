@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.9" prefHeight="471.0" prefWidth="600.0" style="-fx-background-color: blue;" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <tabs>
+    <Tab closable="false" text="Game">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <bottom>
+                  <FlowPane alignment="CENTER_RIGHT" columnHalignment="RIGHT" hgap="5.0" prefHeight="25.0" prefWidth="600.0" vgap="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="0.0" prefWidth="83.0" text="Start" />
+                     </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </FlowPane>
+               </bottom>
+               <center>
+                  <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <items>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0" SplitPane.resizableWithParent="false">
+                           <top>
+                              <FlowPane alignment="CENTER_LEFT" cacheShape="false" hgap="5.0" prefHeight="13.0" prefWidth="296.0" vgap="5.0" BorderPane.alignment="CENTER">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Label text="Sente" />
+                                    <ComboBox prefWidth="150.0" promptText="Select AI" />
+                                 </children>
+                              </FlowPane>
+                           </top>
+                           <center>
+                              <TextArea prefHeight="68.0" prefWidth="296.0" scaleShape="false" text="a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;a&#10;" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                        <BorderPane prefHeight="200.0" prefWidth="200.0">
+                           <top>
+                              <FlowPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="5.0" prefWidth="296.0" vgap="5.0" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label text="Gote" />
+                                    <ComboBox prefWidth="150.0" promptText="Select AI" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </FlowPane>
+                           </top>
+                           <center>
+                              <TextArea prefHeight="200.0" prefWidth="200.0" text="b&#10;b&#10;b&#10;b&#10;b&#10;&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b&#10;b" BorderPane.alignment="CENTER" />
+                           </center>
+                        </BorderPane>
+                     </items>
+                  </SplitPane>
+               </center>
+               <top>
+                  <FlowPane alignment="CENTER_LEFT" hgap="5.0" prefHeight="7.0" prefWidth="600.0" vgap="5.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Label" />
+                        <ComboBox prefWidth="150.0" promptText="Game Mode" />
+                     </children>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </FlowPane>
+               </top>
+            </BorderPane>
+         </content>
+    </Tab>
+      <Tab text="Loaded AI">
+         <content>
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <center>
+                  <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <columns>
+                      <TableColumn prefWidth="75.0" text="Name" />
+                      <TableColumn prefWidth="75.0" text="Version" />
+                        <TableColumn prefWidth="75.0" text="Author" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </center>
+            </BorderPane>
+         </content>
+      </Tab>
+      <Tab closable="false" text="Opetion">
+         <content>
+            <FlowPane hgap="5.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="200.0" vgap="5.0">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </FlowPane>
+         </content>
+      </Tab>
+  </tabs>
+</TabPane>
