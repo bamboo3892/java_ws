@@ -42,11 +42,21 @@
 <fullyQualifiedTypeName name="api.ILearnableAI"/>
 <fullyQualifiedTypeName name="java.io.Serializable"/>
 <fullyQualifiedTypeName name="javax.imageio.IIOException"/>
-<fullyQualifiedTypeName name="java.lang.Override"/>
 <fullyQualifiedTypeName name="java.lang.annotation.Target"/>
 <fullyQualifiedTypeName name="java.lang.annotation.ElementType"/>
 <fullyQualifiedTypeName name="java.lang.annotation.Annotation"/>
-<fullyQualifiedTypeName name="api.OthelloAI"/>
 <fullyQualifiedTypeName name="javafx.event.ActionEvent"/>
 <fullyQualifiedTypeName name="javafx.fxml.FXML"/>
+<fullyQualifiedTypeName name="main.MainPanel.GameMode"/>
+<fullyQualifiedTypeName name="java.security.KeyStore.Entry"/>
+<fullyQualifiedTypeName name="api.OthelloAI"/>
+<fullyQualifiedTypeName name="application.MainLancher.AIAttribute"/>
+<fullyQualifiedTypeName name="javafx.beans.property.StringProperty"/>
+<fullyQualifiedTypeName name="java.util.Map.Entry"/>
+<fullyQualifiedTypeName name="javax.swing.WindowConstants"/>
+<fullyQualifiedTypeName name="java.lang.Override"/>
+<fullyQualifiedTypeName name="javafx.scene.Node"/>
+<fullyQualifiedTypeName name="javafx.stage.StageStyle"/>
+<fullyQualifiedTypeName name="main.AIButtleSheet.TurnPolicy"/>
+<fullyQualifiedTypeName name="application.AIButtleGuiController"/>
 </qualifiedTypeNameHistroy>

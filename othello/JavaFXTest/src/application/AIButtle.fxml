@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.AIButtleGuiController">
+	<bottom>
+		<FlowPane hgap="5.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="35.0" prefWidth="400.0" vgap="5.0" BorderPane.alignment="CENTER">
+			<children>
+				<ProgressBar fx:id="progressBar" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="25.0" prefWidth="386.0" progress="0.0" />
+				<Label fx:id="progressTime" text="10 : 15" />
+				<Button fx:id="flagBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#onFlagButtonClicked" prefHeight="25.0" prefWidth="55.0" text="Start" />
+			</children>
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</FlowPane>
+	</bottom>
+	<center>
+		<TabPane prefHeight="428.0" prefWidth="471.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+			<tabs>
+				<Tab text="Log">
+					<content>
+						<BorderPane prefHeight="200.0" prefWidth="200.0">
+							<center>
+								<TextArea fx:id="logArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" promptText="No Log Added" BorderPane.alignment="CENTER">
+									<BorderPane.margin>
+										<Insets left="5.0" right="5.0" top="5.0" />
+									</BorderPane.margin>
+								</TextArea>
+							</center>
+						</BorderPane>
+					</content>
+				</Tab>
+				<Tab text="Graph">
+					<content>
+						<BorderPane prefHeight="200.0" prefWidth="200.0">
+							<bottom>
+								<LineChart fx:id="rateGraph" legendSide="TOP" title="Win Rate (calculate every 10 matches)" BorderPane.alignment="CENTER">
+									<xAxis>
+										<CategoryAxis side="BOTTOM" />
+									</xAxis>
+									<yAxis>
+										<NumberAxis side="LEFT" />
+									</yAxis>
+								</LineChart>
+							</bottom>
+						</BorderPane>
+					</content>
+				</Tab>
+				<Tab text="Statistic">
+					<content>
+						<ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" pannable="true" prefHeight="200.0" prefWidth="200.0">
+							<padding>
+								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+							</padding>
+							<content>
+								<BorderPane prefHeight="200.0" prefWidth="200.0">
+									<center>
+										<GridPane hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER_LEFT">
+											<columnConstraints>
+												<ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
+												<ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" prefWidth="350.0" />
+											</columnConstraints>
+											<rowConstraints>
+												<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+												<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+												<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+												<RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="25.0" vgrow="SOMETIMES" />
+											</rowConstraints>
+											<children>
+												<Label text="Match" />
+												<Label text="Win" GridPane.rowIndex="1" />
+												<Label text="Draw" GridPane.rowIndex="2" />
+												<Label text="Lose" GridPane.rowIndex="3" />
+												<Label fx:id="stic_match" text="0" GridPane.columnIndex="1" />
+												<Label fx:id="stic_win" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+												<Label fx:id="stic_draw" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+												<Label fx:id="stic_lose" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+											</children>
+											<cursor>
+												<Cursor fx:constant="DEFAULT" />
+											</cursor>
+										</GridPane>
+									</center>
+								</BorderPane>
+							</content>
+						</ScrollPane>
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+	</center>
+</BorderPane>
