@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="com.okina.inventory.RegulationFilter"/>
 <fullyQualifiedTypeName name="com.okina.item.ItemRegulationFilter"/>
 <fullyQualifiedTypeName name="cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent"/>
@@ -60,4 +59,5 @@
 <fullyQualifiedTypeName name="net.minecraft.nbt.NBTTagCompound"/>
 <fullyQualifiedTypeName name="com.okina.multiblock.construct.IProcessorContainer"/>
 <fullyQualifiedTypeName name="com.okina.multiblock.construct.IConstructInventory"/>
+<fullyQualifiedTypeName name="com.okina.multiblock.construct.processor.EnergyProviderProcessor"/>
 </qualifiedTypeNameHistroy>

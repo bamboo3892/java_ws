@@ -1,37 +1,33 @@
-[22:55:14] [main/INFO]: Setting user: Player959
-[22:55:16] [Client thread/INFO]: LWJGL Version: 2.9.1
-[22:55:23] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Not Enough Items, FMLFileResourcePack:Multi Block Mod, FMLFileResourcePack:CoFH Core, FMLFileResourcePack:Thermal Expansion, FMLFileResourcePack:Thermal Foundation, FMLFileResourcePack:Extra Utilities, FMLFileResourcePack:MoreInventoryMod
-[22:55:25] [Sound Library Loader/INFO]: Sound engine started
-[22:55:26] [Client thread/INFO]: Created: 16x16 textures/blocks-atlas
-[22:55:26] [Client thread/INFO]: Created: 16x16 textures/items-atlas
-[22:55:27] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Not Enough Items, FMLFileResourcePack:Multi Block Mod, FMLFileResourcePack:CoFH Core, FMLFileResourcePack:Thermal Expansion, FMLFileResourcePack:Thermal Foundation, FMLFileResourcePack:Extra Utilities, FMLFileResourcePack:MoreInventoryMod
-[22:55:28] [Client thread/INFO]: Created: 1024x512 textures/blocks-atlas
-[22:55:28] [Client thread/INFO]: Created: 512x512 textures/items-atlas
-[22:55:29] [Sound Library Loader/INFO]: Sound engine started
-[22:55:31] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
-[22:55:31] [Server thread/INFO]: Generating keypair
-[22:55:31] [Server thread/INFO]: Preparing start region for level 0
-[22:55:32] [Server thread/INFO]: Changing view distance to 12, from 10
-[22:55:32] [Server thread/INFO]: Player959[local:E:01a577a6] logged in with entity id 3 at (864.6380417895855, 61.0, 33.46941530243957)
-[22:55:32] [Server thread/INFO]: Player959 joined the game
-[22:55:32] [Client thread/INFO]: [CHAT] A new §aMoreInventoryMod§r version is available : §e2.3.0
-[22:55:34] [Client thread/INFO]: [CHAT] Version 1.0.5.120 of NotEnoughItems is available
-[22:55:46] [Client thread/INFO]: [CHAT] Construct Success!
-[22:56:41] [Client thread/INFO]: [CHAT] Start Point
-[22:56:42] [Client thread/INFO]: [CHAT] Connected
-[22:56:43] [Client thread/INFO]: [CHAT] Construct Success!
-[22:56:57] [Server thread/INFO]: Saving and pausing game...
-[22:56:57] [Server thread/INFO]: Saving chunks for level 'New New New'/Overworld
-[22:56:57] [Server thread/INFO]: Saving chunks for level 'New New New'/Nether
-[22:56:57] [Server thread/INFO]: Saving chunks for level 'New New New'/The End
-[22:56:57] [Server thread/INFO]: Saving chunks for level 'New New New'/Underdark
-[22:56:57] [Server thread/INFO]: Saving chunks for level 'New New New'/The Last Millenium
-[22:56:58] [Server thread/INFO]: Stopping server
-[22:56:58] [Server thread/INFO]: Saving players
-[22:56:58] [Server thread/INFO]: Saving worlds
-[22:56:58] [Server thread/INFO]: Saving chunks for level 'New New New'/Overworld
-[22:56:58] [Server thread/INFO]: Saving chunks for level 'New New New'/Nether
-[22:56:58] [Server thread/INFO]: Saving chunks for level 'New New New'/The End
-[22:56:58] [Server thread/INFO]: Saving chunks for level 'New New New'/Underdark
-[22:56:58] [Server thread/INFO]: Saving chunks for level 'New New New'/The Last Millenium
-[22:56:58] [Client thread/INFO]: Stopping!
+[23:40:51] [main/INFO]: Setting user: Player981
+[23:40:53] [Client thread/INFO]: LWJGL Version: 2.9.1
+[23:41:01] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Not Enough Items, FMLFileResourcePack:Multi Block Mod, FMLFileResourcePack:CoFH Core, FMLFileResourcePack:Thermal Expansion, FMLFileResourcePack:Thermal Foundation, FMLFileResourcePack:Extra Utilities, FMLFileResourcePack:MoreInventoryMod
+[23:41:04] [Sound Library Loader/INFO]: Sound engine started
+[23:41:05] [Client thread/INFO]: Created: 16x16 textures/blocks-atlas
+[23:41:05] [Client thread/INFO]: Created: 16x16 textures/items-atlas
+[23:41:07] [Client thread/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Not Enough Items, FMLFileResourcePack:Multi Block Mod, FMLFileResourcePack:CoFH Core, FMLFileResourcePack:Thermal Expansion, FMLFileResourcePack:Thermal Foundation, FMLFileResourcePack:Extra Utilities, FMLFileResourcePack:MoreInventoryMod
+[23:41:07] [Client thread/INFO]: Created: 1024x512 textures/blocks-atlas
+[23:41:08] [Client thread/INFO]: Created: 512x512 textures/items-atlas
+[23:41:08] [Sound Library Loader/INFO]: Sound engine started
+[23:41:10] [Server thread/INFO]: Starting integrated minecraft server version 1.7.10
+[23:41:10] [Server thread/INFO]: Generating keypair
+[23:41:11] [Server thread/INFO]: Preparing start region for level 0
+[23:41:11] [Server thread/INFO]: Changing view distance to 12, from 10
+[23:41:12] [Server thread/INFO]: Player981[local:E:d59ddb6a] logged in with entity id 3 at (883.4111424006833, 56.0, 18.483303783585256)
+[23:41:12] [Server thread/INFO]: Player981 joined the game
+[23:41:12] [Client thread/INFO]: [CHAT] A new §aMoreInventoryMod§r version is available : §e2.3.0
+[23:41:14] [Client thread/INFO]: [CHAT] Version 1.0.5.120 of NotEnoughItems is available
+[23:43:39] [Server thread/INFO]: Saving and pausing game...
+[23:43:39] [Server thread/INFO]: Saving chunks for level 'New New New'/Overworld
+[23:43:39] [Server thread/INFO]: Saving chunks for level 'New New New'/Nether
+[23:43:39] [Server thread/INFO]: Saving chunks for level 'New New New'/The End
+[23:43:39] [Server thread/INFO]: Saving chunks for level 'New New New'/Underdark
+[23:43:39] [Server thread/INFO]: Saving chunks for level 'New New New'/The Last Millenium
+[23:43:54] [Client thread/INFO]: Stopping!
+[23:43:54] [Server thread/INFO]: Stopping server
+[23:43:54] [Server thread/INFO]: Saving players
+[23:43:54] [Server thread/INFO]: Saving worlds
+[23:43:54] [Server thread/INFO]: Saving chunks for level 'New New New'/Overworld
+[23:43:54] [Server thread/INFO]: Saving chunks for level 'New New New'/Nether
+[23:43:54] [Server thread/INFO]: Saving chunks for level 'New New New'/The End
+[23:43:54] [Server thread/INFO]: Saving chunks for level 'New New New'/Underdark
+[23:43:54] [Server thread/INFO]: Saving chunks for level 'New New New'/The Last Millenium
