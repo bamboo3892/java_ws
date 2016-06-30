@@ -1,0 +1,50 @@
+package com.okina.server.command;
+
+import java.util.List;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
+
+public class MBMCommand extends CommandBase {
+
+	public MBMCommand() {}
+
+	@Override
+	public String getCommandName() {
+		return "mbm";
+	}
+
+	@Override
+	public int getRequiredPermissionLevel() {
+		return 1;
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender commandSender) {
+		return "Usage: /mbm <Subcommands>. Subcommands are particleSpawnRate, renderPartsFancy";
+	}
+
+	@Override
+	public void processCommand(ICommandSender commandSender, String[] commands) {
+		if(commands.length == 0){
+			throw new WrongUsageException("commands.forge.usage");
+		}else if("help".equals(commands[0])){
+			throw new WrongUsageException("commands.forge.usage");
+		}else if("tps".equals(commands[0])){
+			displayTPS(sender, commands);
+		}else if("tpslog".equals(commands[0])){
+			doTPSLog(sender, commands);
+		}else if("track".equals(commands[0])){
+			handleTracking(sender, commands);
+		}else{
+			throw new WrongUsageException("commands.forge.usage");
+		}
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender commandSender, String[] commands) {
+		return commands.length == 1 ? getListOfStringsMatchingLastWord(commands, "particleSpawnRate", "renderPartsFancy") : (commands.length == 2 ? getListOfStringsMatchingLastWord(commands, "true", "false") : null);
+	}
+
+}

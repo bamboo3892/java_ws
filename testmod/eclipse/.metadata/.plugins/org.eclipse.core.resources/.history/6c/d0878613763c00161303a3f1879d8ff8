@@ -1,0 +1,9 @@
+package com.okina.network;
+
+public class CommandPacket {
+
+	public CommandPacket() {
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+}

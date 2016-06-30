@@ -1,0 +1,24 @@
+package com.okina.multiblock.construct.block;
+
+import net.minecraft.client.renderer.texture.IIconRegister;
+
+public class ConstructRectificationRepeater extends BlockConstructBase {
+
+	public ConstructRectificationRepeater(int grade) {
+		super(grade);
+		// TODO 自動生成されたコンストラクター・スタブ
+	}
+
+	@Override
+	public void registerBlockIcons(IIconRegister register) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	@Override
+	public String getProseccorName() {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+}

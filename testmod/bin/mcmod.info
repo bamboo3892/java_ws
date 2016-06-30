@@ -1,16 +1,14 @@
 [
 {
-  "modid": "laser_tech",
-  "name": "Laser Tech",
-  "description": "This is a mod based on laser technology.",
-  "version": "1.0",
+  "name": "Multi Block Mod",
+  "description": "This is a mod.",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["OldDirectory"],
+  "authorList": ["Taketorino_Okina"],
   "credits": "",
   "logoFile": "logo.png",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["ThermalExpansion"]
 }
 ]

@@ -1,9 +1,0 @@
-package com.test.nei;
-
-public class GuiDummy {
-
-	public GuiDummy() {
-		// TODO 自動生成されたコンストラクター・スタブ
-	}
-
-}

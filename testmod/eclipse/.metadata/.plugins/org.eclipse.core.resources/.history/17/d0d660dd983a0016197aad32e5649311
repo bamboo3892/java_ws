@@ -1,0 +1,9 @@
+package com.okina.client;
+
+import java.io.Serializable;
+
+public class EffectProperty implements Serializable {
+
+	public EffectProperty() {}
+
+}

@@ -1,0 +1,114 @@
+---- Minecraft Crash Report ----
+// My bad.
+
+Time: 16/05/12 1:37
+Description: Unexpected error
+
+java.lang.NumberFormatException: For input string: "0xffffff"
+	at java.lang.NumberFormatException.forInputString(Unknown Source)
+	at java.lang.Integer.parseInt(Unknown Source)
+	at com.test.multiblock.MultiBlockCasingTileEntity.renderHUD(MultiBlockCasingTileEntity.java:490)
+	at com.test.main.EventHandler.onRenderTick(EventHandler.java:126)
+	at cpw.mods.fml.common.eventhandler.ASMEventHandler_48_EventHandler_onRenderTick_RenderTickEvent.invoke(.dynamic)
+	at cpw.mods.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:54)
+	at cpw.mods.fml.common.eventhandler.EventBus.post(EventBus.java:140)
+	at cpw.mods.fml.common.FMLCommonHandler.onRenderTickEnd(FMLCommonHandler.java:340)
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1069)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:962)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at java.lang.NumberFormatException.forInputString(Unknown Source)
+	at java.lang.Integer.parseInt(Unknown Source)
+	at com.test.multiblock.MultiBlockCasingTileEntity.renderHUD(MultiBlockCasingTileEntity.java:490)
+	at com.test.main.EventHandler.onRenderTick(EventHandler.java:126)
+	at cpw.mods.fml.common.eventhandler.ASMEventHandler_48_EventHandler_onRenderTick_RenderTickEvent.invoke(.dynamic)
+	at cpw.mods.fml.common.eventhandler.ASMEventHandler.invoke(ASMEventHandler.java:54)
+	at cpw.mods.fml.common.eventhandler.EventBus.post(EventBus.java:140)
+
+-- Affected level --
+Details:
+	Level name: MpServer
+	All players: 1 total; [EntityClientPlayerMP['Player499'/189, l='MpServer', x=-242.54, y=10.49, z=1913.65]]
+	Chunk stats: MultiplayerChunkCache: 370, 370
+	Level seed: 0
+	Level generator: ID 01 - flat, ver 0. Features enabled: false
+	Level generator options: 
+	Level spawn location: World: (-268,4,1924), Chunk: (at 4,0,4 in -17,120; contains blocks -272,0,1920 to -257,255,1935), Region: (-1,3; contains chunks -32,96 to -1,127, blocks -512,0,1536 to -1,255,2047)
+	Level time: 245920 game time, 12000 day time
+	Level dimension: 0
+	Level storage version: 0x00000 - Unknown?
+	Level weather: Rain time: 0 (now: false), thunder time: 0 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: false
+	Forced entities: 37 total; [EntityChicken['Chicken'/128, l='MpServer', x=-197.41, y=4.00, z=1857.56], EntityCow['Cow'/129, l='MpServer', x=-203.34, y=4.00, z=1862.25], EntityCow['Cow'/130, l='MpServer', x=-202.19, y=4.00, z=1867.31], EntityItem['item.item.egg'/131, l='MpServer', x=-195.22, y=4.13, z=1858.03], EntityClientPlayerMP['Player499'/189, l='MpServer', x=-242.54, y=10.49, z=1913.65], EntityPig['Pig'/132, l='MpServer', x=-207.85, y=4.00, z=1893.87], EntityChicken['Chicken'/133, l='MpServer', x=-201.47, y=4.00, z=1876.56], EntityChicken['Chicken'/134, l='MpServer', x=-203.56, y=4.00, z=1882.06], EntityItem['item.item.egg'/135, l='MpServer', x=-202.84, y=4.13, z=1880.13], EntityCow['Cow'/136, l='MpServer', x=-202.75, y=4.00, z=1908.14], EntityCow['Cow'/72, l='MpServer', x=-302.75, y=4.00, z=1835.59], EntitySheep['Sheep'/73, l='MpServer', x=-294.84, y=4.00, z=1916.84], EntityPig['Pig'/137, l='MpServer', x=-194.16, y=4.00, z=1986.59], EntityCow['Cow'/77, l='MpServer', x=-274.84, y=4.00, z=1864.16], EntityCow['Cow'/145, l='MpServer', x=-191.59, y=4.00, z=1843.19], EntityPig['Pig'/146, l='MpServer', x=-177.22, y=4.00, z=1885.34], EntityPig['Pig'/147, l='MpServer', x=-198.88, y=4.00, z=1888.41], EntityHorse['Donkey'/83, l='MpServer', x=-259.22, y=4.00, z=1866.53], EntityPig['Pig'/148, l='MpServer', x=-187.94, y=4.00, z=1976.88], EntityCow['Cow'/85, l='MpServer', x=-242.59, y=4.00, z=1870.72], EntityPig['Pig'/149, l='MpServer', x=-181.88, y=4.00, z=1993.91], EntityHorse['Donkey'/86, l='MpServer', x=-252.72, y=4.00, z=1862.16], EntityCow['Cow'/87, l='MpServer', x=-240.75, y=4.00, z=1867.25], EntityItemFrame['entity.ItemFrame.name'/88, l='MpServer', x=-251.50, y=5.50, z=1932.94], EntityCow['Cow'/159, l='MpServer', x=-174.10, y=4.00, z=1900.94], EntityChicken['Chicken'/160, l='MpServer', x=-164.56, y=4.00, z=1976.59], EntitySheep['Sheep'/161, l='MpServer', x=-166.06, y=4.00, z=1983.09], EntityPig['Pig'/105, l='MpServer', x=-217.81, y=4.00, z=1839.44], EntityCow['Cow'/109, l='MpServer', x=-215.81, y=4.00, z=1848.81], EntityChicken['Chicken'/110, l='MpServer', x=-212.38, y=4.00, z=1841.56], EntityCow['Cow'/111, l='MpServer', x=-216.09, y=4.00, z=1842.97], EntityPig['Pig'/113, l='MpServer', x=-210.97, y=4.00, z=1889.06], EntityChicken['Chicken'/114, l='MpServer', x=-209.63, y=4.00, z=1894.53], EntityItem['item.item.egg'/115, l='MpServer', x=-211.44, y=4.13, z=1895.19], EntitySheep['Sheep'/51, l='MpServer', x=-305.28, y=4.00, z=1927.66], EntityPig['Pig'/52, l='MpServer', x=-318.72, y=4.00, z=1977.53], EntityPig['Pig'/117, l='MpServer', x=-220.81, y=4.00, z=1993.41]]
+	Retry entities: 0 total; []
+	Server brand: fml,forge
+	Server type: Integrated singleplayer server
+Stacktrace:
+	at net.minecraft.client.multiplayer.WorldClient.addWorldInfoToCrashReport(WorldClient.java:415)
+	at net.minecraft.client.Minecraft.addGraphicsAndWorldToCrashReport(Minecraft.java:2566)
+	at net.minecraft.client.Minecraft.run(Minecraft.java:991)
+	at net.minecraft.client.main.Main.main(Main.java:164)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.lang.reflect.Method.invoke(Unknown Source)
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135)
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28)
+	at net.minecraftforge.gradle.GradleStartCommon.launch(Unknown Source)
+	at GradleStart.main(Unknown Source)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_77, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 640420376 bytes (610 MB) / 1037959168 bytes (989 MB) up to 1037959168 bytes (989 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 10 mods loaded, 10 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	NotEnoughItems{1.0.3.74} [Not Enough Items] (NotEnoughItems-1.7.10-1.0.3.74-dev.jar) 
+	UCHIJAAAA	CodeChickenCore{1.0.4.29} [CodeChicken Core] (minecraft.jar) 
+	UCHIJAAAA	<CoFH ASM>{000} [CoFH ASM] (minecraft.jar) 
+	UCHIJAAAA	CoFHCore{1.7.10R3.1.2} [CoFH Core] (CoFHCore-[1.7.10]3.1.2-325.jar) 
+	UCHIJAAAA	ThermalFoundation{1.7.10R1.2.3} [Thermal Foundation] (ThermalFoundation-[1.7.10]1.2.3-112.jar) 
+	UCHIJAAAA	ThermalExpansion{1.7.10R4.1.2} [Thermal Expansion] (ThermalExpansion-[1.7.10]4.1.2-240 .jar) 
+	UCHIJAAAA	testmod{0.0.0} [Test Mod] (bin) 
+	GL info: ' Vendor: 'NVIDIA Corporation' Version: '4.5.0 NVIDIA 361.43' Renderer: 'GeForce GTX 970/PCIe/SSE2'
+	CoFHCore: -[1.7.10]3.1.2-325
+	ThermalFoundation: -[1.7.10]1.2.3-112
+	ThermalExpansion: -[1.7.10]4.1.2-240
+	Launched Version: 1.7.10
+	LWJGL: 2.9.1
+	OpenGL: GeForce GTX 970/PCIe/SSE2 GL version 4.5.0 NVIDIA 361.43, NVIDIA Corporation
+	GL Caps: Using GL 1.3 multitexturing.
+Using framebuffer objects because OpenGL 3.0 is supported and separate blending is supported.
+Anisotropic filtering is supported and maximum anisotropy is 16.
+Shaders are available because OpenGL 2.1 is supported.
+
+	Is Modded: Definitely; Client brand changed to 'fml,forge'
+	Type: Client (map_client.txt)
+	Resource Packs: []
+	Current Language: English (US)
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Anisotropic Filtering: Off (1)

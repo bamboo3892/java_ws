@@ -2,6 +2,7 @@
 <section name="Workbench">
 	<section name="WORKBENCH_SETTINGS">
 		<list key="ENABLED_TRANSFERS">
+			<item value="org.eclipse.ui.workbenchTransfer"/>
 		</list>
 	</section>
 	<section name="TaskPropertiesDialogSettings">

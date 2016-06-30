@@ -1,0 +1,100 @@
+---- Minecraft Crash Report ----
+// My bad.
+
+Time: 16/05/28 0:23
+Description: Ticking entity
+
+java.lang.NullPointerException: Ticking entity
+	at com.okina.multiblock.construct.ProcessorContainerTileEntity.writeToNBT(ProcessorContainerTileEntity.java:371)
+	at com.okina.multiblock.construct.ProcessorContainerTileEntity.getDescriptionPacket(ProcessorContainerTileEntity.java:335)
+	at net.minecraft.entity.player.EntityPlayerMP.func_147097_b(EntityPlayerMP.java:584)
+	at net.minecraft.entity.player.EntityPlayerMP.onUpdate(EntityPlayerMP.java:311)
+	at net.minecraft.world.World.updateEntityWithOptionalForce(World.java:2298)
+	at net.minecraft.world.WorldServer.updateEntityWithOptionalForce(WorldServer.java:684)
+	at net.minecraft.world.World.updateEntity(World.java:2258)
+	at net.minecraft.world.World.updateEntities(World.java:2108)
+	at net.minecraft.world.WorldServer.updateEntities(WorldServer.java:515)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:703)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at com.okina.multiblock.construct.ProcessorContainerTileEntity.writeToNBT(ProcessorContainerTileEntity.java:371)
+	at com.okina.multiblock.construct.ProcessorContainerTileEntity.getDescriptionPacket(ProcessorContainerTileEntity.java:335)
+	at net.minecraft.entity.player.EntityPlayerMP.func_147097_b(EntityPlayerMP.java:584)
+	at net.minecraft.entity.player.EntityPlayerMP.onUpdate(EntityPlayerMP.java:311)
+	at net.minecraft.world.World.updateEntityWithOptionalForce(World.java:2298)
+	at net.minecraft.world.WorldServer.updateEntityWithOptionalForce(WorldServer.java:684)
+	at net.minecraft.world.World.updateEntity(World.java:2258)
+
+-- Entity being ticked --
+Details:
+	Entity Type: null (net.minecraft.entity.player.EntityPlayerMP)
+	Entity ID: 1
+	Entity Name: Player490
+	Entity's Exact location: 365.20, 56.00, 532.88
+	Entity's Block location: World: (365,56,532), Chunk: (at 13,3,4 in 22,33; contains blocks 352,0,528 to 367,255,543), Region: (0,1; contains chunks 0,32 to 31,63, blocks 0,0,512 to 511,255,1023)
+	Entity's Momentum: 0.00, -0.08, 0.00
+Stacktrace:
+	at net.minecraft.world.World.updateEntities(World.java:2108)
+	at net.minecraft.world.WorldServer.updateEntities(WorldServer.java:515)
+
+-- Affected level --
+Details:
+	Level name: New New New
+	All players: 1 total; [EntityPlayerMP['Player490'/1, l='New New New', x=365.20, y=56.00, z=532.88]]
+	Chunk stats: ServerChunkCache: 625 Drop: 0
+	Level seed: 7407182683751802862
+	Level generator: ID 01 - flat, ver 0. Features enabled: true
+	Level generator options: 2;7,3x1,52x24;2;
+	Level spawn location: World: (355,4,534), Chunk: (at 3,0,6 in 22,33; contains blocks 352,0,528 to 367,255,543), Region: (0,1; contains chunks 0,32 to 31,63, blocks 0,0,512 to 511,255,1023)
+	Level time: 3056 game time, 3056 day time
+	Level dimension: 0
+	Level storage version: 0x04ABD - Anvil
+	Level weather: Rain time: 50622 (now: false), thunder time: 28181 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: true
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:703)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_77, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 752355408 bytes (717 MB) / 1037959168 bytes (989 MB) up to 1037959168 bytes (989 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 10 mods loaded, 10 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	NotEnoughItems{1.0.3.74} [Not Enough Items] (NotEnoughItems-1.7.10-1.0.3.74-dev.jar) 
+	UCHIJAAAA	CodeChickenCore{1.0.4.29} [CodeChicken Core] (minecraft.jar) 
+	UCHIJAAAA	<CoFH ASM>{000} [CoFH ASM] (minecraft.jar) 
+	UCHIJAAAA	CoFHCore{1.7.10R3.1.2} [CoFH Core] (CoFHCore-[1.7.10]3.1.2-325.jar) 
+	UCHIJAAAA	ThermalFoundation{1.7.10R1.2.3} [Thermal Foundation] (ThermalFoundation-[1.7.10]1.2.3-112.jar) 
+	UCHIJAAAA	ThermalExpansion{1.7.10R4.1.2} [Thermal Expansion] (ThermalExpansion-[1.7.10]4.1.2-240 .jar) 
+	UCHIJAAAA	MultiBlockMod{0.7} [Multi Block Mod] (bin) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	CoFHCore: -[1.7.10]3.1.2-325
+	ThermalFoundation: -[1.7.10]1.2.3-112
+	ThermalExpansion: -[1.7.10]4.1.2-240
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 1 / 8; [EntityPlayerMP['Player490'/1, l='New New New', x=365.20, y=56.00, z=532.88]]
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

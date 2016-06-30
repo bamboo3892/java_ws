@@ -1,0 +1,13 @@
+package com.okina.multiblock.construct;
+
+public interface IPipeConnectionUser {
+
+	/**
+	 * called by pipe when the pipe removed<br>
+	 * be sure to do check next tick, as the breaking pipe still exist.
+	 */
+	public void needUpdateEntry();
+
+	public int getUpdatePolicy();
+
+}

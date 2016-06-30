@@ -1,0 +1,21 @@
+package com.okina.client;
+
+import java.io.Serializable;
+
+public class EffectProperty implements Serializable {
+
+	/**0 - 100*/
+	public int particleSpawnRate;
+	public boolean renderPartsFancy;
+
+	public EffectProperty() {
+		particleSpawnRate = 100;
+		renderPartsFancy = true;
+	}
+
+	//	public String getJson() {
+	//		Gson gson = new Gson();
+	//		return gson.toJson(this);
+	//	}
+
+}

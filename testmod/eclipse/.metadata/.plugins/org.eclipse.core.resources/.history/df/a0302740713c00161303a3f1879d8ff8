@@ -1,0 +1,37 @@
+package com.okina.server.command;
+
+import java.util.List;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+
+public class MBMCommand extends CommandBase {
+
+	public MBMCommand() {}
+
+	@Override
+	public String getCommandName() {
+		return "mbm";
+	}
+
+	@Override
+	public int getRequiredPermissionLevel() {
+		return 1;
+	}
+
+	@Override
+	public String getCommandUsage(ICommandSender commandSender) {
+		return "Usage: /mbm <Subcommands>. Subcommands are ";
+	}
+
+	@Override
+	public void processCommand(ICommandSender p_71515_1_, String[] p_71515_2_) {
+
+	}
+
+	@Override
+	public List addTabCompletionOptions(ICommandSender commandSender, String[] commands) {
+		return commands.length == 1 ? getListOfStringsMatchingLastWord(commands, "particleSpawnRate", "renderPartsFancy") : (commands.length == 2 ? getListOfStringsMatchingLastWord(commands, new String[] { "true", "false" }) : null);
+	}
+
+}

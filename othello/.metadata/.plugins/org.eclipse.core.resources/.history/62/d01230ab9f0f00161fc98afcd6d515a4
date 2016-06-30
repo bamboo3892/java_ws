@@ -1,9 +1,0 @@
-package ai;
-
-import java.io.Serializable;
-
-public interface ILearnableAI extends Serializable {
-	public void setGeneFromMeta();
-	public void setNextGene();
-	public void learn(ILearnableAI pAI);
-}

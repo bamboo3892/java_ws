@@ -1,0 +1,68 @@
+package com.okina.network;
+
+import com.okina.tileentity.ISimpleTilePacketUser;
+
+import cpw.mods.fml.common.network.ByteBufUtils;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
+
+public class CommandPacket implements IMessage {
+
+	public String command;
+	public String value;
+
+	public CommandPacket() {}
+
+	public CommandPacket(String command, String value) {
+		if(command == null || value == null) throw new IllegalArgumentException();
+		this.command = command;
+		this.value = value;
+	}
+
+	@Override
+	public void toBytes(ByteBuf buf) {
+		try{
+			ByteBufUtils.writeUTF8String(buf, command);
+			ByteBufUtils.writeUTF8String(buf, value);
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void fromBytes(ByteBuf buf) {
+		try{
+			command = ByteBufUtils.readUTF8String(buf);
+			value = ByteBufUtils.readUTF8String(buf);
+		}catch (Exception e){
+			System.err.println("Illegal packet received : " + this);
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "Command Packet : " + packets.size();
+	}
+
+	/**client only*/
+	public static class WorldUpdatePacketHandler implements IMessageHandler<WorldUpdatePacket, IMessage> {
+		@Override
+		public IMessage onMessage(WorldUpdatePacket msg, MessageContext ctx) {
+			//			System.out.println(String.format("Received %s from %s", msg, ctx.side.SERVER));
+			if(Minecraft.getMinecraft().theWorld != null && msg.packets != null){
+				for (SimpleTilePacket packet : msg.packets){
+					if(Minecraft.getMinecraft().theWorld.getTileEntity(packet.x, packet.y, packet.z) instanceof ISimpleTilePacketUser){
+						ISimpleTilePacketUser tile = (ISimpleTilePacketUser) Minecraft.getMinecraft().theWorld.getTileEntity(packet.x, packet.y, packet.z);
+						tile.processCommand(packet.type, packet.value);
+					}
+				}
+			}
+			return null;
+		}
+	}
+
+}

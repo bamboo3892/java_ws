@@ -1,0 +1,701 @@
+Side = SERVER
+Tile Name = MultiBlockCoreTileEntity
+zSize = 5
+ySize = 5
+renderDetail = 1b
+interface {
+	NBTTagList {
+	List Content No.0 :
+		side = 1
+		x = 865
+		y = 61
+		z = 17
+	List Content No.1 :
+		side = 3
+		x = 868
+		y = 59
+		z = 18
+	}
+}
+pause = 0b
+connected = 0b
+minY = 57
+Energy = 98000000
+minX = 864
+blockList {
+	NBTTagList {
+	List Content No.0 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 864
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 59
+		side3 {
+			io = 2b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 0b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.1 :
+		inv {
+			size = 1
+			limit = 32
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		invs {
+			NBTTagList {
+			List Content No.0 :
+				side = 3
+				x = 866
+				y = 57
+				z = 16
+			List Content No.1 :
+				side = 3
+				x = 866
+				y = 59
+				z = 16
+			List Content No.2 :
+				side = 3
+				x = 866
+				y = 61
+				z = 16
+			}
+		}
+		receivers {
+			NBTTagList {
+			List Content No.0 :
+				side = -1
+				x = 866
+				y = 57
+				z = 16
+			List Content No.1 :
+				side = -1
+				x = 866
+				y = 59
+				z = 16
+			List Content No.2 :
+				side = -1
+				x = 866
+				y = 61
+				z = 16
+			}
+		}
+		grade = 3
+		x = 865
+		name = "dispatcher"
+		side4 {
+			io = 2b
+		}
+		y = 61
+		side3 {
+			io = 2b
+		}
+		z = 17
+		side5 {
+			io = 1b
+		}
+		side0 {
+			io = 1b
+		}
+		event = 0b
+		indexPointer = 0
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.2 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 866
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 57
+		side3 {
+			io = 0b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.3 :
+		provider {
+			side = -1
+			x = 868
+			y = 61
+			z = 14
+		}
+		grade = 4
+		x = 866
+		name = "alter"
+		side4 {
+			io = 2b
+		}
+		y = 58
+		side3 {
+			io = 0b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.4 :
+		partialTick = 13
+		grade = 4
+		x = 866
+		name = "clockPulser"
+		side4 {
+			io = 2b
+		}
+		y = 58
+		side3 {
+			io = 2b
+		}
+		z = 17
+		interval = 44
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			side = -1
+			io = 1b
+			x = 866
+			y = 58
+			z = 16
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.5 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 866
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 59
+		side3 {
+			io = 2b
+		}
+		z = 14
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 0b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.6 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = 0
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				List Content No.0 :
+					Slot = 0b
+					id = 399s
+					Count = 1b
+					Damage = 0s
+				}
+			}
+		}
+		mode = 5
+		grade = 4
+		x = 866
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 59
+		side3 {
+			io = 0b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.7 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 866
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 59
+		side3 {
+			io = 2b
+		}
+		z = 18
+		side5 {
+			io = 0b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.8 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 866
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 61
+		side3 {
+			io = 0b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.9 :
+		modeList {
+			NBTTagList {
+			List Content No.0 :
+				index = 0
+			List Content No.1 :
+				connectDirection = -1
+				index = 1
+				processingTicks = -1
+			List Content No.2 :
+				index = 2
+				processingTicks = -1
+			List Content No.3 :
+				connectDirection = -1
+				index = 3
+				processingTicks = -1
+			List Content No.4 :
+				connectDirection = -1
+				index = 4
+				processingTicks = -1
+			List Content No.5 :
+				connectDirection = -1
+				index = 5
+				processingTicks = -1
+			}
+		}
+		waitForTransfer = 0b
+		inv {
+			size = 1
+			limit = 1
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		mode = 0
+		grade = 4
+		x = 868
+		name = "container"
+		side4 {
+			io = 2b
+		}
+		y = 59
+		side3 {
+			io = 0b
+		}
+		z = 16
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.10 :
+		inv {
+			size = 1
+			limit = 32
+			Items {
+				NBTTagList {
+				}
+			}
+		}
+		invs {
+			NBTTagList {
+			List Content No.0 :
+				side = 0
+				x = 866
+				y = 59
+				z = 14
+			List Content No.1 :
+				side = 0
+				x = 864
+				y = 59
+				z = 16
+			List Content No.2 :
+				side = 3
+				x = 868
+				y = 59
+				z = 16
+			List Content No.3 :
+				side = 5
+				x = 866
+				y = 59
+				z = 18
+			}
+		}
+		receivers {
+			NBTTagList {
+			List Content No.0 :
+				side = -1
+				x = 866
+				y = 59
+				z = 14
+			List Content No.1 :
+				side = -1
+				x = 864
+				y = 59
+				z = 16
+			List Content No.2 :
+				side = -1
+				x = 868
+				y = 59
+				z = 16
+			List Content No.3 :
+				side = -1
+				x = 866
+				y = 59
+				z = 18
+			}
+		}
+		grade = 3
+		x = 868
+		name = "dispatcher"
+		side4 {
+			io = 1b
+		}
+		y = 59
+		side3 {
+			io = 2b
+		}
+		z = 18
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 1b
+		}
+		event = 0b
+		indexPointer = 0
+		side2 {
+			io = 1b
+		}
+		side1 {
+			io = 2b
+		}
+	List Content No.11 :
+		Energy = 0
+		grade = 4
+		x = 868
+		name = "energyprovider"
+		side4 {
+			io = 2b
+		}
+		y = 61
+		side3 {
+			io = 2b
+		}
+		z = 14
+		side5 {
+			io = 2b
+		}
+		side0 {
+			io = 2b
+		}
+		event = 0b
+		side2 {
+			io = 2b
+		}
+		side1 {
+			io = 2b
+		}
+	}
+}
+x = 865
+y = 57
+z = 10
+id = "multiBlockCoreTileEntity"
+minZ = 14
+xSize = 5

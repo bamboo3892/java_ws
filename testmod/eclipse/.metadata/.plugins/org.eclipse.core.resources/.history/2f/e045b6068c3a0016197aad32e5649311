@@ -1,0 +1,92 @@
+package com.okina.multiblock.construct.processor;
+
+import com.okina.main.TestCore;
+import com.okina.multiblock.construct.IProcessorContainer;
+import com.okina.multiblock.construct.ISignalReceiver;
+import com.okina.network.PacketType;
+import com.okina.utils.ColoredString;
+
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+
+public class RectificationRepeaterProcessor extends SignalEmitterProcessor implements ISignalReceiver {
+
+	/**use only on server*/
+	public int lastEmittedDirection = 0;
+
+	public RectificationRepeaterProcessor(IProcessorContainer pc, boolean isRemote, boolean isTile) {
+		super(pc, isRemote, isTile);
+	}
+
+	@Override
+	public void updateEntity() {
+		super.updateEntity();
+	}
+
+	@Override
+	public void processCommand(PacketType type, Object value) {
+		if(type == PacketType.OTHER2 && value instanceof Integer){//both side
+			lastEmittedDirection = (Integer) value;
+		}
+		super.processCommand(type, value);
+	}
+
+	@Override
+	public String getNameForNBT() {
+		return "rectificationRepeater";
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound tag) {
+		super.readFromNBT(tag);
+		lastEmittedDirection = tag.getInteger("lastEmittedDirection");
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound tag) {
+		super.writeToNBT(tag);
+		tag.setInteger("lastEmittedDirection", lastEmittedDirection);
+	}
+
+	//non-override////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private int getNextEmitDirection() {
+		int dir;
+		do{
+			dir = lastEmittedDirection == 5 ? 0 : lastEmittedDirection + 1;
+			if(connection[dir] != null && connection[dir].hasTile()) return dir;
+		}while (dir != lastEmittedDirection);
+		if(connection[dir] != null && connection[dir].hasTile()){
+			return dir;
+		}
+		return -1;
+	}
+
+	@Override
+	public void onSignalReceived() {
+		assert !isRemote;
+		int dir = getNextEmitDirection();
+		if(dir != -1){
+			emitSignal(dir);
+			lastEmittedDirection = dir;
+			pc.sendPacket(PacketType.OTHER2, lastEmittedDirection);
+		}
+	}
+
+	//render//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public ColoredString getNameForHUD() {
+		return new ColoredString("RECTIFICATION REPEATER", ColorCode[grade]);
+	}
+
+	//tile entity//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//part////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	public Block getRenderBlock() {
+		return TestCore.constructRectificationRepeater[grade];
+	}
+
+}

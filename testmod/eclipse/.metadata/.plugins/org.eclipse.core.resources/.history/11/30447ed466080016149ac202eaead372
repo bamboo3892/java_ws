@@ -1,9 +1,0 @@
-package com.test.nei;
-
-public class LoadNEIConfig {
-
-	public LoadNEIConfig() {
-		// TODO 自動生成されたコンストラクター・スタブ
-	}
-
-}

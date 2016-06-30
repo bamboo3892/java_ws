@@ -1,0 +1,30 @@
+Side = SERVER
+Tile Name = MultiBlockCasingTileEntity
+core {
+	side = -1
+	x = 883
+	y = 57
+	z = 25
+}
+x = 882
+side4 {
+	io = 2b
+}
+y = 57
+side3 {
+	io = 2b
+}
+z = 25
+id = "multiBlockCasingTileEntity"
+side5 {
+	io = 2b
+}
+side0 {
+	io = 2b
+}
+side2 {
+	io = 2b
+}
+side1 {
+	io = 2b
+}

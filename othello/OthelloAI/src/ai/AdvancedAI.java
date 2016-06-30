@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import api.AISheet;
 import api.OthelloAI;
-import main.SLock;
 
 @OthelloAI(depend = "1.0", author = "bamboo3892", version = "1.0")
 public class AdvancedAI extends AISheet implements Runnable {
@@ -12,7 +11,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 	private LinkedList<int[][]> boxHistory = new LinkedList<int[][]>();
 	private int originalTeban;
 	private float point;//thread only
-	private SLock slock;
+	//	private SLock slock;
 
 	public AdvancedAI() {
 
@@ -25,20 +24,16 @@ public class AdvancedAI extends AISheet implements Runnable {
 		originalTeban = teban;
 	}
 
-	public AdvancedAI(int[][] box, int teban, SLock p_slock) {
-		super(box, teban);
-		addList(box);
-		originalTeban = teban;
-		this.slock = p_slock;
-	}
+	//	public AdvancedAI(int[][] box, int teban, SLock p_slock) {
+	//		super(box, teban);
+	//		addList(box);
+	//		originalTeban = teban;
+	//		this.slock = p_slock;
+	//	}
 
 	@Override
 	public AISheet set(int[][] box, int teban) {
-		for (int i = 0; i < 8; i++)
-			for (int j = 0; j < 8; j++){
-				this.box[i][j] = box[i][j];
-			}
-		this.teban = teban;
+		super.set(box, teban);
 		addList(box);
 		originalTeban = teban;
 		return this;
@@ -55,7 +50,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 		LinkedList<AdvancedAI> threadList = new LinkedList<AdvancedAI>();
 		LinkedList<Integer> listX = new LinkedList<Integer>();
 		LinkedList<Integer> listY = new LinkedList<Integer>();
-		SLock slock = new SLock();
+		//		SLock slock = new SLock();
 
 		float max = 0f;
 		int maxX = 0;
@@ -68,7 +63,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 				this.teban = originalTeban;
 				if(canPlace(i, j)){
 					canPlaceAtAndReverse(i, j);
-					threadList.add(new AdvancedAI(box, teban == 1 ? 2 : 1, slock));
+					//					threadList.add(new AdvancedAI(box, teban == 1 ? 2 : 1, slock));
 					listX.add(i);
 					listY.add(j);
 					nnn1++;
@@ -76,11 +71,11 @@ public class AdvancedAI extends AISheet implements Runnable {
 					this.teban = originalTeban;
 				}
 			}
-		slock.setAll(nnn1 + 1);
+		//		slock.setAll(nnn1 + 1);
 		for (int i = 0; i < threadList.size(); i++){
 			new Thread(threadList.get(i)).start();
 		}
-		slock.lock();
+		//		slock.lock();
 		for (int i = 0; i < listX.size(); i++){
 			float point = threadList.get(i).getPoint();
 			if(max <= point){
@@ -103,13 +98,13 @@ public class AdvancedAI extends AISheet implements Runnable {
 			return;
 		}
 		int nnn = 0;
-
+	
 		float max = 0f;
 		int maxX = 0;
 		int maxY = 0;
 		this.box = getList(0);
 		this.teban = originalTeban;
-
+	
 		for(int i=0;i<8;i++) for(int j=0;j<8;j++) {
 			this.box = getList(0);
 			this.teban = originalTeban;
@@ -161,7 +156,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 			}
 		this.point = sum / n;
 
-		slock.lock();
+		//		slock.lock();
 	}
 
 	public float getPoint() {//thread only
@@ -170,7 +165,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 
 	/*
 		private float nextAssumption(int p_teban, int p_index){//return assessment point
-
+	
 			if(isFilled()){
 				return judge(box, originalTeban) ? 1f : 0f;
 			}
@@ -180,7 +175,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 					return judge(box, originalTeban) ? 1f : 0f;
 				}
 				this.teban = p_teban;
-
+	
 				this.box = getList(p_index);
 				this.teban = p_teban;
 				changeList(box, p_index+1);
@@ -188,7 +183,7 @@ public class AdvancedAI extends AISheet implements Runnable {
 				float point = nextAssumption(p_teban==1 ? 2 : 1, p_index+1);
 				return point;
 			}
-
+	
 			if(p_teban == originalTeban){
 				float max = 0f;
 				this.box = getList(p_index);

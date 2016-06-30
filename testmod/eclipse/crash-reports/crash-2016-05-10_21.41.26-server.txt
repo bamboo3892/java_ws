@@ -1,0 +1,98 @@
+---- Minecraft Crash Report ----
+// You're mean.
+
+Time: 16/05/10 21:41
+Description: Ticking entity
+
+java.lang.IllegalAccessError: tried to access field net.minecraft.world.World.collidingBoundingBoxes from class cofh.asmhooks.HooksCore
+	at cofh.asmhooks.HooksCore.getEntityCollisionBoxes(HooksCore.java:85)
+	at net.minecraft.entity.Entity.moveEntity(Entity.java:688)
+	at net.minecraft.entity.item.EntityItem.onUpdate(EntityItem.java:120)
+	at net.minecraft.world.World.updateEntityWithOptionalForce(World.java:2298)
+	at net.minecraft.world.WorldServer.updateEntityWithOptionalForce(WorldServer.java:684)
+	at net.minecraft.world.World.updateEntity(World.java:2258)
+	at net.minecraft.world.World.updateEntities(World.java:2108)
+	at net.minecraft.world.WorldServer.updateEntities(WorldServer.java:515)
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:703)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Stacktrace:
+	at cofh.asmhooks.HooksCore.getEntityCollisionBoxes(HooksCore.java:85)
+	at net.minecraft.entity.Entity.moveEntity(Entity.java:688)
+	at net.minecraft.entity.item.EntityItem.onUpdate(EntityItem.java:120)
+	at net.minecraft.world.World.updateEntityWithOptionalForce(World.java:2298)
+	at net.minecraft.world.WorldServer.updateEntityWithOptionalForce(WorldServer.java:684)
+	at net.minecraft.world.World.updateEntity(World.java:2258)
+
+-- Entity being ticked --
+Details:
+	Entity Type: Item (net.minecraft.entity.item.EntityItem)
+	Entity ID: 7
+	Entity Name: item.item.egg
+	Entity's Exact location: -372.96, 4.13, 1952.36
+	Entity's Block location: World: (-373,4,1952), Chunk: (at 11,0,0 in -24,122; contains blocks -384,0,1952 to -369,255,1967), Region: (-1,3; contains chunks -32,96 to -1,127, blocks -512,0,1536 to -1,255,2047)
+	Entity's Momentum: 0.00, -0.04, 0.00
+Stacktrace:
+	at net.minecraft.world.World.updateEntities(World.java:2108)
+	at net.minecraft.world.WorldServer.updateEntities(WorldServer.java:515)
+
+-- Affected level --
+Details:
+	Level name: Glass World
+	All players: 0 total; []
+	Chunk stats: ServerChunkCache: 625 Drop: 0
+	Level seed: -5117296163716428016
+	Level generator: ID 01 - flat, ver 0. Features enabled: true
+	Level generator options: 2;7,2x3,2;1;village
+	Level spawn location: World: (-268,4,1924), Chunk: (at 4,0,4 in -17,120; contains blocks -272,0,1920 to -257,255,1935), Region: (-1,3; contains chunks -32,96 to -1,127, blocks -512,0,1536 to -1,255,2047)
+	Level time: 138688 game time, 12000 day time
+	Level dimension: 0
+	Level storage version: 0x04ABD - Anvil
+	Level weather: Rain time: 42468 (now: false), thunder time: 96476 (now: false)
+	Level game mode: Game mode: creative (ID 1). Hardcore: false. Cheats: true
+Stacktrace:
+	at net.minecraft.server.MinecraftServer.updateTimeLightAndEntities(MinecraftServer.java:703)
+	at net.minecraft.server.MinecraftServer.tick(MinecraftServer.java:614)
+	at net.minecraft.server.integrated.IntegratedServer.tick(IntegratedServer.java:118)
+	at net.minecraft.server.MinecraftServer.run(MinecraftServer.java:485)
+	at net.minecraft.server.MinecraftServer$2.run(MinecraftServer.java:752)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.7.10
+	Operating System: Windows 10 (amd64) version 10.0
+	Java Version: 1.8.0_77, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
+	Memory: 881570472 bytes (840 MB) / 1037959168 bytes (989 MB) up to 1037959168 bytes (989 MB)
+	JVM Flags: 3 total; -Xincgc -Xmx1024M -Xms1024M
+	AABB Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
+	FML: MCP v9.05 FML v7.10.99.99 Minecraft Forge 10.13.4.1558 10 mods loaded, 10 mods active
+	States: 'U' = Unloaded 'L' = Loaded 'C' = Constructed 'H' = Pre-initialized 'I' = Initialized 'J' = Post-initialized 'A' = Available 'D' = Disabled 'E' = Errored
+	UCHIJAAAA	mcp{9.05} [Minecraft Coder Pack] (minecraft.jar) 
+	UCHIJAAAA	FML{7.10.99.99} [Forge Mod Loader] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	Forge{10.13.4.1558} [Minecraft Forge] (forgeSrc-1.7.10-10.13.4.1558-1.7.10.jar) 
+	UCHIJAAAA	NotEnoughItems{1.0.3.74} [Not Enough Items] (NotEnoughItems-1.7.10-1.0.3.74-dev.jar) 
+	UCHIJAAAA	CodeChickenCore{1.0.4.29} [CodeChicken Core] (minecraft.jar) 
+	UCHIJAAAA	<CoFH ASM>{000} [CoFH ASM] (minecraft.jar) 
+	UCHIJAAAA	CoFHCore{1.7.10R3.1.2} [CoFH Core] (CoFHCore-[1.7.10]3.1.2-325.jar) 
+	UCHIJAAAA	testmod{0.0.0} [Test Mod] (bin) 
+	UCHIJAAAA	ThermalFoundation{1.7.10R1.2.3} [Thermal Foundation] (ThermalFoundation-[1.7.10]1.2.3-112.jar) 
+	UCHIJAAAA	ThermalExpansion{1.7.10R4.1.2} [Thermal Expansion] (ThermalExpansion-[1.7.10]4.1.2-240 .jar) 
+	GL info: ~~ERROR~~ RuntimeException: No OpenGL context found in the current thread.
+	CoFHCore: -[1.7.10]3.1.2-325
+	ThermalFoundation: -[1.7.10]1.2.3-112
+	ThermalExpansion: -[1.7.10]4.1.2-240
+	Profiler Position: N/A (disabled)
+	Vec3 Pool Size: 0 (0 bytes; 0 MB) allocated, 0 (0 bytes; 0 MB) used
+	Player Count: 0 / 8; []
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fml,forge'

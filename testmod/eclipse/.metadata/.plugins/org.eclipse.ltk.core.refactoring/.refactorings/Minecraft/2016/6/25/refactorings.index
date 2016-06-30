@@ -1,0 +1,12 @@
+1465833871252	型名 'Positionedstack2' を変更します
+1466003448642	メソッド名 'findRecipe' を変更します
+1466010837081	メソッド名 'checkDesignatedConnection' を変更します
+1466010842973	メソッド名 'checkExistingConnection' を変更します
+1466010848759	メソッド名 'checkNewConnection' を変更します
+1466086196118	メソッド名 'getOreItem' を変更します
+1466086686331	メソッド名 'getItemStack' を変更します
+1466146825136	要素の削除
+1466146840521	要素の削除
+1466219732766	メソッド名 'getCoreTie' を変更します
+1466221035427	列挙定数 'FILTER_NBT_FROM_CLIENT_GUI' の名前を変更します
+1466221820814	メソッド名 'sendPacket' を変更します

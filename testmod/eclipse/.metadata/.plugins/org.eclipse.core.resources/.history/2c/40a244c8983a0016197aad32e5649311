@@ -1,0 +1,7 @@
+package com.okina.client;
+
+public class EffectProperty {
+
+	public EffectProperty() {}
+
+}
