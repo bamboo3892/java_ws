@@ -96,7 +96,7 @@ Tasks to be executed: [task ':compileApiJava', task ':processApiResources', task
 :compileApiJava
 Skipping task ':compileApiJava' as it has no source files.
 :compileApiJava UP-TO-DATE
-:compileApiJava (Thread[main,5,main]) completed. Took 0.015 secs.
+:compileApiJava (Thread[main,5,main]) completed. Took 0.023 secs.
 :processApiResources (Thread[main,5,main]) started.
 :processApiResources
 Skipping task ':processApiResources' as it has no source files.
@@ -106,14 +106,14 @@ Skipping task ':processApiResources' as it has no source files.
 :apiClasses
 Skipping task ':apiClasses' as it has no actions.
 :apiClasses UP-TO-DATE
-:apiClasses (Thread[main,5,main]) completed. Took 0.0 secs.
+:apiClasses (Thread[main,5,main]) completed. Took 0.001 secs.
 :sourceMainJava (Thread[main,5,main]) started.
 :sourceMainJava
-Executing task ':sourceMainJava' (up-to-date check took 0.178 secs) due to:
-  Input file D:\eclipse\workspace\testmod\src\main\java\com\okina\multiblock\construct\processor\EnergyProviderProcessor.java has changed.
-  Input file D:\eclipse\workspace\testmod\src\main\java\com\okina\multiblock\MultiBlockCoreTileEntity.java has changed.
+Executing task ':sourceMainJava' (up-to-date check took 0.878 secs) due to:
   Input file D:\eclipse\workspace\testmod\src\main\java\com\okina\multiblock\BlockFrameTileEntity.java has changed.
-:sourceMainJava (Thread[main,5,main]) completed. Took 2.788 secs.
+  Input file D:\eclipse\workspace\testmod\src\main\java\com\okina\main\EventHandler.java has changed.
+  Input file D:\eclipse\workspace\testmod\src\main\java\com\okina\multiblock\construct\mode\EnergyProviderMode.java has changed.
+:sourceMainJava (Thread[main,5,main]) completed. Took 23.388 secs.
 :compileJava (Thread[main,5,main]) started.
 :compileJava
 Resource missing. [HTTP GET: http://files.minecraftforge.net/maven//forgeSrc/1.7.10-10.13.4.1558-1.7.10/forgeSrc-1.7.10-10.13.4.1558-1.7.10.pom]
@@ -236,27 +236,27 @@ Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-ext
 Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/tv/twitch/twitch-external-platform/4.5/twitch-external-platform-4.5-natives-windows-32.jar]
 Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1.pom]
 Resource missing. [HTTP HEAD: http://files.minecraftforge.net/maven/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-windows.jar]
-Executing task ':compileJava' (up-to-date check took 53.743 secs) due to:
-  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\multiblock\BlockPipeTileEntity.java has changed.
-  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\multiblock\construct\processor\EnergyProviderProcessor.java has changed.
-  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\inventory\CraftingFilterInventory.java has changed.
+Executing task ':compileJava' (up-to-date check took 51.597 secs) due to:
+  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\multiblock\construct\mode\EnergyProviderMode.java has changed.
+  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\main\EventHandler.java has changed.
+  Input file D:\eclipse\workspace\testmod\build\sources\java\com\okina\multiblock\BlockFrameTileEntity.java has changed.
 Compiling with JDK Java compiler API.
-:compileJava (Thread[main,5,main]) completed. Took 56.672 secs.
+:compileJava (Thread[main,5,main]) completed. Took 54.77 secs.
 :processResources (Thread[main,5,main]) started.
 :processResources
-Skipping task ':processResources' as it is up-to-date (took 0.058 secs).
+Skipping task ':processResources' as it is up-to-date (took 0.055 secs).
 :processResources UP-TO-DATE
-:processResources (Thread[main,5,main]) completed. Took 0.06 secs.
+:processResources (Thread[main,5,main]) completed. Took 0.056 secs.
 :classes (Thread[main,5,main]) started.
 :classes
 Skipping task ':classes' as it has no actions.
 :classes (Thread[main,5,main]) completed. Took 0.0 secs.
 :jar (Thread[main,5,main]) started.
 :jar
-Executing task ':jar' (up-to-date check took 0.051 secs) due to:
+Executing task ':jar' (up-to-date check took 0.041 secs) due to:
   Output file D:\eclipse\workspace\testmod\build\libs\MultiBlockMod1.7.10-0.1.jar has changed.
   Output file D:\eclipse\workspace\testmod\build\libs\MultiBlockMod1.7.10-0.1.jar has been removed.
-:jar (Thread[main,5,main]) completed. Took 0.771 secs.
+:jar (Thread[main,5,main]) completed. Took 2.202 secs.
 :compileTestJava (Thread[main,5,main]) started.
 :compileTestJava
 Skipping task ':compileTestJava' as it has no source files.
@@ -271,42 +271,42 @@ Skipping task ':processTestResources' as it has no source files.
 :testClasses
 Skipping task ':testClasses' as it has no actions.
 :testClasses UP-TO-DATE
-:testClasses (Thread[main,5,main]) completed. Took 0.001 secs.
+:testClasses (Thread[main,5,main]) completed. Took 0.0 secs.
 :test (Thread[main,5,main]) started.
 :test
 file or directory 'D:\eclipse\workspace\testmod\build\classes\test', not found
 Skipping task ':test' as it has no source files.
 :test UP-TO-DATE
-:test (Thread[main,5,main]) completed. Took 0.0 secs.
+:test (Thread[main,5,main]) completed. Took 0.001 secs.
 :extractMcpData (Thread[main,5,main]) started.
 :extractMcpData
 Skipping task ':extractMcpData' as it is up-to-date (took 0.002 secs).
 :extractMcpData UP-TO-DATE
-:extractMcpData (Thread[main,5,main]) completed. Took 0.004 secs.
+:extractMcpData (Thread[main,5,main]) completed. Took 0.003 secs.
 :getVersionJson (Thread[main,5,main]) started.
 :getVersionJson
 Executing task ':getVersionJson' (up-to-date check took 0.0 secs) due to:
   Task has not declared any outputs.
-:getVersionJson (Thread[main,5,main]) completed. Took 0.468 secs.
+:getVersionJson (Thread[main,5,main]) completed. Took 0.631 secs.
 :extractUserDev (Thread[main,5,main]) started.
 :extractUserDev
 Resource missing. [HTTP GET: http://repo1.maven.org/maven2/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10.pom]
 Resource missing. [HTTP HEAD: http://repo1.maven.org/maven2/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10-userdev.jar]
 Failed to get resource: GET. [HTTP HTTP/1.1 403 Forbidden: https://libraries.minecraft.net/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/forge-1.7.10-10.13.4.1558-1.7.10.pom]
-Skipping task ':extractUserDev' as it is up-to-date (took 1.662 secs).
+Skipping task ':extractUserDev' as it is up-to-date (took 1.621 secs).
 :extractUserDev UP-TO-DATE
-:extractUserDev (Thread[main,5,main]) completed. Took 1.664 secs.
+:extractUserDev (Thread[main,5,main]) completed. Took 1.622 secs.
 :genSrgs (Thread[main,5,main]) started.
 :genSrgs
 Skipping task ':genSrgs' as task onlyIf is false.
 :genSrgs SKIPPED
-:genSrgs (Thread[main,5,main]) completed. Took 0.282 secs.
+:genSrgs (Thread[main,5,main]) completed. Took 0.271 secs.
 :reobf (Thread[main,5,main]) started.
 :reobf
 Executing task ':reobf' (up-to-date check took 0.002 secs) due to:
   Output file D:\eclipse\workspace\testmod\build\libs\MultiBlockMod1.7.10-0.1.jar has changed.
   Output file D:\eclipse\workspace\testmod\build\libs\MultiBlockMod1.7.10-0.1.jar has changed.
-:reobf (Thread[main,5,main]) completed. Took 1.451 secs.
+:reobf (Thread[main,5,main]) completed. Took 1.5 secs.
 :assemble (Thread[main,5,main]) started.
 :assemble
 Skipping task ':assemble' as it has no actions.
@@ -315,7 +315,7 @@ Skipping task ':assemble' as it has no actions.
 :check
 Skipping task ':check' as it has no actions.
 :check UP-TO-DATE
-:check (Thread[main,5,main]) completed. Took 0.0 secs.
+:check (Thread[main,5,main]) completed. Took 0.001 secs.
 :build (Thread[main,5,main]) started.
 :build
 Skipping task ':build' as it has no actions.
@@ -323,5 +323,5 @@ Skipping task ':build' as it has no actions.
 
 BUILD SUCCESSFUL
 
-Total time: 1 mins 38.76 secs
+Total time: 2 mins 7.422 secs
 Stopped 0 compiler daemon(s).

@@ -1,9 +1,0 @@
-package com.okina.client;
-
-public class EffectProperty {
-
-	public EffectProperty() {
-		// TODO 自動生成されたコンストラクター・スタブ
-	}
-
-}
